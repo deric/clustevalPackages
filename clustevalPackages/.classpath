@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="program/Executable.java|program/ExecutableFinder.java|program/ExecutableFinderThread.java|run/config/RunConfig.java|run/config/ExecutionRunConfig.java|run/config/ClusteringRunConfig.java|run/config/ParameterOptimizationRunConfig.java|run/config/InternalParameterOptimizationRunConfig.java|run/config/AnalysisRunConfig.java|run/config/DataAnalysisRunConfig.java|run/config/RunAnalysisRunConfig.java|run/config/RunDataAnalysisRunConfig.java|run/config/" kind="src" path="src"/>
+	<classpathentry kind="lib" path="/clusteval/lib/jansi-1.9.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/jline-2.8-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/jline-2.8-SNAPSHOT.jar" sourcepath="/home/wiwie/Dropbox/workspace/ClusEvalFramework/lib/jline-2.8-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/junit-addons-1.4.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/mysql-connector-java-5.1.21-bin.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/Wiutils.jar" sourcepath="/Wiutils/src"/>
+	<classpathentry kind="lib" path="/clusteval/lib/apacheCommons/commons-cli-1.2.jar" sourcepath="/clusteval/lib/apacheCommons/commons-cli-1.2-sources.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/apacheCommons/commons-configuration-1.8.jar" sourcepath="/clusteval/lib/apacheCommons/commons-configuration-1.8-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ClusEvalFramework/lib/apacheCommons/commons-configuration-1.8-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/clusteval/lib/apacheCommons/commons-io-2.3.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/apacheCommons/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/apacheCommons/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/apacheCommons/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/apacheCommons/commons-logging-adapters-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/apacheCommons/commons-logging-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/apacheCommons/commons-logging-tests.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/logback/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/logback/logback-access-1.0.1.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/logback/logback-access-1.0.9.jar" sourcepath="/clusteval/lib/logback/logback-access-1.0.9-sources.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/logback/logback-classic-1.0.1.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/logback/logback-classic-1.0.9.jar" sourcepath="/clusteval/lib/logback/logback-classic-1.0.9-sources.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/logback/logback-core-1.0.1.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/logback/logback-core-1.0.9.jar" sourcepath="/clusteval/lib/logback/logback-core-1.0.9-sources.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/logback/slf4j-api-1.6.4.jar" sourcepath="/clusteval/lib/logback/slf4j-api-1.6.4-sources.jar"/>
+	<classpathentry kind="lib" path="/clusteval/lib/pcolt/parallelcolt-0.9.4.jar" sourcepath="/clusteval/lib/pcolt/src">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/home/wiwie/Dropbox/workspace/ClusEvalFramework/lib/pcolt/doc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/clusteval/lib/rJava/REngine.jar" sourcepath="/clusteval/lib/rJava"/>
+	<classpathentry kind="lib" path="/clusteval/lib/rJava/Rserve.jar" sourcepath="/clusteval/lib/rJava"/>
+	<classpathentry kind="lib" path="/clusteval/lib/transclust/TransClust.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/clusteval"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
