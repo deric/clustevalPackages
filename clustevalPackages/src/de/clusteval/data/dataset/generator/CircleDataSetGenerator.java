@@ -152,6 +152,8 @@ public class CircleDataSetGenerator extends DataSetGenerator {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(
 						dataSetFile));
 				// writer header
+				writer.append("// alias = " + getAlias());
+				writer.newLine();
 				writer.append("// dataSetFormat = MatrixDataSetFormat");
 				writer.newLine();
 				writer.append("// dataSetType = SyntheticDataSetType");
@@ -166,7 +168,7 @@ public class CircleDataSetGenerator extends DataSetGenerator {
 				writer.close();
 
 				return new AbsoluteDataSet(this.repository, true,
-						dataSetFile.lastModified(), dataSetFile,
+						dataSetFile.lastModified(), dataSetFile, getAlias(),
 						(AbsoluteDataSetFormat) DataSetFormat.parseFromString(
 								repository, "MatrixDataSetFormat"),
 						DataSetType.parseFromString(repository,
