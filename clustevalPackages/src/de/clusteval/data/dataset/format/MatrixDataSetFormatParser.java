@@ -48,7 +48,7 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 
 		RelativeDataSet newDataSet = new RelativeDataSet(
 				dataSet.getRepository(), false, System.currentTimeMillis(),
-				targetFile,
+				targetFile, dataSet.getAlias(),
 				(RelativeDataSetFormat) DataSetFormat.parseFromString(
 						dataSet.getRepository(), "SimMatrixDataSetFormat"),
 				dataSet.getDataSetType());

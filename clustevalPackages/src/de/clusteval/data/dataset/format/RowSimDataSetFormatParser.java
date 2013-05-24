@@ -85,6 +85,7 @@ public class RowSimDataSetFormatParser extends DataSetFormatParser {
 		}
 		return new RelativeDataSet(dataSet.getRepository(), false,
 				dataSet.getChangeDate(), new File(resultFileName),
+				dataSet.getAlias(),
 				(RelativeDataSetFormat) DataSetFormat.parseFromString(
 						dataSet.getRepository(), "SimMatrixDataSetFormat"),
 				dataSet.getDataSetType());
@@ -144,9 +145,10 @@ public class RowSimDataSetFormatParser extends DataSetFormatParser {
 		}
 		return new RelativeDataSet(dataSet.getRepository(), false,
 				dataSet.getChangeDate(), new File(resultFileName),
-				new RowSimDataSetFormat(dataSet.getRepository(), false, dataSet
-						.getChangeDate(), new File(resultFileName), dataSet
-						.getRepository().getCurrentDataSetFormatVersion(
+				dataSet.getAlias(), new RowSimDataSetFormat(
+						dataSet.getRepository(), false,
+						dataSet.getChangeDate(), new File(resultFileName),
+						dataSet.getRepository().getCurrentDataSetFormatVersion(
 								RowSimDataSetFormat.class.getSimpleName())),
 				dataSet.getDataSetType());
 	}

@@ -79,6 +79,7 @@ public class TransClustSimMatrixDataSetFormatParser extends DataSetFormatParser 
 		}
 		return new RelativeDataSet(dataSet.getRepository(), false,
 				System.currentTimeMillis(), new File(resultFileName),
+				dataSet.getAlias(),
 				(RelativeDataSetFormat) DataSetFormat.parseFromString(
 						dataSet.getRepository(), "SimMatrixDataSetFormat"),
 				dataSet.getDataSetType());

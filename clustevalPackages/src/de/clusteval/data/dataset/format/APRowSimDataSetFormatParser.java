@@ -80,7 +80,8 @@ public class APRowSimDataSetFormatParser extends DataSetFormatParser {
 		}
 		return new RelativeDataSet(dataSet.getRepository(), false,
 				System.currentTimeMillis(), new File(absResultFilePath),
-				new APRowSimDataSetFormat(dataSet.getRepository(), false,
+				dataSet.getAlias(), new APRowSimDataSetFormat(
+						dataSet.getRepository(), false,
 						System.currentTimeMillis(),
 						new File(absResultFilePath), dataSet.getRepository()
 								.getCurrentDataSetFormatVersion(

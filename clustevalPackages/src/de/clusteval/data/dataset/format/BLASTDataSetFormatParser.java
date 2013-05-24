@@ -139,7 +139,7 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 						"SimMatrixDataSetFormat");
 		return new RelativeDataSet(dataSet.getRepository(), false,
 				System.currentTimeMillis(), new File(resultFileName),
-				targetFormat, dataSet.getDataSetType());
+				dataSet.getAlias(), targetFormat, dataSet.getDataSetType());
 	}
 
 	/*
