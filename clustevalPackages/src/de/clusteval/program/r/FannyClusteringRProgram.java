@@ -79,7 +79,7 @@ public class FannyClusteringRProgram extends RelativeDataRProgram {
 	 */
 	@Override
 	public String getAlias() {
-		return "Fuzzy Clustering (R)";
+		return "Fuzzy Clustering";
 	}
 
 	/*
