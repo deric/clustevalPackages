@@ -125,7 +125,7 @@ public class TransClustSimMatrixDataSetFormatParser extends DataSetFormatParser 
 		 */
 		public TransClustSimMatrixConverter(final String absFilePath,
 				final String outputPath) throws IOException {
-			super(absFilePath, null, null, false, outputPath, OUTPUT_MODE.BURST);
+			super(absFilePath, null, null, false, null, outputPath, OUTPUT_MODE.BURST);
 			this.setLockTargetFile(true);
 			this.skipEmptyLines = true;
 			this.keyToId = new HashMap<String, Integer>();
