@@ -324,6 +324,10 @@
 			<fileset dir="bin" includes="**/CooccurrenceBestRunStatistic*.class" />
 			<fileset dir="src" includes="**/CooccurrenceBestRunStatistic*.java" />
 		</jar>
+		<jar destfile="repository/supp/statistics/run/ParameterImportanceRunStatistic.jar">
+			<fileset dir="bin" includes="**/ParameterImportanceRunStatistic*.class" />
+			<fileset dir="src" includes="**/ParameterImportanceRunStatistic*.java" />
+		</jar>
 	</target>
 
 	<target name="create_runDataStatistic_jars">
