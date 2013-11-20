@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import utils.ArraysExt;
 import utils.RangeCreationException;
 import de.clusteval.cluster.quality.ClusteringQualityMeasure;
 import de.clusteval.data.DataConfig;
@@ -87,7 +88,7 @@ public class TransClustQuantileParameterOptimizationMethod
 	 */
 	@Override
 	protected void initParameterValues() throws ParameterOptimizationException {
-		this.parameterValues = new HashMap<ProgramParameter<?>, double[]>();
+		this.parameterValues = new HashMap<ProgramParameter<?>, String[]>();
 		currentPos = new HashMap<ProgramParameter<?>, Integer>();
 		try {
 			RelativeDataSet dataSet = (RelativeDataSet) (this.dataConfig
@@ -97,8 +98,12 @@ public class TransClustQuantileParameterOptimizationMethod
 					iterationPerParameter[0]);
 			dataSet.unloadFromMemory();
 
+			String[] quantileStr = new String[quantiles.length];
+			for (int i = 0; i < quantileStr.length; i++)
+				quantileStr[i] = quantiles[i] + "";
+
 			ProgramParameter<?> tParam = this.params.get(0);
-			parameterValues.put(tParam, quantiles);
+			parameterValues.put(tParam, quantileStr);
 			currentPos.put(tParam, -1);
 		} catch (RangeCreationException e1) {
 			throw new ParameterOptimizationException(

@@ -21,11 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.clusteval.cluster.quality.ClusteringQualityMeasure;
-import de.clusteval.cluster.quality.ClusteringQualitySet;
-
 import utils.ArraysExt;
 import utils.Pair;
+import de.clusteval.cluster.quality.ClusteringQualityMeasure;
+import de.clusteval.cluster.quality.ClusteringQualitySet;
 import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.format.DataSetFormat;
 import de.clusteval.framework.repository.RegisterException;
@@ -54,6 +53,7 @@ public class LayeredDivisiveParameterOptimizationMethod
 	 * The number of layers.
 	 */
 	protected int layerCount;
+	protected int iterationsPerLayer;
 	protected int currentLayer;
 	protected DivisiveParameterOptimizationMethod currentDivisiveMethod;
 	protected List<ProgramParameter<?>> originalParameters;
@@ -86,10 +86,9 @@ public class LayeredDivisiveParameterOptimizationMethod
 				params, optimizationCriterion, iterationPerParameter, isResume);
 		this.originalParameters = params;
 		this.totalIterationCount = (int) ArraysExt
-				.sum(this.iterationPerParameter);
-		this.layerCount = (int) Math.sqrt(getTotalIterationCount());
-		// this.layerCount =
-		// ArraysExt.toIntArray(ArraysExt.sqrt(iterationPerParameter));
+				.product(this.iterationPerParameter);
+		this.layerCount = (int) Math.sqrt(this.iterationPerParameter[0]);
+		this.iterationsPerLayer = this.totalIterationCount / this.layerCount;
 		this.paramToValueRange = new HashMap<String, Pair<?, ?>>();
 
 		if (register)
@@ -115,10 +114,9 @@ public class LayeredDivisiveParameterOptimizationMethod
 		this.originalParameters = ProgramParameter
 				.cloneParameterList(other.params);
 		this.totalIterationCount = (int) ArraysExt
-				.sum(this.iterationPerParameter);
-		this.layerCount = (int) Math.sqrt(getTotalIterationCount());
-		// this.layerCount =
-		// ArraysExt.toIntArray(ArraysExt.sqrt(iterationPerParameter));
+				.product(this.iterationPerParameter);
+		this.layerCount = (int) Math.sqrt(this.iterationPerParameter[0]);
+		this.iterationsPerLayer = this.totalIterationCount / this.layerCount;
 		this.paramToValueRange = new HashMap<String, Pair<?, ?>>();
 	}
 
@@ -222,9 +220,9 @@ public class LayeredDivisiveParameterOptimizationMethod
 				 * In the next layer we half the domains of every parameter
 				 * centered around that point with maximal quality
 				 */
-				double paramOptValue = this.getResult()
+				double paramOptValue = Double.valueOf(this.getResult()
 						.getOptimalParameterSets()
-						.get(this.optimizationCriterion).get(param.getName());
+						.get(this.optimizationCriterion).get(param.getName()));
 
 				double oldMinValue;
 				double oldMaxValue;
@@ -310,29 +308,7 @@ public class LayeredDivisiveParameterOptimizationMethod
 			 */
 		}
 
-		int[] newIterationsPerParameter;
-		if (currentLayer < layerCount)
-			// newIterationsPerParameter = (int) (this.iterationPerParameter /
-			// (double) this.layerCount);
-			newIterationsPerParameter = ArraysExt.toIntArray(ArraysExt.scaleBy(
-					this.iterationPerParameter, this.layerCount));
-		else
-			/*
-			 * If this is the last layer, do the remaining number of iterations
-			 */
-			// newIterationsPerParameter = this.iterationPerParameter
-			// - (this.layerCount - 1)
-			// * (int) (this.iterationPerParameter / (double) this.layerCount);
-			newIterationsPerParameter = ArraysExt.subtract(
-					this.iterationPerParameter, ArraysExt.toIntArray(ArraysExt
-							.scaleBy(ArraysExt.toIntArray(ArraysExt
-									.scaleBy(this.iterationPerParameter,
-											this.layerCount)),
-									(this.layerCount - 1), false)));
-		// int newLayerIterations = newIterationsPerParameter *
-		// this.params.size();
-		int newLayerIterations = (int) ArraysExt.sum(newIterationsPerParameter);
-		this.remainingIterationCount -= newLayerIterations;
+		int[] newIterationsPerParameter = getNextIterationsPerParameter();
 		try {
 			this.currentDivisiveMethod = createDivisiveMethod(newParams,
 					newIterationsPerParameter);
@@ -344,6 +320,29 @@ public class LayeredDivisiveParameterOptimizationMethod
 			e.printStackTrace();
 		}
 		this.currentLayer++;
+	}
+
+	protected int[] getNextIterationsPerParameter() {
+		int[] newIterationsPerParameter;
+		if (currentLayer < layerCount - 1) {
+			newIterationsPerParameter = ArraysExt.rep((int) Math.pow(
+					this.iterationsPerLayer,
+					1.0 / this.iterationPerParameter.length),
+					this.iterationPerParameter.length);
+			int newLayerIterations = (int) ArraysExt
+					.product(newIterationsPerParameter);
+			this.remainingIterationCount -= newLayerIterations;
+		} else {
+			/*
+			 * If this is the last layer, do the remaining number of iterations
+			 */
+			newIterationsPerParameter = ArraysExt.rep((int) Math.pow(
+					this.remainingIterationCount,
+					1.0 / this.iterationPerParameter.length),
+					this.iterationPerParameter.length);
+			this.remainingIterationCount = 0;
+		}
+		return newIterationsPerParameter;
 	}
 
 	protected DivisiveParameterOptimizationMethod createDivisiveMethod(

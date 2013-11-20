@@ -21,10 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.clusteval.cluster.quality.ClusteringQualityMeasure;
-
 import utils.ArraysExt;
 import utils.RangeCreationException;
+import de.clusteval.cluster.quality.ClusteringQualityMeasure;
 import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.format.DataSetFormat;
 import de.clusteval.framework.repository.RegisterException;
@@ -34,6 +33,7 @@ import de.clusteval.program.IntegerProgramParameter;
 import de.clusteval.program.ParameterSet;
 import de.clusteval.program.ProgramConfig;
 import de.clusteval.program.ProgramParameter;
+import de.clusteval.program.StringProgramParameter;
 import de.clusteval.run.ParameterOptimizationRun;
 import de.clusteval.utils.InternalAttributeException;
 
@@ -47,7 +47,7 @@ public class DivisiveParameterOptimizationMethod
 			ParameterOptimizationMethod {
 
 	protected Map<ProgramParameter<?>, Integer> currentPos;
-	protected Map<ProgramParameter<?>, double[]> parameterValues;
+	protected Map<ProgramParameter<?>, String[]> parameterValues;
 
 	/**
 	 * @param repo
@@ -124,7 +124,7 @@ public class DivisiveParameterOptimizationMethod
 	@Override
 	protected void initParameterValues() throws ParameterOptimizationException,
 			InternalAttributeException {
-		this.parameterValues = new HashMap<ProgramParameter<?>, double[]>();
+		this.parameterValues = new HashMap<ProgramParameter<?>, String[]>();
 		currentPos = new HashMap<ProgramParameter<?>, Integer>();
 		for (int p = 0; p < this.params.size(); p++) {
 			ProgramParameter<?> param = this.params.get(p);
@@ -136,7 +136,10 @@ public class DivisiveParameterOptimizationMethod
 						programConfig);
 				double[] paramValues = ArraysExt.range(nMinValue, nMaxValue,
 						this.iterationPerParameter[p], true);
-				parameterValues.put(param, paramValues);
+				String[] paramValuesStr = new String[paramValues.length];
+				for (int i = 0; i < paramValues.length; i++)
+					paramValuesStr[i] = Double.toString(paramValues[i]);
+				parameterValues.put(param, paramValuesStr);
 			} else if (param.getClass().equals(IntegerProgramParameter.class)) {
 				IntegerProgramParameter paCast = (IntegerProgramParameter) param;
 				int nMinValue = paCast.evaluateMinValue(dataConfig,
@@ -153,11 +156,18 @@ public class DivisiveParameterOptimizationMethod
 					// and whether it is calculated correctly -> progress
 					paramValues = ArraysExt.unique(paramValues);
 					this.iterationPerParameter[p] = paramValues.length;
-					parameterValues.put(param,
-							ArraysExt.toDoubleArray(paramValues));
+					String[] paramValuesStr = new String[paramValues.length];
+					for (int i = 0; i < paramValues.length; i++)
+						paramValuesStr[i] = Integer.toString(paramValues[i]);
+					parameterValues.put(param, paramValuesStr);
 				} catch (RangeCreationException e) {
 					// will never occur
 				}
+			} else if (param.getClass().equals(StringProgramParameter.class)) {
+				StringProgramParameter paCast = (StringProgramParameter) param;
+				String[] options = paCast.getOptions();
+				this.iterationPerParameter[p] = options.length;
+				parameterValues.put(param, options);
 			}
 			/*
 			 * We need to initialize the last parameter with -1, because it will
@@ -196,7 +206,7 @@ public class DivisiveParameterOptimizationMethod
 						forcedParameterSet.get(param.getName()));
 			} else
 				result.put(param.getName(),
-						parameterValues.get(param)[currentPos.get(param)]);
+						parameterValues.get(param)[currentPos.get(param)] + "");
 		}
 
 		return result;
@@ -253,7 +263,7 @@ public class DivisiveParameterOptimizationMethod
 	 */
 	@Override
 	public int getTotalIterationCount() {
-		return (int) ArraysExt.sum(this.iterationPerParameter);
+		return (int) ArraysExt.product(this.iterationPerParameter);
 	}
 
 	/*

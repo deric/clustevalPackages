@@ -154,7 +154,7 @@ public class GapStatisticParameterOptimizationMethod
 				int noOfClusters = result.asInteger();
 
 				ParameterSet res = new ParameterSet();
-				res.put("k", (double) noOfClusters);
+				res.put("k", (double) noOfClusters + "");
 
 				return res;
 

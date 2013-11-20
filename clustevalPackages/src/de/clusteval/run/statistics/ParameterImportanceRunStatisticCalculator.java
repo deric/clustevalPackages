@@ -58,6 +58,7 @@ import de.clusteval.framework.repository.config.RepositoryConfigNotFoundExceptio
 import de.clusteval.framework.repository.config.RepositoryConfigurationException;
 import de.clusteval.program.NoOptimizableProgramParameterException;
 import de.clusteval.program.ParameterSet;
+import de.clusteval.program.UnknownParameterType;
 import de.clusteval.program.UnknownProgramParameterException;
 import de.clusteval.program.UnknownProgramTypeException;
 import de.clusteval.program.r.UnknownRProgramException;
@@ -135,7 +136,8 @@ public class ParameterImportanceRunStatisticCalculator
 			UnknownRunDataStatisticException, RunResultParseException,
 			UnknownDataPreprocessorException,
 			IncompatibleDataSetConfigPreprocessorException,
-			UnknownContextException, IncompatibleContextException {
+			UnknownContextException, IncompatibleContextException,
+			UnknownParameterType {
 
 		List<ParameterOptimizationResult> results = new ArrayList<ParameterOptimizationResult>();
 
@@ -157,11 +159,11 @@ public class ParameterImportanceRunStatisticCalculator
 
 				// paramName x paramValue -> validityIndex x ( ..., qualities,
 				// ...)
-				Map<Pair<String, Double>, Map<ClusteringQualityMeasure, List<ClusteringQualityMeasureValue>>> paramQualities = new HashMap<Pair<String, Double>, Map<ClusteringQualityMeasure, List<ClusteringQualityMeasureValue>>>();
+				Map<Pair<String, String>, Map<ClusteringQualityMeasure, List<ClusteringQualityMeasureValue>>> paramQualities = new HashMap<Pair<String, String>, Map<ClusteringQualityMeasure, List<ClusteringQualityMeasureValue>>>();
 
 				for (Pair<ParameterSet, ClusteringQualitySet> qualities : result) {
 					for (String paramName : qualities.getFirst().keySet()) {
-						Pair<String, Double> p = Pair.getPair(programConfig
+						Pair<String, String> p = Pair.getPair(programConfig
 								+ ":" + paramName,
 								qualities.getFirst().get(paramName));
 
@@ -183,10 +185,10 @@ public class ParameterImportanceRunStatisticCalculator
 					}
 				}
 
-				Map<Pair<String, Double>, Map<String, Double>> paramQualitiesMean = new HashMap<Pair<String, Double>, Map<String, Double>>();
+				Map<Pair<String, String>, Map<String, Double>> paramQualitiesMean = new HashMap<Pair<String, String>, Map<String, Double>>();
 
 				// average over qualities for a certain parameter value
-				for (Pair<String, Double> p : paramQualities.keySet()) {
+				for (Pair<String, String> p : paramQualities.keySet()) {
 					Map<ClusteringQualityMeasure, List<ClusteringQualityMeasureValue>> quals = paramQualities
 							.get(p);
 
@@ -213,7 +215,7 @@ public class ParameterImportanceRunStatisticCalculator
 
 				// merge for different param values into one list
 				Map<String, Map<String, List<Double>>> paramQualitiesLists = new HashMap<String, Map<String, List<Double>>>();
-				for (Pair<String, Double> p : paramQualitiesMean.keySet()) {
+				for (Pair<String, String> p : paramQualitiesMean.keySet()) {
 					String paramName = p.getFirst();
 					if (!paramQualitiesLists.containsKey(paramName))
 						paramQualitiesLists.put(paramName,
