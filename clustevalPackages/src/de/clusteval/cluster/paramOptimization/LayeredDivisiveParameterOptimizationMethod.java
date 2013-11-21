@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import utils.ArraysExt;
 import utils.Pair;
 import de.clusteval.cluster.quality.ClusteringQualityMeasure;
 import de.clusteval.cluster.quality.ClusteringQualitySet;
@@ -57,7 +56,7 @@ public class LayeredDivisiveParameterOptimizationMethod
 	protected int currentLayer;
 	protected DivisiveParameterOptimizationMethod currentDivisiveMethod;
 	protected List<ProgramParameter<?>> originalParameters;
-	private int totalIterationCount;
+	// private int totalIterationCount;
 	protected Map<String, Pair<?, ?>> paramToValueRange;
 
 	/**
@@ -70,7 +69,7 @@ public class LayeredDivisiveParameterOptimizationMethod
 	 * @param dataConfig
 	 * @param params
 	 * @param optimizationCriterion
-	 * @param iterationPerParameter
+	 * @param totalIterations
 	 * @param isResume
 	 * @throws RegisterException
 	 */
@@ -80,14 +79,16 @@ public class LayeredDivisiveParameterOptimizationMethod
 			final ProgramConfig programConfig, final DataConfig dataConfig,
 			List<ProgramParameter<?>> params,
 			ClusteringQualityMeasure optimizationCriterion,
-			int[] iterationPerParameter, final boolean isResume)
+			int totalIterations, final boolean isResume)
 			throws RegisterException {
 		super(repo, false, changeDate, absPath, run, programConfig, dataConfig,
-				params, optimizationCriterion, iterationPerParameter, isResume);
+				params, optimizationCriterion, totalIterations, isResume);
 		this.originalParameters = params;
-		this.totalIterationCount = (int) ArraysExt
-				.product(this.iterationPerParameter);
-		this.layerCount = (int) Math.sqrt(this.iterationPerParameter[0]);
+		// this.totalIterationCount = (int) ArraysExt
+		// .product(this.iterationPerParameter);
+		// this.layerCount = (int) Math.sqrt(this.iterationPerParameter[0]);
+		// this.iterationsPerLayer = this.totalIterationCount / this.layerCount;
+		this.layerCount = (int) Math.log10(this.totalIterationCount);
 		this.iterationsPerLayer = this.totalIterationCount / this.layerCount;
 		this.paramToValueRange = new HashMap<String, Pair<?, ?>>();
 
@@ -113,10 +114,12 @@ public class LayeredDivisiveParameterOptimizationMethod
 
 		this.originalParameters = ProgramParameter
 				.cloneParameterList(other.params);
-		this.totalIterationCount = (int) ArraysExt
-				.product(this.iterationPerParameter);
-		this.layerCount = (int) Math.sqrt(this.iterationPerParameter[0]);
-		this.iterationsPerLayer = this.totalIterationCount / this.layerCount;
+		// this.totalIterationCount = (int) ArraysExt
+		// .product(this.iterationPerParameter);
+		// this.layerCount = (int) Math.sqrt(this.iterationPerParameter[0]);
+		// this.iterationsPerLayer = this.totalIterationCount / this.layerCount;
+		this.layerCount = other.layerCount;
+		this.iterationsPerLayer = other.iterationsPerLayer;
 		this.paramToValueRange = new HashMap<String, Pair<?, ?>>();
 	}
 
@@ -308,7 +311,7 @@ public class LayeredDivisiveParameterOptimizationMethod
 			 */
 		}
 
-		int[] newIterationsPerParameter = getNextIterationsPerParameter();
+		int newIterationsPerParameter = getNextIterationsPerLayer();
 		try {
 			this.currentDivisiveMethod = createDivisiveMethod(newParams,
 					newIterationsPerParameter);
@@ -322,31 +325,27 @@ public class LayeredDivisiveParameterOptimizationMethod
 		this.currentLayer++;
 	}
 
-	protected int[] getNextIterationsPerParameter() {
-		int[] newIterationsPerParameter;
+	protected int getNextIterationsPerLayer() {
+		int newLayerIterations;
 		if (currentLayer < layerCount - 1) {
-			newIterationsPerParameter = ArraysExt.rep((int) Math.pow(
-					this.iterationsPerLayer,
-					1.0 / this.iterationPerParameter.length),
-					this.iterationPerParameter.length);
-			int newLayerIterations = (int) ArraysExt
-					.product(newIterationsPerParameter);
+			newLayerIterations = (int) Math.pow(Math.floor(Math.pow(
+					this.iterationsPerLayer, 1.0 / this.params.size())),
+					this.params.size());
 			this.remainingIterationCount -= newLayerIterations;
 		} else {
 			/*
 			 * If this is the last layer, do the remaining number of iterations
 			 */
-			newIterationsPerParameter = ArraysExt.rep((int) Math.pow(
-					this.remainingIterationCount,
-					1.0 / this.iterationPerParameter.length),
-					this.iterationPerParameter.length);
+			newLayerIterations = (int) Math.pow(Math.floor(Math.pow(
+					this.remainingIterationCount, 1.0 / this.params.size())),
+					this.params.size());
 			this.remainingIterationCount = 0;
 		}
-		return newIterationsPerParameter;
+		return newLayerIterations;
 	}
 
 	protected DivisiveParameterOptimizationMethod createDivisiveMethod(
-			List<ProgramParameter<?>> newParams, int[] newIterationsPerParameter)
+			List<ProgramParameter<?>> newParams, int newIterationsPerParameter)
 			throws ParameterOptimizationException, RegisterException {
 		return new DivisiveParameterOptimizationMethod(repository, false,
 				System.currentTimeMillis(), new File(

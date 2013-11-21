@@ -17,7 +17,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.ArraysExt;
 import de.clusteval.cluster.quality.ClusteringQualityMeasure;
 import de.clusteval.cluster.quality.ClusteringQualitySet;
 import de.clusteval.data.DataConfig;
@@ -76,11 +75,13 @@ public class APParameterOptimizationMethod
 			final ProgramConfig programConfig, final DataConfig dataConfig,
 			final List<ProgramParameter<?>> params,
 			final ClusteringQualityMeasure optimizationCriterion,
-			int[] iterationPerParameter, final boolean isResume)
+			int iterationPerParameter, final boolean isResume)
 			throws RegisterException {
 		super(repo, false, changeDate, absPath, run, programConfig, dataConfig,
 				getPreferenceParam(params), optimizationCriterion,
-				new int[]{iterationPerParameter[0]}, isResume);
+				// TODO: why?
+				// new int[]{iterationPerParameter[0]},
+				iterationPerParameter, isResume);
 		this.allParams = params;
 		this.numberTriesOnNotTerminated = 3; // TODO
 
@@ -172,7 +173,7 @@ public class APParameterOptimizationMethod
 					this.iterationParamMethod = new DivisiveParameterOptimizationMethod(
 							repository, false, changeDate, absPath, run,
 							programConfig, dataConfig, iterationParams,
-							optimizationCriterion, ArraysExt.rep(
+							optimizationCriterion, (int) Math.pow(
 									this.numberTriesOnNotTerminated,
 									iterationParams.size()), isResume);
 					this.iterationParamMethod.reset(new File(this.getResult()
@@ -217,7 +218,7 @@ public class APParameterOptimizationMethod
 			this.iterationParamMethod = new DivisiveParameterOptimizationMethod(
 					repository, false, changeDate, absPath, run, programConfig,
 					dataConfig, iterationParams, optimizationCriterion,
-					ArraysExt.rep(this.numberTriesOnNotTerminated,
+					(int) Math.pow(this.numberTriesOnNotTerminated,
 							iterationParams.size()), isResume);
 			this.iterationParamMethod.reset(new File(this.getResult()
 					.getAbsolutePath()));

@@ -46,6 +46,8 @@ public class DivisiveParameterOptimizationMethod
 		extends
 			ParameterOptimizationMethod {
 
+	protected int[] iterationPerParameter;
+
 	protected Map<ProgramParameter<?>, Integer> currentPos;
 	protected Map<ProgramParameter<?>, String[]> parameterValues;
 
@@ -82,12 +84,17 @@ public class DivisiveParameterOptimizationMethod
 			final ProgramConfig programConfig, final DataConfig dataConfig,
 			final List<ProgramParameter<?>> params,
 			final ClusteringQualityMeasure optimizationCriterion,
-			final int[] terminateCount, final boolean isResume)
+			final int terminateCount, final boolean isResume)
 			throws ParameterOptimizationException, RegisterException {
 		super(repo, false, changeDate, absPath, run, programConfig, dataConfig,
 				params, optimizationCriterion, terminateCount, isResume);
 
-		this.iterationPerParameter = terminateCount;
+		// TODO: why?
+		this.totalIterationCount = terminateCount;
+
+		this.iterationPerParameter = ArraysExt.rep(
+				(int) Math.pow(this.totalIterationCount, 1.0 / params.size()),
+				params.size());
 
 		if (register)
 			this.register();
@@ -105,6 +112,9 @@ public class DivisiveParameterOptimizationMethod
 			throws RegisterException {
 		super(other);
 
+		// TODO: why?
+		this.totalIterationCount = other.totalIterationCount;
+		
 		this.iterationPerParameter = other.iterationPerParameter;
 	}
 

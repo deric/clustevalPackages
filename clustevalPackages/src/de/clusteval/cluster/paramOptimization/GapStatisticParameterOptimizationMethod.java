@@ -95,7 +95,7 @@ public class GapStatisticParameterOptimizationMethod
 			ParameterOptimizationRun run, ProgramConfig programConfig,
 			DataConfig dataConfig, List<ProgramParameter<?>> params,
 			ClusteringQualityMeasure optimizationCriterion,
-			int[] iterationPerParameter, boolean isResume)
+			int iterationPerParameter, boolean isResume)
 			throws RegisterException {
 		super(repo, false, changeDate, absPath, run, programConfig, dataConfig,
 				params, optimizationCriterion, iterationPerParameter, isResume);

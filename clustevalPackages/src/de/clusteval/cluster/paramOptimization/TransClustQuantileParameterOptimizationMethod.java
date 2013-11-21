@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-import utils.ArraysExt;
 import utils.RangeCreationException;
 import de.clusteval.cluster.quality.ClusteringQualityMeasure;
 import de.clusteval.data.DataConfig;
@@ -57,9 +56,9 @@ public class TransClustQuantileParameterOptimizationMethod
 			final boolean register, final long changeDate, final File absPath,
 			ParameterOptimizationRun run, ProgramConfig programConfig,
 			DataConfig dataConfig, List<ProgramParameter<?>> params,
-			ClusteringQualityMeasure optimizationCriterion,
-			int[] terminateCount, boolean isResume)
-			throws ParameterOptimizationException, RegisterException {
+			ClusteringQualityMeasure optimizationCriterion, int terminateCount,
+			boolean isResume) throws ParameterOptimizationException,
+			RegisterException {
 		super(repo, false, changeDate, absPath, run, programConfig, dataConfig,
 				params, optimizationCriterion, terminateCount, isResume);
 
