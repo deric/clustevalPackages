@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="program/Executable.java|program/ExecutableFinder.java|program/ExecutableFinderThread.java|run/config/RunConfig.java|run/config/ExecutionRunConfig.java|run/config/ClusteringRunConfig.java|run/config/ParameterOptimizationRunConfig.java|run/config/InternalParameterOptimizationRunConfig.java|run/config/AnalysisRunConfig.java|run/config/DataAnalysisRunConfig.java|run/config/RunAnalysisRunConfig.java|run/config/RunDataAnalysisRunConfig.java|run/config/" kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="lib" path="/clusteval/lib/jansi-1.9.jar"/>
 	<classpathentry kind="lib" path="/clusteval/lib/jline-2.8-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="/clusteval/lib/jline-2.8-SNAPSHOT.jar" sourcepath="/home/wiwie/Dropbox/workspace/ClusEvalFramework/lib/jline-2.8-SNAPSHOT-sources.jar"/>

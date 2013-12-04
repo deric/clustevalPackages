@@ -160,7 +160,7 @@ public class HyperCubeCornersDataSetGenerator extends DataSetGenerator {
 	@Override
 	protected DataSet generateDataSet() throws DataSetGenerationException {
 		try {
-			MyRengine rEngine = new MyRengine("");
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			rEngine.eval("library(mlbench)");
 			rEngine.eval("result <- mlbench.hypercube(n=" + this.numberOfPoints
 					+ ",d=" + this.numberDimensions + ",sd="

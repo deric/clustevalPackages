@@ -105,7 +105,7 @@ public class SimilarityDistributionDataStatisticCalculator
 	@Override
 	public void writeOutputTo(final File absFolderPath) {
 		try {
-			MyRengine rEngine = new MyRengine("");
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			try {
 
 				rEngine.eval("plotSimilarityDistribution <- function(title, path, xlabels, distr) {"

@@ -143,7 +143,7 @@ public class IntraInterDistributionDataStatisticCalculator
 	@Override
 	public void writeOutputTo(final File absFolderPath) {
 		try {
-			MyRengine rEngine = new MyRengine("");
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			try {
 
 				rEngine.eval("plotIntraVsInterDistribution <- function(title, path, xlabels, intraDistr, interDistr) {"

@@ -132,7 +132,7 @@ public class CuboidDataSetGenerator extends DataSetGenerator {
 	@Override
 	protected DataSet generateDataSet() throws DataSetGenerationException {
 		try {
-			MyRengine rEngine = new MyRengine("");
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			rEngine.eval("library(mlbench)");
 			rEngine.eval("result <- mlbench.cuboids(n=" + this.numberOfPoints
 					+ ");");

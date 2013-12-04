@@ -139,7 +139,7 @@ public class CooccurrenceRunStatisticCalculator
 			UnknownDataPreprocessorException,
 			IncompatibleDataSetConfigPreprocessorException,
 			UnknownContextException, IncompatibleContextException,
-			UnknownParameterType {
+			UnknownParameterType, InterruptedException {
 
 		List<ParameterOptimizationResult> results = new ArrayList<ParameterOptimizationResult>();
 
@@ -221,7 +221,7 @@ public class CooccurrenceRunStatisticCalculator
 	public void writeOutputTo(File absFolderPath) {
 		SparseLongMatrix2D matrix = lastResult.cooccurrenceMatrix;
 		try {
-			MyRengine rEngine = new MyRengine("");
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			try {
 				rEngine.assign("ids", lastResult.ids);
 				rEngine.assign("coocc",

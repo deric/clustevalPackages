@@ -32,7 +32,6 @@ import de.clusteval.cluster.paramOptimization.UnknownParameterOptimizationMethod
 import de.clusteval.cluster.quality.UnknownClusteringQualityMeasureException;
 import de.clusteval.context.IncompatibleContextException;
 import de.clusteval.context.UnknownContextException;
-
 import utils.ArraysExt;
 import cern.colt.matrix.tlong.impl.SparseLongMatrix2D;
 import de.clusteval.data.DataConfigNotFoundException;
@@ -139,7 +138,7 @@ public class CooccurrenceBestRunStatisticCalculator
 			UnknownDataPreprocessorException,
 			IncompatibleDataSetConfigPreprocessorException,
 			UnknownContextException, IncompatibleContextException,
-			UnknownParameterType {
+			UnknownParameterType, InterruptedException {
 
 		List<ParameterOptimizationResult> results = new ArrayList<ParameterOptimizationResult>();
 
@@ -218,7 +217,7 @@ public class CooccurrenceBestRunStatisticCalculator
 	public void writeOutputTo(File absFolderPath) {
 		SparseLongMatrix2D matrix = lastResult.cooccurrenceMatrix;
 		try {
-			MyRengine rEngine = new MyRengine("");
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			try {
 				rEngine.assign("ids", lastResult.ids);
 				rEngine.assign("coocc",

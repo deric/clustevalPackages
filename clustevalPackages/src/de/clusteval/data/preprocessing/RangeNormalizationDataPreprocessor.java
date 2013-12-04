@@ -91,7 +91,7 @@ public class RangeNormalizationDataPreprocessor extends DataPreprocessor {
 			dataSet.loadIntoMemory();
 			DataMatrix matrix = dataSet.getDataSetContent();
 			try {
-				MyRengine rEngine = new MyRengine("");
+				MyRengine rEngine = repository.getRengineForCurrentThread();
 				try {
 					rEngine.assign("x", matrix.getData());
 					rEngine.eval("x.norm <- t(x) - apply(x,MARGIN=2,min)");

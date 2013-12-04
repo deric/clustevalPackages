@@ -132,7 +132,7 @@ public class GapStatisticParameterOptimizationMethod
 				.getDatasetConfig().getDataSet().getOriginalDataSet());
 
 		try {
-			MyRengine rEngine = new MyRengine("");
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			try {
 				dataSet.loadIntoMemory();
 				double[][] coords = dataSet.getDataSetContent().getData();

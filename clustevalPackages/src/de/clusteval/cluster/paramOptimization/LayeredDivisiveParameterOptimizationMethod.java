@@ -86,9 +86,10 @@ public class LayeredDivisiveParameterOptimizationMethod
 		this.originalParameters = params;
 		// this.totalIterationCount = (int) ArraysExt
 		// .product(this.iterationPerParameter);
-		// this.layerCount = (int) Math.sqrt(this.iterationPerParameter[0]);
+		this.layerCount = (int) Math.sqrt(this.totalIterationCount);
 		// this.iterationsPerLayer = this.totalIterationCount / this.layerCount;
-		this.layerCount = (int) Math.log10(this.totalIterationCount);
+		// this.layerCount = (int) Math
+		// .round(Math.log10(this.totalIterationCount));
 		this.iterationsPerLayer = this.totalIterationCount / this.layerCount;
 		this.paramToValueRange = new HashMap<String, Pair<?, ?>>();
 
@@ -337,7 +338,8 @@ public class LayeredDivisiveParameterOptimizationMethod
 			 * If this is the last layer, do the remaining number of iterations
 			 */
 			newLayerIterations = (int) Math.pow(Math.floor(Math.pow(
-					this.remainingIterationCount, 1.0 / this.params.size())),
+					//this.remainingIterationCount, 1.0 / this.params.size())),
+					this.iterationsPerLayer, 1.0 / this.params.size())),
 					this.params.size());
 			this.remainingIterationCount = 0;
 		}

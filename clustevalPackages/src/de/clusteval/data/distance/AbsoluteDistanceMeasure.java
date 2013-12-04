@@ -100,7 +100,7 @@ public class AbsoluteDistanceMeasure extends DistanceMeasure {
 	public double[][] getDistances(double[][] matrix)
 			throws InvalidParameterException {
 		try {
-			MyRengine rEngine = new MyRengine("");
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			try {
 				rEngine.assign("matrix", matrix);
 				REXP result = rEngine

@@ -159,7 +159,7 @@ public class SpiralsDataSetGenerator extends DataSetGenerator {
 	@Override
 	protected DataSet generateDataSet() throws DataSetGenerationException {
 		try {
-			MyRengine rEngine = new MyRengine("");
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			rEngine.eval("library(mlbench)");
 			rEngine.eval("result <- mlbench.spirals(n=" + this.numberOfPoints
 					+ ",cycles=" + this.numberCycles + ",sd="

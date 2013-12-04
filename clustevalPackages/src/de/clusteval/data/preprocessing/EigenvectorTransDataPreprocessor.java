@@ -87,7 +87,7 @@ public class EigenvectorTransDataPreprocessor extends DataPreprocessor {
 			dataSet.loadIntoMemory();
 			DataMatrix matrix = dataSet.getDataSetContent();
 			try {
-				MyRengine rEngine = new MyRengine("");
+				MyRengine rEngine = repository.getRengineForCurrentThread();
 				try {
 					rEngine.assign("matrix", matrix.getData());
 				} catch (REngineException e) {

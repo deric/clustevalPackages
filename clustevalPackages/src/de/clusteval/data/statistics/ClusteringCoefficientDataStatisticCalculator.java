@@ -87,7 +87,7 @@ public class ClusteringCoefficientDataStatisticCalculator
 				ArraysExt.max(similarities));
 
 		try {
-			MyRengine rEngine = new MyRengine("");
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			try {
 				rEngine.assign("simMatrix", similarities);
 				rEngine.eval("library('igraph')");

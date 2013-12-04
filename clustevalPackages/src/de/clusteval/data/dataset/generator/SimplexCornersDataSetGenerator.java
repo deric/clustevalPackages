@@ -160,7 +160,7 @@ public class SimplexCornersDataSetGenerator extends DataSetGenerator {
 	@Override
 	protected DataSet generateDataSet() throws DataSetGenerationException {
 		try {
-			MyRengine rEngine = new MyRengine("");
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			rEngine.eval("library(mlbench)");
 			rEngine.eval("result <- mlbench.simplex(n=" + this.numberOfPoints
 					+ ",d=" + this.numberDimensions + ",sd="
