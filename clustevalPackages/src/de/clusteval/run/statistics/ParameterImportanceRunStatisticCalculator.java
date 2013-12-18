@@ -65,6 +65,7 @@ import de.clusteval.program.r.UnknownRProgramException;
 import de.clusteval.run.InvalidRunModeException;
 import de.clusteval.run.RunException;
 import de.clusteval.run.result.ParameterOptimizationResult;
+import de.clusteval.run.result.RunResult;
 import de.clusteval.run.result.RunResultParseException;
 import de.clusteval.run.result.format.UnknownRunResultFormatException;
 import de.clusteval.utils.InvalidConfigurationFileException;
@@ -144,7 +145,7 @@ public class ParameterImportanceRunStatisticCalculator
 		ParameterOptimizationResult.parseFromRunResultFolder(
 				this.repository,
 				new File(FileUtils.buildPath(
-						this.repository.getRunResultBasePath(),
+						this.repository.getBasePath(RunResult.class),
 						this.uniqueRunIdentifiers)), results, false, false,
 				false);
 

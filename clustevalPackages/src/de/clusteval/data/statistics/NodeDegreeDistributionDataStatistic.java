@@ -14,14 +14,10 @@
 package de.clusteval.data.statistics;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
-
-import de.clusteval.framework.repository.RegisterException;
-import de.clusteval.framework.repository.Repository;
-
 
 import utils.ArraysExt;
+import de.clusteval.framework.repository.RegisterException;
+import de.clusteval.framework.repository.Repository;
 
 /**
  * @author Christian Wiwie
@@ -79,16 +75,6 @@ public class NodeDegreeDistributionDataStatistic extends DataStatistic {
 			this.xlabels = other.xlabels.clone();
 		if (other.distribution != null)
 			this.distribution = other.distribution.clone();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see utils.Statistic#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>();
 	}
 
 	/*

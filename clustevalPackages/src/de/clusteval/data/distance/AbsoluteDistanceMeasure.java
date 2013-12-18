@@ -15,19 +15,16 @@ package de.clusteval.data.distance;
 
 import java.io.File;
 import java.security.InvalidParameterException;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RserveException;
 
-import de.clusteval.framework.MyRengine;
+import utils.ArraysExt;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
-
-import utils.ArraysExt;
 
 /**
  * @author Christian Wiwie
@@ -54,20 +51,9 @@ public class AbsoluteDistanceMeasure extends DistanceMeasure {
 	 *            The object to clone.
 	 * @throws RegisterException
 	 */
-	public AbsoluteDistanceMeasure(
-			final AbsoluteDistanceMeasure other)
+	public AbsoluteDistanceMeasure(final AbsoluteDistanceMeasure other)
 			throws RegisterException {
 		super(other);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see data.distance.DistanceMeasure#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>();
 	}
 
 	/*
@@ -111,7 +97,7 @@ public class AbsoluteDistanceMeasure extends DistanceMeasure {
 			} catch (REXPMismatchException e) {
 				e.printStackTrace();
 			} finally {
-				rEngine.close();
+				rEngine.clear();
 			}
 		} catch (RserveException e) {
 			e.printStackTrace();

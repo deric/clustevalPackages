@@ -31,13 +31,14 @@ import de.clusteval.cluster.quality.ClusteringQualitySet;
 import de.clusteval.data.DataConfig;
 import de.clusteval.data.statistics.DataStatistic;
 import de.clusteval.data.statistics.DoubleValueDataStatistic;
-import de.clusteval.framework.MyRengine;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 import de.clusteval.program.ParameterSet;
 import de.clusteval.program.Program;
 import de.clusteval.run.result.DataAnalysisRunResult;
 import de.clusteval.run.result.ParameterOptimizationResult;
+import de.clusteval.run.result.RunResult;
 import de.clusteval.run.result.RunResultParseException;
 import file.FileUtils;
 
@@ -97,7 +98,7 @@ public class LinearModelLassoRunDataStatisticCalculator
 				ParameterOptimizationResult.parseFromRunResultFolder(
 						this.repository,
 						new File(FileUtils.buildPath(
-								this.repository.getRunResultBasePath(),
+								this.repository.getBasePath(RunResult.class),
 								runIdentifier)), results, false, false, false);
 				runResults.addAll(results);
 			} catch (Exception e) {
@@ -117,10 +118,11 @@ public class LinearModelLassoRunDataStatisticCalculator
 					DataAnalysisRunResult dataResult = DataAnalysisRunResult
 							.parseFromRunResultFolder(
 									this.repository,
-									new File(FileUtils.buildPath(
-											this.repository
-													.getRunResultBasePath(),
-											dataIdentifier)));
+									new File(
+											FileUtils.buildPath(
+													this.repository
+															.getBasePath(RunResult.class),
+													dataIdentifier)));
 					if (dataResult != null) {
 						dataResults.add(dataResult);
 						commonDataConfigs.addAll(dataResult.getDataConfigs());

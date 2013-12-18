@@ -16,10 +16,8 @@ package de.clusteval.cluster.paramOptimization;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import utils.ArraysExt;
 import utils.RangeCreationException;
@@ -116,18 +114,6 @@ public class DivisiveParameterOptimizationMethod
 		this.totalIterationCount = other.totalIterationCount;
 		
 		this.iterationPerParameter = other.iterationPerParameter;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * cluster.paramOptimization.ParameterOptimizationMethod#getRequiredRlibraries
-	 * ()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>();
 	}
 
 	@SuppressWarnings("unused")

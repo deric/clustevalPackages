@@ -16,10 +16,7 @@ package de.clusteval.cluster.paramOptimization;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
@@ -27,13 +24,13 @@ import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RserveException;
 
 import de.clusteval.cluster.quality.ClusteringQualityMeasure;
-
 import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.AbsoluteDataSet;
 import de.clusteval.data.dataset.format.AbsoluteDataSetFormat;
 import de.clusteval.data.dataset.format.DataSetFormat;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
-import de.clusteval.framework.MyRengine;
+import de.clusteval.framework.RLibraryRequirement;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 import de.clusteval.program.ParameterSet;
@@ -49,21 +46,10 @@ import de.clusteval.run.ParameterOptimizationRun;
  * @author Christian Wiwie
  * 
  */
+@RLibraryRequirement(requiredRLibraries = {"cluster"})
 public class GapStatisticParameterOptimizationMethod
 		extends
 			ParameterOptimizationMethod {
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * cluster.paramOptimization.ParameterOptimizationMethod#getRequiredRlibraries
-	 * ()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>(Arrays.asList(new String[]{"cluster"}));
-	}
 
 	/**
 	 * @param repo
@@ -168,8 +154,6 @@ public class GapStatisticParameterOptimizationMethod
 				e.printStackTrace();
 			} catch (REXPMismatchException e) {
 				e.printStackTrace();
-			} finally {
-				rEngine.close();
 			}
 		} catch (RserveException e) {
 			e.printStackTrace();

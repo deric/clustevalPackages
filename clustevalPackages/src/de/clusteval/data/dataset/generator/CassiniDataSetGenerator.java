@@ -18,8 +18,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -37,7 +35,8 @@ import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.data.dataset.type.DataSetType;
 import de.clusteval.data.dataset.type.UnknownDataSetTypeException;
 import de.clusteval.data.goldstandard.GoldStandard;
-import de.clusteval.framework.MyRengine;
+import de.clusteval.framework.RLibraryRequirement;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 import file.FileUtils;
@@ -46,6 +45,7 @@ import file.FileUtils;
  * @author Christian Wiwie
  * 
  */
+@RLibraryRequirement(requiredRLibraries = {"mlbench"})
 public class CassiniDataSetGenerator extends DataSetGenerator {
 
 	protected int numberOfPoints;
@@ -141,8 +141,8 @@ public class CassiniDataSetGenerator extends DataSetGenerator {
 
 			// create the target file
 			File dataSetFile = new File(FileUtils.buildPath(
-					this.repository.getDataSetBasePath(), this.getFolderName(),
-					this.getFileName()));
+					this.repository.getBasePath(DataSet.class),
+					this.getFolderName(), this.getFileName()));
 
 			try {
 				// dataset file
@@ -202,7 +202,7 @@ public class CassiniDataSetGenerator extends DataSetGenerator {
 		try {
 			// goldstandard file
 			File goldStandardFile = new File(FileUtils.buildPath(
-					this.repository.getGoldStandardBasePath(),
+					this.repository.getBasePath(GoldStandard.class),
 					this.getFolderName(), this.getFileName()));
 			BufferedWriter writer = new BufferedWriter(new FileWriter(
 					goldStandardFile));
@@ -222,16 +222,6 @@ public class CassiniDataSetGenerator extends DataSetGenerator {
 		}
 		throw new GoldStandardGenerationException(
 				"The goldstandard could not be generated!");
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see data.dataset.generator.DataSetGenerator#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>(Arrays.asList(new String[]{"mlbench"}));
 	}
 
 }

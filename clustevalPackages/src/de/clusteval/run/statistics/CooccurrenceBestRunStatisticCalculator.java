@@ -23,6 +23,8 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RserveException;
 
+import utils.ArraysExt;
+import cern.colt.matrix.tlong.impl.SparseLongMatrix2D;
 import de.clusteval.cluster.Cluster;
 import de.clusteval.cluster.ClusterItem;
 import de.clusteval.cluster.Clustering;
@@ -32,8 +34,6 @@ import de.clusteval.cluster.paramOptimization.UnknownParameterOptimizationMethod
 import de.clusteval.cluster.quality.UnknownClusteringQualityMeasureException;
 import de.clusteval.context.IncompatibleContextException;
 import de.clusteval.context.UnknownContextException;
-import utils.ArraysExt;
-import cern.colt.matrix.tlong.impl.SparseLongMatrix2D;
 import de.clusteval.data.DataConfigNotFoundException;
 import de.clusteval.data.DataConfigurationException;
 import de.clusteval.data.dataset.DataSetConfigNotFoundException;
@@ -50,8 +50,8 @@ import de.clusteval.data.goldstandard.GoldStandardNotFoundException;
 import de.clusteval.data.goldstandard.format.UnknownGoldStandardFormatException;
 import de.clusteval.data.preprocessing.UnknownDataPreprocessorException;
 import de.clusteval.data.statistics.UnknownDataStatisticException;
-import de.clusteval.framework.MyRengine;
 import de.clusteval.framework.repository.InvalidRepositoryException;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.NoRepositoryFoundException;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
@@ -66,6 +66,7 @@ import de.clusteval.program.r.UnknownRProgramException;
 import de.clusteval.run.InvalidRunModeException;
 import de.clusteval.run.RunException;
 import de.clusteval.run.result.ParameterOptimizationResult;
+import de.clusteval.run.result.RunResult;
 import de.clusteval.run.result.RunResultParseException;
 import de.clusteval.run.result.format.UnknownRunResultFormatException;
 import de.clusteval.utils.InvalidConfigurationFileException;
@@ -146,7 +147,7 @@ public class CooccurrenceBestRunStatisticCalculator
 				.parseFromRunResultFolder(
 						this.repository,
 						new File(FileUtils.buildPath(
-								this.repository.getRunResultBasePath(),
+								this.repository.getBasePath(RunResult.class),
 								this.uniqueRunIdentifiers)), results, true,
 						true, false);
 
@@ -243,7 +244,7 @@ public class CooccurrenceBestRunStatisticCalculator
 			} catch (RserveException e) {
 				e.printStackTrace();
 			} finally {
-				rEngine.close();
+				rEngine.clear();
 			}
 		} catch (REngineException e) {
 			e.printStackTrace();

@@ -15,9 +15,7 @@ package de.clusteval.run.statistics;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import utils.Pair;
 import de.clusteval.framework.repository.RegisterException;
@@ -78,16 +76,6 @@ public class ParameterImportanceRunStatistic extends RunStatistic {
 		if (other.parameterImportances != null)
 			this.parameterImportances = new HashMap<Pair<String, String>, Map<String, Double>>(
 					other.parameterImportances);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see utils.Statistic#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>();
 	}
 
 	/*

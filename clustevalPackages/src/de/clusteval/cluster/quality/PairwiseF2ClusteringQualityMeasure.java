@@ -15,9 +15,7 @@ package de.clusteval.cluster.quality;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import de.clusteval.cluster.Cluster;
 import de.clusteval.cluster.ClusterItem;
@@ -59,16 +57,6 @@ public class PairwiseF2ClusteringQualityMeasure
 			final PairwiseF2ClusteringQualityMeasure other)
 			throws RegisterException {
 		super(other);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see cluster.quality.ClusteringQualityMeasure#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>();
 	}
 
 	/*

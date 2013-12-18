@@ -28,7 +28,7 @@ import de.clusteval.data.dataset.DataMatrix;
 import de.clusteval.data.dataset.DataSet;
 import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
-import de.clusteval.framework.MyRengine;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 
@@ -61,17 +61,6 @@ public class RangeNormalizationDataPreprocessor extends DataPreprocessor {
 	public RangeNormalizationDataPreprocessor(
 			RangeNormalizationDataPreprocessor other) throws RegisterException {
 		super(other);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.clusteval.data.preprocessing.DataPreprocessor#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>();
 	}
 
 	/*
@@ -112,7 +101,7 @@ public class RangeNormalizationDataPreprocessor extends DataPreprocessor {
 				} catch (REXPMismatchException e) {
 					e.printStackTrace();
 				} finally {
-					rEngine.close();
+					rEngine.clear();
 				}
 			} catch (RserveException e) {
 				e.printStackTrace();

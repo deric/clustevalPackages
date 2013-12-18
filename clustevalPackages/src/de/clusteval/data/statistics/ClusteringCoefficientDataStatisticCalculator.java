@@ -29,7 +29,7 @@ import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
 import de.clusteval.data.statistics.ClusteringCoefficientDataStatistic;
 import de.clusteval.data.statistics.DataStatisticCalculator;
-import de.clusteval.framework.MyRengine;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 
@@ -102,7 +102,7 @@ public class ClusteringCoefficientDataStatisticCalculator
 			} catch (REXPMismatchException e) {
 				e.printStackTrace();
 			} finally {
-				rEngine.close();
+				rEngine.clear();
 			}
 		} catch (RserveException e) {
 			e.printStackTrace();

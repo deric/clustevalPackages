@@ -14,7 +14,6 @@
 package de.clusteval.program.r;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -28,8 +27,10 @@ import de.clusteval.context.Context;
 import de.clusteval.context.UnknownContextException;
 import de.clusteval.data.dataset.format.DataSetFormat;
 import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
+import de.clusteval.framework.RLibraryRequirement;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
+import de.clusteval.program.Program;
 import de.clusteval.run.result.format.RunResultFormat;
 import de.clusteval.run.result.format.UnknownRunResultFormatException;
 import file.FileUtils;
@@ -41,6 +42,7 @@ import file.FileUtils;
  * @author Christian Wiwie
  * 
  */
+@RLibraryRequirement(requiredRLibraries = {"cluster"})
 public class KMedoidsClusteringRProgram extends RelativeDataRProgram {
 
 	/**
@@ -50,9 +52,9 @@ public class KMedoidsClusteringRProgram extends RelativeDataRProgram {
 	public KMedoidsClusteringRProgram(Repository repository)
 			throws RegisterException {
 		super(repository, new File(FileUtils.buildPath(
-				repository.getProgramBasePath(),
+				repository.getBasePath(Program.class),
 				"KMedoidsClusteringRProgram.jar")).lastModified(), new File(
-				FileUtils.buildPath(repository.getProgramBasePath(),
+				FileUtils.buildPath(repository.getBasePath(Program.class),
 						"KMedoidsClusteringRProgram.jar")));
 	}
 
@@ -88,17 +90,7 @@ public class KMedoidsClusteringRProgram extends RelativeDataRProgram {
 	public String getInvocationFormat() {
 		return "pam(x,k=%k%)";
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see program.r.RProgram#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>(Arrays.asList(new String[]{"cluster"}));
-	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 

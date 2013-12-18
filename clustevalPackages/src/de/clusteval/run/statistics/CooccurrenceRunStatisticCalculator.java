@@ -50,8 +50,8 @@ import de.clusteval.data.goldstandard.GoldStandardNotFoundException;
 import de.clusteval.data.goldstandard.format.UnknownGoldStandardFormatException;
 import de.clusteval.data.preprocessing.UnknownDataPreprocessorException;
 import de.clusteval.data.statistics.UnknownDataStatisticException;
-import de.clusteval.framework.MyRengine;
 import de.clusteval.framework.repository.InvalidRepositoryException;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.NoRepositoryFoundException;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
@@ -67,6 +67,7 @@ import de.clusteval.program.r.UnknownRProgramException;
 import de.clusteval.run.InvalidRunModeException;
 import de.clusteval.run.RunException;
 import de.clusteval.run.result.ParameterOptimizationResult;
+import de.clusteval.run.result.RunResult;
 import de.clusteval.run.result.RunResultParseException;
 import de.clusteval.run.result.format.UnknownRunResultFormatException;
 import de.clusteval.utils.InvalidConfigurationFileException;
@@ -147,7 +148,7 @@ public class CooccurrenceRunStatisticCalculator
 				.parseFromRunResultFolder(
 						this.repository,
 						new File(FileUtils.buildPath(
-								this.repository.getRunResultBasePath(),
+								this.repository.getBasePath(RunResult.class),
 								this.uniqueRunIdentifiers)), results, true,
 						true, false);
 		try {
@@ -247,7 +248,7 @@ public class CooccurrenceRunStatisticCalculator
 			} catch (RserveException e) {
 				e.printStackTrace();
 			} finally {
-				rEngine.close();
+				rEngine.clear();
 			}
 		} catch (REngineException e) {
 			e.printStackTrace();

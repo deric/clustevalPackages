@@ -15,14 +15,12 @@ package de.clusteval.data.distance;
 
 import java.io.File;
 import java.security.InvalidParameterException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 
-import de.clusteval.framework.MyRengine;
+import de.clusteval.framework.RLibraryRequirement;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 
@@ -30,6 +28,7 @@ import de.clusteval.framework.repository.Repository;
  * @author Christian Wiwie
  * 
  */
+@RLibraryRequirement(requiredRLibraries = {"Hmisc"})
 public class HoeffdingDRDistanceMeasure extends DistanceMeasureR {
 
 	/**
@@ -54,16 +53,6 @@ public class HoeffdingDRDistanceMeasure extends DistanceMeasureR {
 	public HoeffdingDRDistanceMeasure(final HoeffdingDRDistanceMeasure other)
 			throws RegisterException {
 		super(other);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see data.distance.DistanceMeasure#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>(Arrays.asList(new String[]{"Hmisc"}));
 	}
 
 	/*

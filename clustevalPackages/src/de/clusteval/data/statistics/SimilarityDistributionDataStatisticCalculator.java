@@ -27,7 +27,7 @@ import de.clusteval.data.dataset.DataSetConfig;
 import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
 import de.clusteval.data.dataset.format.RelativeDataSetFormat;
-import de.clusteval.framework.MyRengine;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 import file.FileUtils;
@@ -149,7 +149,7 @@ public class SimilarityDistributionDataStatisticCalculator
 			} catch (REngineException e) {
 				e.printStackTrace();
 			} finally {
-				rEngine.close();
+				rEngine.clear();
 			}
 		} catch (RserveException e) {
 			e.printStackTrace();

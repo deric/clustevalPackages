@@ -14,7 +14,6 @@
 package de.clusteval.program.r;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -35,8 +34,10 @@ import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.data.dataset.format.DataSetFormat;
 import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.framework.RLibraryNotLoadedException;
+import de.clusteval.framework.RLibraryRequirement;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
+import de.clusteval.program.Program;
 import de.clusteval.program.ProgramConfig;
 import de.clusteval.run.result.format.RunResultFormat;
 import de.clusteval.run.result.format.UnknownRunResultFormatException;
@@ -50,6 +51,7 @@ import file.FileUtils;
  * @author Christian Wiwie
  * 
  */
+@RLibraryRequirement(requiredRLibraries = {"kernlab"})
 public class SpectralClusteringRProgram extends RProgram {
 
 	/**
@@ -59,9 +61,9 @@ public class SpectralClusteringRProgram extends RProgram {
 	public SpectralClusteringRProgram(Repository repository)
 			throws RegisterException {
 		super(repository, new File(FileUtils.buildPath(
-				repository.getProgramBasePath(),
+				repository.getBasePath(Program.class),
 				"SpectralClusteringRProgram.jar")).lastModified(), new File(
-				FileUtils.buildPath(repository.getProgramBasePath(),
+				FileUtils.buildPath(repository.getBasePath(Program.class),
 						"SpectralClusteringRProgram.jar")));
 	}
 
@@ -96,16 +98,6 @@ public class SpectralClusteringRProgram extends RProgram {
 	@Override
 	public String getInvocationFormat() {
 		return "specc(x,centers=%k%)";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see program.r.RProgram#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>(Arrays.asList(new String[]{"kernlab"}));
 	}
 
 	/*

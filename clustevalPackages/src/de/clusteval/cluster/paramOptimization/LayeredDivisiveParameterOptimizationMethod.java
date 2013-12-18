@@ -16,10 +16,8 @@ package de.clusteval.cluster.paramOptimization;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import utils.Pair;
 import de.clusteval.cluster.quality.ClusteringQualityMeasure;
@@ -122,18 +120,6 @@ public class LayeredDivisiveParameterOptimizationMethod
 		this.layerCount = other.layerCount;
 		this.iterationsPerLayer = other.iterationsPerLayer;
 		this.paramToValueRange = new HashMap<String, Pair<?, ?>>();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * cluster.paramOptimization.ParameterOptimizationMethod#getRequiredRlibraries
-	 * ()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>();
 	}
 
 	/*
@@ -338,7 +324,7 @@ public class LayeredDivisiveParameterOptimizationMethod
 			 * If this is the last layer, do the remaining number of iterations
 			 */
 			newLayerIterations = (int) Math.pow(Math.floor(Math.pow(
-					//this.remainingIterationCount, 1.0 / this.params.size())),
+			// this.remainingIterationCount, 1.0 / this.params.size())),
 					this.iterationsPerLayer, 1.0 / this.params.size())),
 					this.params.size());
 			this.remainingIterationCount = 0;

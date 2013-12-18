@@ -14,9 +14,7 @@
 package de.clusteval.cluster.quality;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +27,8 @@ import de.clusteval.cluster.Cluster;
 import de.clusteval.cluster.ClusterItem;
 import de.clusteval.cluster.Clustering;
 import de.clusteval.data.DataConfig;
-import de.clusteval.framework.MyRengine;
+import de.clusteval.framework.RLibraryRequirement;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 
@@ -37,6 +36,7 @@ import de.clusteval.framework.repository.Repository;
  * @author Christian Wiwie
  * 
  */
+@RLibraryRequirement(requiredRLibraries = {"clv"})
 public class JaccardIndexRClusteringQualityMeasure
 		extends
 			ClusteringQualityMeasureR {
@@ -65,16 +65,6 @@ public class JaccardIndexRClusteringQualityMeasure
 			final JaccardIndexRClusteringQualityMeasure other)
 			throws RegisterException {
 		super(other);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see cluster.quality.ClusteringQualityMeasure#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>(Arrays.asList(new String[]{"clv"}));
 	}
 
 	/*

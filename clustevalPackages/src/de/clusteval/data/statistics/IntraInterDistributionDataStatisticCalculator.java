@@ -35,7 +35,7 @@ import de.clusteval.data.dataset.format.RelativeDataSetFormat;
 import de.clusteval.data.goldstandard.GoldStandard;
 import de.clusteval.data.goldstandard.GoldStandardConfig;
 import de.clusteval.data.goldstandard.format.UnknownGoldStandardFormatException;
-import de.clusteval.framework.MyRengine;
+import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 import file.FileUtils;
@@ -196,7 +196,7 @@ public class IntraInterDistributionDataStatisticCalculator
 			} catch (REngineException e) {
 				e.printStackTrace();
 			} finally {
-				rEngine.close();
+				rEngine.clear();
 			}
 		} catch (RserveException e) {
 			e.printStackTrace();

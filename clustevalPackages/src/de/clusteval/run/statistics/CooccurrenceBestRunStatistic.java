@@ -14,13 +14,11 @@
 package de.clusteval.run.statistics;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import utils.ArraysExt;
 import utils.StringExt;
 import cern.colt.matrix.tlong.impl.SparseLongMatrix2D;
+import de.clusteval.framework.RLibraryRequirement;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 
@@ -28,6 +26,7 @@ import de.clusteval.framework.repository.Repository;
  * @author Christian Wiwie
  * 
  */
+@RLibraryRequirement(requiredRLibraries = {"lattice"})
 public class CooccurrenceBestRunStatistic extends RunStatistic {
 
 	protected String[] ids;
@@ -80,16 +79,6 @@ public class CooccurrenceBestRunStatistic extends RunStatistic {
 		if (other.cooccurrenceMatrix != null)
 			this.cooccurrenceMatrix = (SparseLongMatrix2D) other.cooccurrenceMatrix
 					.copy();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see utils.Statistic#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>(Arrays.asList(new String[]{"lattice"}));
 	}
 
 	/*

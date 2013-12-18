@@ -209,18 +209,6 @@ public class VMeasureClusteringQualityMeasure extends ClusteringQualityMeasure {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * de.clusteval.cluster.quality.ClusteringQualityMeasure#getRequiredRlibraries
-	 * ()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * de.clusteval.cluster.quality.ClusteringQualityMeasure#requiresGoldstandard
 	 * ()
 	 */

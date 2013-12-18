@@ -14,8 +14,6 @@
 package de.clusteval.data.statistics;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
@@ -25,16 +23,6 @@ import de.clusteval.framework.repository.Repository;
  * 
  */
 public class NumberOfSamplesDataStatistic extends DoubleValueDataStatistic {
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see utils.Statistic#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>();
-	}
 
 	/*
 	 * (non-Javadoc)

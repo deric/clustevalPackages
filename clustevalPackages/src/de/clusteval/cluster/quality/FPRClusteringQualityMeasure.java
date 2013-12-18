@@ -56,16 +56,6 @@ public class FPRClusteringQualityMeasure extends ClusteringQualityMeasure {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see cluster.quality.ClusteringQualityMeasure#getRequiredRlibraries()
-	 */
-	@Override
-	public Set<String> getRequiredRlibraries() {
-		return new HashSet<String>();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see cluster.quality.ClusteringQualityMeasure#getAlias()
 	 */
 	@Override
