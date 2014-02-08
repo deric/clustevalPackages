@@ -56,6 +56,7 @@ public class SimMatrixDataSetFormatParser extends DataSetFormatParser {
 						dataSet.getAbsolutePath());
 				filterer.process();
 			}
+			// TODO: symmetry
 			final SimFileMatrixParser p;
 			try {
 				p = new SimFileMatrixParser(dataSet.getAbsolutePath()

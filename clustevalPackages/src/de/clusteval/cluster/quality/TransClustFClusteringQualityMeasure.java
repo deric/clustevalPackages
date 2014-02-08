@@ -221,4 +221,12 @@ public class TransClustFClusteringQualityMeasure
 			ClusteringQualityMeasureValue quality2) {
 		return quality1.getValue() > quality2.getValue();
 	}
+
+	/* (non-Javadoc)
+	 * @see de.clusteval.cluster.quality.ClusteringQualityMeasure#supportsFuzzyClusterings()
+	 */
+	@Override
+	public boolean supportsFuzzyClusterings() {
+		return false;
+	}
 }

@@ -15,7 +15,6 @@ package de.clusteval.program.r;
 
 import java.io.File;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.rosuda.REngine.REXP;
@@ -90,7 +89,7 @@ public class KMedoidsClusteringRProgram extends RelativeDataRProgram {
 	public String getInvocationFormat() {
 		return "pam(x,k=%k%)";
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -102,17 +101,6 @@ public class KMedoidsClusteringRProgram extends RelativeDataRProgram {
 		REXP result = rEngine.eval("result$clustering");
 		int[] clusterIds = result.asIntegers();
 		return Clustering.clusterIdsToFuzzyCoeff(clusterIds);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.clusteval.program.r.RProgram#getParameterValueForResultFile()
-	 */
-	@Override
-	protected String getParameterValueForResultFile(
-			final Map<String, String> effectiveParams) {
-		return effectiveParams.get("k");
 	}
 
 	/*

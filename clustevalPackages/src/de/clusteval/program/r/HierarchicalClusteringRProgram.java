@@ -15,7 +15,6 @@ package de.clusteval.program.r;
 
 import java.io.File;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.rosuda.REngine.REXP;
@@ -55,7 +54,8 @@ public class HierarchicalClusteringRProgram extends RelativeDataRProgram {
 		super(repository, new File(FileUtils.buildPath(
 				repository.getBasePath(Program.class),
 				"HierarchicalClusteringRProgram.jar")).lastModified(),
-				new File(FileUtils.buildPath(repository.getBasePath(Program.class),
+				new File(FileUtils.buildPath(
+						repository.getBasePath(Program.class),
 						"HierarchicalClusteringRProgram.jar")));
 	}
 
@@ -89,7 +89,7 @@ public class HierarchicalClusteringRProgram extends RelativeDataRProgram {
 	 */
 	@Override
 	public String getInvocationFormat() {
-		return "cutree(hclust(x),k=%k%)";
+		return "cutree(hclust(x,method=\"%method%\"),k=%k%)";
 	}
 
 	/*
@@ -103,19 +103,6 @@ public class HierarchicalClusteringRProgram extends RelativeDataRProgram {
 		REXP result = rEngine.eval("result@.Data");
 		int[] clusterIds = result.asIntegers();
 		return Clustering.clusterIdsToFuzzyCoeff(clusterIds);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.clusteval.program.r.RProgram#getParameterValueForResultFile(java.util
-	 * .Map)
-	 */
-	@Override
-	protected String getParameterValueForResultFile(
-			Map<String, String> effectiveParams) {
-		return effectiveParams.get("k");
 	}
 
 	/*

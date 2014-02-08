@@ -31,6 +31,7 @@ import de.clusteval.program.IntegerProgramParameter;
 import de.clusteval.program.ParameterSet;
 import de.clusteval.program.ProgramConfig;
 import de.clusteval.program.ProgramParameter;
+import de.clusteval.program.StringProgramParameter;
 import de.clusteval.run.ParameterOptimizationRun;
 import de.clusteval.run.result.RunResultParseException;
 import de.clusteval.utils.InternalAttributeException;
@@ -205,7 +206,11 @@ public class LayeredDivisiveParameterOptimizationMethod
 		for (ProgramParameter<?> p : params) {
 			ProgramParameter<?> param = p.clone();
 			newParams.add(param);
-			if (this.currentDivisiveMethod != null) {
+			// if this is the first layer or the parameter is a string parameter
+			// with options, we do not change the value range
+			if (this.currentDivisiveMethod != null
+					&& !(param instanceof StringProgramParameter && param
+							.isOptionsSet())) {
 				/*
 				 * In the next layer we half the domains of every parameter
 				 * centered around that point with maximal quality

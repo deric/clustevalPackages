@@ -15,7 +15,6 @@ package de.clusteval.program.r;
 
 import java.io.File;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.rosuda.REngine.REXP;
@@ -52,10 +51,10 @@ public class KMeansClusteringRProgram extends AbsoluteDataRProgram {
 	 */
 	public KMeansClusteringRProgram(Repository repository)
 			throws RegisterException {
-		super(repository, new File(
+		super(repository, new File(FileUtils.buildPath(
+				repository.getBasePath(Program.class),
+				"KMeansClusteringRProgram.jar")).lastModified(), new File(
 				FileUtils.buildPath(repository.getBasePath(Program.class),
-						"KMeansClusteringRProgram.jar")).lastModified(),
-				new File(FileUtils.buildPath(repository.getBasePath(Program.class),
 						"KMeansClusteringRProgram.jar")));
 	}
 
@@ -103,19 +102,6 @@ public class KMeansClusteringRProgram extends AbsoluteDataRProgram {
 		REXP result = rEngine.eval("result$cluster");
 		int[] clusterIds = result.asIntegers();
 		return Clustering.clusterIdsToFuzzyCoeff(clusterIds);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.clusteval.program.r.RProgram#getParameterValueForResultFile(java.util
-	 * .Map)
-	 */
-	@Override
-	protected String getParameterValueForResultFile(
-			Map<String, String> effectiveParams) {
-		return effectiveParams.get("k");
 	}
 
 	/*

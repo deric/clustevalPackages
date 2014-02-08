@@ -77,25 +77,32 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 			DistanceMeasure dist = config
 					.getDistanceMeasureAbsoluteToRelative();
 
+			SimilarityMatrix matrix = new SimilarityMatrix(ids,
+					coordsMatrix.length, coordsMatrix.length,
+					config.getSimilarityPrecision(), dist.isSymmetric());
+
 			double[][] distances = null;
 			if (dist.supportsMatrix()) {
 				distances = dist.getDistances(coordsMatrix);
+				for (int i = 0; i < distances.length; i++)
+					for (int j = 0; j < (dist.isSymmetric()
+							? i + 1
+							: distances[i].length); j++)
+						matrix.setSimilarity(i, j, distances[i][j]);
 			}
 			// 31.01.2013: Some measures require R for the
 			// getDistances(double[][]) operation. In these cases, the return
 			// type is null.
 			if (distances == null) {
-				distances = new double[coords.size()][coords.size()];
-
-				for (int i = 0; i < distances.length; i++) {
-					for (int j = i; j < distances.length; j++) {
-						double result = dist.getDistance(coords.get(i)
-								.getSecond(), coords.get(j).getSecond());
-						distances[i][j] = result;
-						distances[j][i] = result;
+				for (int i = 0; i < matrix.getRows(); i++) {
+					for (int j = i; j < matrix.getColumns(); j++) {
+						matrix.setSimilarity(i, j, dist.getDistance(
+								coords.get(i).getSecond(), coords.get(j)
+										.getSecond()));
 					}
 				}
 			}
+			distances = null;
 
 			/*
 			 * changed 23.09.2012 removed scaling and put max in subtract as
@@ -113,7 +120,6 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 						ArraysExt.max(distances));
 			}
 
-			SimilarityMatrix matrix = new SimilarityMatrix(ids, distances);
 			newDataSet.setDataSetContent(matrix);
 			newDataSet.writeToFile(false);
 			newDataSet.unloadFromMemory();

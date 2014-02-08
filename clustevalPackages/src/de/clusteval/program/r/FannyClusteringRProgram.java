@@ -15,7 +15,6 @@ package de.clusteval.program.r;
 
 import java.io.File;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.rosuda.REngine.REXP;
@@ -95,19 +94,6 @@ public class FannyClusteringRProgram extends RelativeDataRProgram {
 		REXP result = rEngine.eval("result$membership");
 		double[][] fuzzyCoeffs = result.asDoubleMatrix();
 		return ArraysExt.toFloatArray(fuzzyCoeffs);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.clusteval.program.r.RProgram#getParameterValueForResultFile(java.util
-	 * .Map)
-	 */
-	@Override
-	protected String getParameterValueForResultFile(
-			Map<String, String> effectiveParams) {
-		return effectiveParams.get("k");
 	}
 
 	/*

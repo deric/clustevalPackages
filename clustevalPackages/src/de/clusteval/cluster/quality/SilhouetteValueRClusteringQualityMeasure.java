@@ -135,12 +135,7 @@ public class SilhouetteValueRClusteringQualityMeasure
 		rEngine.eval("names(clusterIds) <- as.character(1:"
 				+ similarities.length + ")");
 
-		rEngine.eval("sim <- c()");
-		for (int i = 0; i < similarities.length; i++) {
-			rEngine.assign("sim_" + i, similarities[i]);
-			rEngine.eval("sim <- rbind(sim,sim_" + i + ")");
-			rEngine.eval("remove(sim_" + i + ")");
-		}
+		rEngine.assign("sim", similarities);
 		rEngine.eval("rownames(sim) <- as.character(1:" + similarities.length
 				+ ")");
 		rEngine.eval("colnames(sim) <- as.character(1:" + similarities.length
@@ -200,5 +195,13 @@ public class SilhouetteValueRClusteringQualityMeasure
 			ClusteringQualityMeasureValue quality1,
 			ClusteringQualityMeasureValue quality2) {
 		return quality1.getValue() > quality2.getValue();
+	}
+
+	/* (non-Javadoc)
+	 * @see de.clusteval.cluster.quality.ClusteringQualityMeasure#supportsFuzzyClusterings()
+	 */
+	@Override
+	public boolean supportsFuzzyClusterings() {
+		return false;
 	}
 }

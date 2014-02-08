@@ -227,4 +227,12 @@ public class VMeasureClusteringQualityMeasure extends ClusteringQualityMeasure {
 		return "V-Measure";
 	}
 
+	/* (non-Javadoc)
+	 * @see de.clusteval.cluster.quality.ClusteringQualityMeasure#supportsFuzzyClusterings()
+	 */
+	@Override
+	public boolean supportsFuzzyClusterings() {
+		return false;
+	}
+
 }

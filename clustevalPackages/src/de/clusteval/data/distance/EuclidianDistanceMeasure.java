@@ -87,6 +87,16 @@ public class EuclidianDistanceMeasure extends DistanceMeasure {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see de.clusteval.data.distance.DistanceMeasure#isSymmetric()
+	 */
+	@Override
+	public boolean isSymmetric() {
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see data.distance.DistanceMeasure#getDistances(double[][])
 	 */
 	@Override

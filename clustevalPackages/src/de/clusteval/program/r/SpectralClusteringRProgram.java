@@ -117,19 +117,6 @@ public class SpectralClusteringRProgram extends RProgram {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * de.clusteval.program.r.RProgram#getParameterValueForResultFile(java.util
-	 * .Map)
-	 */
-	@Override
-	protected String getParameterValueForResultFile(
-			Map<String, String> effectiveParams) {
-		return effectiveParams.get("k");
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * de.clusteval.program.r.RProgram#extractDataSetContent(de.clusteval.data
 	 * .DataConfig)
 	 */

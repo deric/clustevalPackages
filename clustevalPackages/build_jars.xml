@@ -367,5 +367,9 @@
 			<fileset dir="bin" includes="**/FannyClusteringRProgram*.class" />
 			<fileset dir="src" includes="**/FannyClusteringRProgram*.java" />
 		</jar>
+		<jar destfile="repository/programs/DBSCANClusteringRProgram.jar">
+			<fileset dir="bin" includes="**/DBSCANClusteringRProgram*.class" />
+			<fileset dir="src" includes="**/DBSCANClusteringRProgram*.java" />
+		</jar>
 	</target>
 </project>

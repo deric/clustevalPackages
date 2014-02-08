@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "Compiling fast RNSC..."
+
+g++ -ornsc -Wall -O3 main.cpp linkedList.cpp linkedList2.cpp linkedList3.cpp graph.cpp graph2.cpp graph3.cpp graph4.cpp graph5.cpp graph6.cpp printing.cpp experiment.cpp miscFunctions.cpp
+

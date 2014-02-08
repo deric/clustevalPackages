@@ -85,6 +85,16 @@ public class HoeffdingDRDistanceMeasure extends DistanceMeasureR {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see de.clusteval.data.distance.DistanceMeasure#isSymmetric()
+	 */
+	@Override
+	public boolean isSymmetric() {
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see data.distance.DistanceMeasure#getDistances(double[][])
 	 */
 	@SuppressWarnings("unused")

@@ -1,0 +1,4 @@
+[Database]
+yilibdb=/home/bader/4Greg/linux/yilib/
+#yilibdb=/home/gbader/yilib/
+Instructions=Enter the path to your local yilib databases under yilibdb.
