@@ -79,10 +79,11 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 
 			SimilarityMatrix matrix = null;
 
-			this.log.info("Calculating pairwise similarities");
+			this.log.info("Calculating pairwise distances");
 			if (dist.supportsMatrix()) {
 				matrix = dist.getDistances(config, coordsMatrix);
 				matrix.setIds(ids);
+				this.log.info("Converting distances to similarities");
 				matrix.invert();
 			}
 			// 31.01.2013: Some measures require R for the
@@ -99,6 +100,7 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 										.getSecond()));
 					}
 				}
+				this.log.info("Converting distances to similarities");
 				matrix.invert();
 			}
 
@@ -108,6 +110,7 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 			 */
 
 			if (this.normalize) {
+				this.log.info("Normalizing similarities");
 				matrix.normalize();
 			}
 

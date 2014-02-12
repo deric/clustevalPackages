@@ -48,20 +48,12 @@ public class SimMatrixDataSetFormatParser extends DataSetFormatParser {
 		File sourceFile = ClustevalBackendServer.getCommonFile(new File(dataSet
 				.getAbsolutePath()));
 		synchronized (sourceFile) {
-			/*
-			 * Remove attributes from the dataset
-			 */
-			if (!new File(dataSet.getAbsolutePath() + ".strip").exists()) {
-				DataSetAttributeFilterer filterer = new DataSetAttributeFilterer(
-						dataSet.getAbsolutePath());
-				filterer.process();
-			}
 			// TODO: symmetry
 			final SimFileMatrixParser p;
 			try {
-				p = new SimFileMatrixParser(dataSet.getAbsolutePath()
-						+ ".strip", SIM_FILE_FORMAT.MATRIX_HEADER, null, null,
-						null, OUTPUT_MODE.BURST, SIM_FILE_FORMAT.MATRIX_HEADER);
+				p = new SimFileMatrixParser(dataSet.getAbsolutePath(),
+						SIM_FILE_FORMAT.MATRIX_HEADER, null, null, null,
+						OUTPUT_MODE.BURST, SIM_FILE_FORMAT.MATRIX_HEADER);
 				p.process();
 				return p.getSimilarities();
 			} catch (IOException e) {
@@ -128,6 +120,9 @@ public class SimMatrixDataSetFormatParser extends DataSetFormatParser {
 			writer.append("\t");
 			writer.append(id);
 		}
+		// we write it line-was, such that we only keep the string for one line
+		// in the memory. otherwise we might encounter problems with huge
+		// datasets.
 		writer.append(System.getProperty("line.separator"));
 		for (int i = 0; i < matrix.getRows(); i++) {
 			StringBuilder sb = new StringBuilder();
