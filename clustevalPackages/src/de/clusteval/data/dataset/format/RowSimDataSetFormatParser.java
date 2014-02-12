@@ -139,6 +139,7 @@ public class RowSimDataSetFormatParser extends DataSetFormatParser {
 		if (!(new File(resultFile).exists())) {
 			String matrixFile = dataSet.getAbsolutePath();
 			if (dataSetFormat.getNormalized()) {
+				this.log.info("Normalizing similarities");
 				new SimilarityFileNormalizer(matrixFile,
 						SIM_FILE_FORMAT.MATRIX_HEADER, matrixFile + ".tmp", 1.0)
 						.process();
