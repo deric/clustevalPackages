@@ -15,10 +15,10 @@ package de.clusteval.data.distance;
 
 import java.io.File;
 
-import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 
+import de.clusteval.data.dataset.format.ConversionInputToStandardConfiguration;
 import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
@@ -97,11 +97,13 @@ public class PearsonCorrelationRDistanceMeasure extends DistanceMeasureR {
 	 * @see data.distance.DistanceMeasure#getDistances(double[][])
 	 */
 	@Override
-	public double[][] getDistancesHelper(double[][] matrix,
-			final MyRengine rEngine) throws REngineException,
-			REXPMismatchException {
-		rEngine.assign("matrix", matrix);
-		REXP result = rEngine.eval("1-abs(cor(t(matrix)))");
-		return result.asDoubleMatrix();
+	public double[][] getDistancesHelper(
+			ConversionInputToStandardConfiguration config, double[][] matrix,
+			final MyRengine rEngine, int firstRow, int lastRow)
+			throws REngineException, REXPMismatchException {
+		return rEngine
+				.eval(String
+						.format("1-abs(cor(cbind(matrix.t[,%d:%d]), cbind(matrix.t), method='pearson'))",
+								firstRow, lastRow)).asDoubleMatrix();
 	}
 }

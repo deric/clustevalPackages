@@ -84,7 +84,7 @@ public class ClusteringCoefficientDataStatisticCalculator
 
 		double[][] similarities = simMatrix.toArray();
 		similarities = ArraysExt.scaleBy(similarities,
-				ArraysExt.max(similarities));
+				ArraysExt.max(similarities), true);
 
 		try {
 			MyRengine rEngine = repository.getRengineForCurrentThread();

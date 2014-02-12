@@ -149,7 +149,7 @@ public class RowSimDataSetFormatParser extends DataSetFormatParser {
 			this.log.debug("Converting input file...");
 			final SimFileMatrixParser p = new SimFileMatrixParser(
 					dataSet.getAbsolutePath(), SIM_FILE_FORMAT.MATRIX_HEADER,
-					null, null, resultFile, OUTPUT_MODE.BURST,
+					null, null, resultFile, OUTPUT_MODE.STREAM,
 					SIM_FILE_FORMAT.ID_ID_SIM);
 			p.process();
 		}

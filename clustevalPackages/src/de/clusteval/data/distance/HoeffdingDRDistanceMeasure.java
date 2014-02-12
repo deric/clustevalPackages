@@ -19,6 +19,7 @@ import java.security.InvalidParameterException;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 
+import de.clusteval.data.dataset.format.ConversionInputToStandardConfiguration;
 import de.clusteval.framework.RLibraryRequirement;
 import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
@@ -99,8 +100,10 @@ public class HoeffdingDRDistanceMeasure extends DistanceMeasureR {
 	 */
 	@SuppressWarnings("unused")
 	@Override
-	public double[][] getDistancesHelper(double[][] matrix,
-			final MyRengine rEngine) throws InvalidParameterException {
+	public double[][] getDistancesHelper(
+			ConversionInputToStandardConfiguration config, double[][] matrix,
+			final MyRengine rEngine, int firstRow, int lastRow)
+			throws InvalidParameterException {
 		return null;
 	}
 }

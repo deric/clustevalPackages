@@ -121,8 +121,8 @@ public class DaviesBouldinIndexRClusteringQualityMeasure
 		/*
 		 * Convert to dissimilarities
 		 */
-		similarities = ArraysExt
-				.subtract(simMatrix.getMaxValue(), similarities);
+		similarities = ArraysExt.subtract(simMatrix.getMaxValue(),
+				similarities, true);
 
 		/*
 		 * Pass the arrays to R
@@ -195,8 +195,11 @@ public class DaviesBouldinIndexRClusteringQualityMeasure
 		return quality1.getValue() > quality2.getValue();
 	}
 
-	/* (non-Javadoc)
-	 * @see de.clusteval.cluster.quality.ClusteringQualityMeasure#supportsFuzzyClusterings()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.clusteval.cluster.quality.ClusteringQualityMeasure#
+	 * supportsFuzzyClusterings()
 	 */
 	@Override
 	public boolean supportsFuzzyClusterings() {

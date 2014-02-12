@@ -61,10 +61,8 @@ public class SimMatrixDataSetFormatParser extends DataSetFormatParser {
 			try {
 				p = new SimFileMatrixParser(dataSet.getAbsolutePath()
 						+ ".strip", SIM_FILE_FORMAT.MATRIX_HEADER, null, null,
-						dataSet.getAbsolutePath() + ".tmp", OUTPUT_MODE.BURST,
-						SIM_FILE_FORMAT.MATRIX_HEADER);
+						null, OUTPUT_MODE.BURST, SIM_FILE_FORMAT.MATRIX_HEADER);
 				p.process();
-				new File(dataSet.getAbsolutePath() + ".tmp").delete();
 				return p.getSimilarities();
 			} catch (IOException e) {
 				throw new InvalidDataSetFormatVersionException(e.getMessage());
@@ -118,7 +116,6 @@ public class SimMatrixDataSetFormatParser extends DataSetFormatParser {
 			throws IOException {
 		RelativeDataSet absDataSet = (RelativeDataSet) dataSet;
 		SimilarityMatrix matrix = absDataSet.getDataSetContent();
-		double[][] coords = matrix.toArray();
 
 		// create sorted id array
 		Map<String, Integer> idMap = matrix.getIds();
@@ -126,23 +123,23 @@ public class SimMatrixDataSetFormatParser extends DataSetFormatParser {
 		for (Map.Entry<String, Integer> entry : idMap.entrySet())
 			ids[entry.getValue()] = entry.getKey();
 
-		StringBuilder sb = new StringBuilder();
 		// add header line with ids
 		for (String id : ids) {
-			sb.append("\t");
-			sb.append(id);
+			writer.append("\t");
+			writer.append(id);
 		}
-		sb.append(System.getProperty("line.separator"));
-		for (int i = 0; i < coords.length; i++) {
+		writer.append(System.getProperty("line.separator"));
+		for (int i = 0; i < matrix.getRows(); i++) {
+			StringBuilder sb = new StringBuilder();
 			sb.append(ids[i]);
 			sb.append("\t");
-			for (int j = 0; j < coords[i].length; j++) {
-				sb.append(coords[i][j] + "\t");
+			for (int j = 0; j < matrix.getColumns(); j++) {
+				sb.append(matrix.getSimilarity(i, j) + "\t");
 			}
 			sb.deleteCharAt(sb.length() - 1);
-			sb.append(System.getProperty("line.separator"));
+			if (i < matrix.getRows() - 1)
+				sb.append(System.getProperty("line.separator"));
+			writer.append(sb.toString());
 		}
-		sb.deleteCharAt(sb.length() - 1);
-		writer.append(sb.toString());
 	}
 }

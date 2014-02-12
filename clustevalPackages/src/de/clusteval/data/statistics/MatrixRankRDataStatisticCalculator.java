@@ -87,7 +87,7 @@ public class MatrixRankRDataStatisticCalculator
 
 		double[][] similarities = simMatrix.toArray();
 		similarities = ArraysExt.scaleBy(similarities,
-				ArraysExt.max(similarities));
+				ArraysExt.max(similarities), true);
 
 		rEngine.assign("simMatrix", similarities);
 		REXP result = rEngine.eval("qr(simMatrix)$rank");

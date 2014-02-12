@@ -14,14 +14,13 @@
 package de.clusteval.data.distance;
 
 import java.io.File;
-import java.security.InvalidParameterException;
 
-import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
-import org.rosuda.REngine.Rserve.RserveException;
 
 import utils.ArraysExt;
+import de.clusteval.data.dataset.format.ConversionInputToStandardConfiguration;
+import de.clusteval.framework.RLibraryRequirement;
 import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
@@ -30,7 +29,8 @@ import de.clusteval.framework.repository.Repository;
  * @author Christian Wiwie
  * 
  */
-public class AbsoluteDistanceMeasure extends DistanceMeasure {
+@RLibraryRequirement(requiredRLibraries = {"proxy"})
+public class AbsoluteDistanceMeasure extends DistanceMeasureR {
 
 	/**
 	 * @param repository
@@ -59,17 +59,6 @@ public class AbsoluteDistanceMeasure extends DistanceMeasure {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see data.distance.DistanceMeasure#getDistance(double[], double[])
-	 */
-	@Override
-	public double getDistance(double[] point1, double[] point2)
-			throws InvalidParameterException {
-		return ArraysExt.sum(ArraysExt.abs(ArraysExt.subtract(point1, point2)));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see data.distance.DistanceMeasure#supportsMatrix()
 	 */
 	@Override
@@ -90,29 +79,32 @@ public class AbsoluteDistanceMeasure extends DistanceMeasure {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see data.distance.DistanceMeasure#getDistances(double[][])
+	 * @see
+	 * de.clusteval.data.distance.DistanceMeasureR#getDistanceHelper(double[],
+	 * double[], de.clusteval.framework.repository.MyRengine)
 	 */
 	@Override
-	public double[][] getDistances(double[][] matrix)
-			throws InvalidParameterException {
-		try {
-			MyRengine rEngine = repository.getRengineForCurrentThread();
-			try {
-				rEngine.assign("matrix", matrix);
-				REXP result = rEngine
-						.eval("as.matrix(dist(matrix, method='manhattan'))");
-				return result.asDoubleMatrix();
-			} catch (REngineException e) {
-				e.printStackTrace();
-			} catch (REXPMismatchException e) {
-				e.printStackTrace();
-			} finally {
-				rEngine.clear();
-			}
-		} catch (RserveException e) {
-			e.printStackTrace();
-		}
-		return null;
+	protected double getDistanceHelper(double[] point1, double[] point2,
+			MyRengine rEngine) throws REngineException, REXPMismatchException {
+		return ArraysExt.sum(ArraysExt.abs(ArraysExt.subtract(point1, point2)));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.clusteval.data.distance.DistanceMeasureR#getDistancesHelper(de.clusteval
+	 * .data.dataset.format.ConversionInputToStandardConfiguration, double[][],
+	 * de.clusteval.framework.repository.MyRengine, int)
+	 */
+	@Override
+	protected double[][] getDistancesHelper(
+			ConversionInputToStandardConfiguration config, double[][] matrix,
+			MyRengine rEngine, int firstRow, int lastRow)
+			throws REngineException, REXPMismatchException {
+		return rEngine
+				.eval(String
+						.format("proxy::dist(rbind(matrix[%d:%d,]), rbind(matrix), method='Manhattan')",
+								firstRow, lastRow)).asDoubleMatrix();
+	}
 }

@@ -85,11 +85,9 @@ public class GraphCohesionRDataStatisticCalculator
 		if (dataSet.isInMemory())
 			dataSet.unloadFromMemory();
 
-		double[][] similarities = simMatrix.toArray();
-		similarities = ArraysExt.scaleBy(similarities,
-				ArraysExt.max(similarities));
+		simMatrix.scaleBy(simMatrix.getMaxValue());
 
-		rEngine.assign("simMatrix", similarities);
+		rEngine.assign("simMatrix", simMatrix.toArray());
 		rEngine.eval("library('igraph')");
 		rEngine.eval("gr <- graph.adjacency(simMatrix,weighted=TRUE)");
 		rEngine.eval("gr <- simplify(gr, remove.loops=TRUE, remove.multiple=TRUE)");

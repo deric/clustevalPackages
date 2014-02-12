@@ -20,7 +20,6 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.ArraysExt;
 import utils.Pair;
 import utils.SimilarityMatrix;
 import utils.parse.TextFileParser;
@@ -77,23 +76,20 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 			DistanceMeasure dist = config
 					.getDistanceMeasureAbsoluteToRelative();
 
-			SimilarityMatrix matrix = new SimilarityMatrix(ids,
-					coordsMatrix.length, coordsMatrix.length,
-					config.getSimilarityPrecision(), dist.isSymmetric());
+			SimilarityMatrix matrix = null;
 
-			double[][] distances = null;
 			if (dist.supportsMatrix()) {
-				distances = dist.getDistances(coordsMatrix);
-				for (int i = 0; i < distances.length; i++)
-					for (int j = 0; j < (dist.isSymmetric()
-							? i + 1
-							: distances[i].length); j++)
-						matrix.setSimilarity(i, j, distances[i][j]);
+				matrix = dist.getDistances(config, coordsMatrix);
+				matrix.setIds(ids);
+				matrix.invert();
 			}
 			// 31.01.2013: Some measures require R for the
 			// getDistances(double[][]) operation. In these cases, the return
 			// type is null.
-			if (distances == null) {
+			if (matrix == null) {
+				matrix = new SimilarityMatrix(ids, coordsMatrix.length,
+						coordsMatrix.length, config.getSimilarityPrecision(),
+						dist.isSymmetric());
 				for (int i = 0; i < matrix.getRows(); i++) {
 					for (int j = i; j < matrix.getColumns(); j++) {
 						matrix.setSimilarity(i, j, dist.getDistance(
@@ -101,23 +97,16 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 										.getSecond()));
 					}
 				}
+				matrix.invert();
 			}
-			distances = null;
 
 			/*
 			 * changed 23.09.2012 removed scaling and put max in subtract as
 			 * first parameter
 			 */
-			// distances = ArraysExt.scaleBy(distances,
-			// ArraysExt.max(distances));
-
-			distances = ArraysExt.subtract(ArraysExt.max(distances), distances);
 
 			if (this.normalize) {
-				distances = ArraysExt.subtract(distances,
-						ArraysExt.min(distances));
-				distances = ArraysExt.scaleBy(distances,
-						ArraysExt.max(distances));
+				matrix.normalize();
 			}
 
 			newDataSet.setDataSetContent(matrix);

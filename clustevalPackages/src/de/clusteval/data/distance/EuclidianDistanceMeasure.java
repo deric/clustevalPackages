@@ -16,11 +16,10 @@ package de.clusteval.data.distance;
 import java.io.File;
 import java.security.InvalidParameterException;
 
-import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
-import org.rosuda.REngine.Rserve.RserveException;
 
+import de.clusteval.data.dataset.format.ConversionInputToStandardConfiguration;
 import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
@@ -29,7 +28,7 @@ import de.clusteval.framework.repository.Repository;
  * @author Christian Wiwie
  * 
  */
-public class EuclidianDistanceMeasure extends DistanceMeasure {
+public class EuclidianDistanceMeasure extends DistanceMeasureR {
 
 	/**
 	 * @param repository
@@ -58,25 +57,6 @@ public class EuclidianDistanceMeasure extends DistanceMeasure {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see utils.Distance#getDistance(double[], double[])
-	 */
-	@Override
-	public double getDistance(double[] point1, double[] point2)
-			throws InvalidParameterException {
-		double result = 0.0;
-		if (point1.length != point2.length)
-			throw new InvalidParameterException(
-					"The dimensions of the points need to be the same.");
-		for (int i = 0; i < point1.length; i++) {
-			result += Math.pow(point1[i] - point2[i], 2.0);
-		}
-		result = Math.sqrt(result);
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see data.distance.DistanceMeasure#supportsMatrix()
 	 */
 	@Override
@@ -97,28 +77,40 @@ public class EuclidianDistanceMeasure extends DistanceMeasure {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see data.distance.DistanceMeasure#getDistances(double[][])
+	 * @see
+	 * de.clusteval.data.distance.DistanceMeasureR#getDistanceHelper(double[],
+	 * double[], de.clusteval.framework.repository.MyRengine)
 	 */
 	@Override
-	public double[][] getDistances(double[][] matrix)
-			throws InvalidParameterException {
-		try {
-			MyRengine rEngine = repository.getRengineForCurrentThread();
-			try {
-				rEngine.assign("matrix", matrix);
-				REXP result = rEngine
-						.eval("as.matrix(dist(matrix, method='euclidean'))");
-				return result.asDoubleMatrix();
-			} catch (REngineException e) {
-				e.printStackTrace();
-			} catch (REXPMismatchException e) {
-				e.printStackTrace();
-			} finally {
-				rEngine.clear();
-			}
-		} catch (RserveException e) {
-			e.printStackTrace();
+	protected double getDistanceHelper(double[] point1, double[] point2,
+			MyRengine rEngine) throws REngineException, REXPMismatchException {
+		double result = 0.0;
+		if (point1.length != point2.length)
+			throw new InvalidParameterException(
+					"The dimensions of the points need to be the same.");
+		for (int i = 0; i < point1.length; i++) {
+			result += Math.pow(point1[i] - point2[i], 2.0);
 		}
-		return null;
+		result = Math.sqrt(result);
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.clusteval.data.distance.DistanceMeasureR#getDistancesHelper(de.clusteval
+	 * .data.dataset.format.ConversionInputToStandardConfiguration, double[][],
+	 * de.clusteval.framework.repository.MyRengine, int)
+	 */
+	@Override
+	protected double[][] getDistancesHelper(
+			ConversionInputToStandardConfiguration config, double[][] matrix,
+			MyRengine rEngine, int firstRow, int lastRow)
+			throws REngineException, REXPMismatchException {
+		return rEngine
+				.eval(String
+						.format("proxy::dist(rbind(matrix[%d:%d,]), rbind(matrix), method='Euclidean')",
+								firstRow, lastRow)).asDoubleMatrix();
 	}
 }

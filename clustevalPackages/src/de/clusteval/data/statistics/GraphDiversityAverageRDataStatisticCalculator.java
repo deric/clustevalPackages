@@ -86,8 +86,7 @@ public class GraphDiversityAverageRDataStatisticCalculator
 			dataSet.unloadFromMemory();
 
 		double[][] similarities = simMatrix.toArray();
-		similarities = ArraysExt.scaleBy(similarities,
-				ArraysExt.max(similarities));
+		ArraysExt.scaleBy(similarities, ArraysExt.max(similarities), true);
 
 		rEngine.assign("simMatrix", similarities);
 		rEngine.eval("library('igraph')");
