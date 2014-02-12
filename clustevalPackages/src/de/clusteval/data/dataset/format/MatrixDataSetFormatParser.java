@@ -63,6 +63,7 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 				dataSet.getDataSetType());
 
 		if (!targetFile.exists()) {
+			this.log.info("Parsing input file coordinates into RAM");
 			MatrixParser parser = new MatrixParser(dataSet.getAbsolutePath());
 			parser.process();
 			List<Pair<String, double[]>> coords = parser.getCoordinates();
@@ -78,6 +79,7 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 
 			SimilarityMatrix matrix = null;
 
+			this.log.info("Calculating pairwise similarities");
 			if (dist.supportsMatrix()) {
 				matrix = dist.getDistances(config, coordsMatrix);
 				matrix.setIds(ids);
@@ -109,6 +111,7 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 				matrix.normalize();
 			}
 
+			this.log.info("Writing similarity matrix into file");
 			newDataSet.setDataSetContent(matrix);
 			newDataSet.writeToFile(false);
 			newDataSet.unloadFromMemory();
