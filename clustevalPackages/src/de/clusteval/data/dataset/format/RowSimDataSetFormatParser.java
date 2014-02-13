@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import utils.SimilarityMatrix;
+import utils.SimilarityMatrix.NUMBER_PRECISION;
 import utils.parse.SimFileMatrixParser;
 import utils.parse.SimFileParser.SIM_FILE_FORMAT;
 import utils.parse.SimilarityFileNormalizer;
@@ -293,11 +294,11 @@ public class RowSimDataSetFormatParser extends DataSetFormatParser {
 	 * @see data.dataset.format.DataSetFormatParser#parse(data.dataset.DataSet)
 	 */
 	@Override
-	protected SimilarityMatrix parse(DataSet dataSet) throws IOException,
-			InvalidDataSetFormatVersionException {
+	protected SimilarityMatrix parse(DataSet dataSet, NUMBER_PRECISION precision)
+			throws IOException, InvalidDataSetFormatVersionException {
 		switch (dataSet.getDataSetFormat().getVersion()) {
 			case 1 :
-				return parse_v1(dataSet);
+				return parse_v1(dataSet, precision);
 			default :
 				throw new InvalidDataSetFormatVersionException("Version "
 						+ dataSet.getDataSetFormat().getVersion()
@@ -306,7 +307,8 @@ public class RowSimDataSetFormatParser extends DataSetFormatParser {
 		}
 	}
 
-	protected SimilarityMatrix parse_v1(DataSet dataSet) throws IOException {
+	protected SimilarityMatrix parse_v1(DataSet dataSet,
+			NUMBER_PRECISION precision) throws IOException {
 		/*
 		 * Remove dataset attributes from file and write the result to
 		 * dataSet.getAbsolutePath() + ".strip"
@@ -316,7 +318,8 @@ public class RowSimDataSetFormatParser extends DataSetFormatParser {
 		filterer.process();
 
 		final SimFileMatrixParser p = new SimFileMatrixParser(
-				dataSet.getAbsolutePath() + ".strip", SIM_FILE_FORMAT.ID_ID_SIM);
+				dataSet.getAbsolutePath() + ".strip",
+				SIM_FILE_FORMAT.ID_ID_SIM, null, null, null, precision);
 		p.process();
 		return p.getSimilarities();
 	}

@@ -19,11 +19,11 @@ import java.io.IOException;
 import java.util.Map;
 
 import utils.SimilarityMatrix;
+import utils.SimilarityMatrix.NUMBER_PRECISION;
 import utils.parse.SimFileMatrixParser;
 import utils.parse.SimFileParser.SIM_FILE_FORMAT;
 import utils.parse.TextFileParser.OUTPUT_MODE;
 import de.clusteval.data.dataset.DataSet;
-import de.clusteval.data.dataset.DataSetAttributeFilterer;
 import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.framework.ClustevalBackendServer;
 import de.clusteval.framework.repository.RegisterException;
@@ -41,7 +41,7 @@ public class SimMatrixDataSetFormatParser extends DataSetFormatParser {
 	 * @see data.dataset.format.DataSetFormat#parseDataSet(data.dataset.DataSet)
 	 */
 	@Override
-	protected SimilarityMatrix parse(DataSet dataSet)
+	protected SimilarityMatrix parse(DataSet dataSet, NUMBER_PRECISION precision)
 			throws IllegalArgumentException, IOException,
 			InvalidDataSetFormatVersionException {
 
@@ -50,10 +50,11 @@ public class SimMatrixDataSetFormatParser extends DataSetFormatParser {
 		synchronized (sourceFile) {
 			// TODO: symmetry
 			final SimFileMatrixParser p;
+
 			try {
 				p = new SimFileMatrixParser(dataSet.getAbsolutePath(),
-						SIM_FILE_FORMAT.MATRIX_HEADER, null, null, null,
-						OUTPUT_MODE.BURST, SIM_FILE_FORMAT.MATRIX_HEADER);
+						SIM_FILE_FORMAT.MATRIX_HEADER, null, OUTPUT_MODE.BURST,
+						SIM_FILE_FORMAT.MATRIX_HEADER, precision);
 				p.process();
 				return p.getSimilarities();
 			} catch (IOException e) {

@@ -22,6 +22,7 @@ import java.util.List;
 
 import utils.Pair;
 import utils.SimilarityMatrix;
+import utils.SimilarityMatrix.NUMBER_PRECISION;
 import utils.parse.TextFileParser;
 import de.clusteval.data.dataset.AbsoluteDataSet;
 import de.clusteval.data.dataset.DataMatrix;
@@ -144,7 +145,8 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 	 * @see data.dataset.format.DataSetFormatParser#parse(data.dataset.DataSet)
 	 */
 	@Override
-	protected DataMatrix parse(DataSet dataSet) throws IOException {
+	protected DataMatrix parse(DataSet dataSet, NUMBER_PRECISION precision)
+			throws IOException {
 		MatrixParser parser = new MatrixParser(dataSet.getAbsolutePath());
 		parser.process();
 		List<Pair<String, double[]>> coords = parser.getCoordinates();

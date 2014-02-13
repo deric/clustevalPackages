@@ -29,6 +29,7 @@ import de.clusteval.data.dataset.AbsoluteDataSet;
 import de.clusteval.data.dataset.format.AbsoluteDataSetFormat;
 import de.clusteval.data.dataset.format.DataSetFormat;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
+import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.framework.RLibraryRequirement;
 import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
@@ -153,6 +154,8 @@ public class GapStatisticParameterOptimizationMethod
 			} catch (REngineException e) {
 				e.printStackTrace();
 			} catch (REXPMismatchException e) {
+				e.printStackTrace();
+			} catch (UnknownDataSetFormatException e) {
 				e.printStackTrace();
 			}
 		} catch (RserveException e) {

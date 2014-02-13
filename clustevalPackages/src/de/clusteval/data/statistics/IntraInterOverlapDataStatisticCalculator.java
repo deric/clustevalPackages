@@ -29,6 +29,7 @@ import de.clusteval.data.dataset.DataSetConfig;
 import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
 import de.clusteval.data.dataset.format.RelativeDataSetFormat;
+import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.data.goldstandard.GoldStandard;
 import de.clusteval.data.goldstandard.GoldStandardConfig;
 import de.clusteval.data.goldstandard.format.UnknownGoldStandardFormatException;
@@ -83,7 +84,7 @@ public class IntraInterOverlapDataStatisticCalculator
 			throws IncompatibleDataConfigDataStatisticException,
 			UnknownGoldStandardFormatException, IllegalArgumentException,
 			IOException, InvalidDataSetFormatVersionException,
-			RegisterException {
+			RegisterException, UnknownDataSetFormatException {
 		if (!dataConfig.hasGoldStandardConfig())
 			throw new IncompatibleDataConfigDataStatisticException(
 					"IntraInterOverlap requires a goldstandard, which the DataConfig "

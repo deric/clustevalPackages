@@ -21,6 +21,7 @@ import java.util.Map;
 
 import utils.ArraysExt;
 import utils.SimilarityMatrix;
+import utils.SimilarityMatrix.NUMBER_PRECISION;
 import utils.parse.SimFileMatrixParser;
 import utils.parse.SimFileParser.SIM_FILE_FORMAT;
 import utils.parse.SimilarityFileNormalizer;
@@ -125,7 +126,8 @@ public class TransClustSimMatrixDataSetFormatParser extends DataSetFormatParser 
 		 */
 		public TransClustSimMatrixConverter(final String absFilePath,
 				final String outputPath) throws IOException {
-			super(absFilePath, null, null, false, null, outputPath, OUTPUT_MODE.BURST);
+			super(absFilePath, null, null, false, null, outputPath,
+					OUTPUT_MODE.BURST);
 			this.setLockTargetFile(true);
 			this.skipEmptyLines = true;
 			this.keyToId = new HashMap<String, Integer>();
@@ -204,11 +206,11 @@ public class TransClustSimMatrixDataSetFormatParser extends DataSetFormatParser 
 	 * @see data.dataset.format.DataSetFormatParser#parse(data.dataset.DataSet)
 	 */
 	@Override
-	protected SimilarityMatrix parse(DataSet dataSet) throws IOException,
-			InvalidDataSetFormatVersionException {
+	protected SimilarityMatrix parse(DataSet dataSet, NUMBER_PRECISION precision)
+			throws IOException, InvalidDataSetFormatVersionException {
 		switch (dataSet.getDataSetFormat().getVersion()) {
 			case 1 :
-				return parse_v1(dataSet);
+				return parse_v1(dataSet, precision);
 			default :
 				throw new InvalidDataSetFormatVersionException("Version "
 						+ dataSet.getDataSetFormat().getVersion()
@@ -217,7 +219,8 @@ public class TransClustSimMatrixDataSetFormatParser extends DataSetFormatParser 
 		}
 	}
 
-	protected SimilarityMatrix parse_v1(DataSet dataSet) throws IOException {
+	protected SimilarityMatrix parse_v1(DataSet dataSet,
+			NUMBER_PRECISION precision) throws IOException {
 
 		/*
 		 * Remove dataset attributes from file and write the result to
@@ -242,7 +245,7 @@ public class TransClustSimMatrixDataSetFormatParser extends DataSetFormatParser 
 
 		final SimFileMatrixParser p = new SimFileMatrixParser(resultFileName,
 				SIM_FILE_FORMAT.MATRIX_HEADER, null, null, resultFile + ".tmp",
-				OUTPUT_MODE.BURST, SIM_FILE_FORMAT.MATRIX_HEADER);
+				OUTPUT_MODE.BURST, SIM_FILE_FORMAT.MATRIX_HEADER, precision);
 		new File(resultFile + ".tmp").delete();
 		p.process();
 		return p.getSimilarities();

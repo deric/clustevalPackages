@@ -23,6 +23,7 @@ import de.clusteval.cluster.quality.ClusteringQualityMeasure;
 import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
+import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 import de.clusteval.program.ProgramConfig;
@@ -113,6 +114,8 @@ public class TransClustQuantileParameterOptimizationMethod
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InvalidDataSetFormatVersionException e) {
+			e.printStackTrace();
+		} catch (UnknownDataSetFormatException e) {
 			e.printStackTrace();
 		}
 	}

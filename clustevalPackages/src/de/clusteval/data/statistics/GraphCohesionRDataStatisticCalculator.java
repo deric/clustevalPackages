@@ -26,6 +26,7 @@ import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.DataSetConfig;
 import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
+import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
@@ -73,7 +74,8 @@ public class GraphCohesionRDataStatisticCalculator
 	protected GraphCohesionRDataStatistic calculateResultHelper(
 			final MyRengine rEngine) throws IllegalArgumentException,
 			IOException, InvalidDataSetFormatVersionException,
-			RegisterException, REngineException, REXPMismatchException {
+			RegisterException, REngineException, REXPMismatchException,
+			UnknownDataSetFormatException {
 
 		DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
 		RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig.getDataSet()

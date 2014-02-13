@@ -27,6 +27,7 @@ import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.DataSetConfig;
 import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
+import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.data.statistics.ClusteringCoefficientDataStatistic;
 import de.clusteval.data.statistics.DataStatisticCalculator;
 import de.clusteval.framework.repository.MyRengine;
@@ -70,7 +71,8 @@ public class ClusteringCoefficientDataStatisticCalculator
 	@Override
 	protected ClusteringCoefficientDataStatistic calculateResult()
 			throws IllegalArgumentException, IOException,
-			InvalidDataSetFormatVersionException, RegisterException {
+			InvalidDataSetFormatVersionException, RegisterException,
+			UnknownDataSetFormatException {
 
 		DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
 		RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig.getDataSet()

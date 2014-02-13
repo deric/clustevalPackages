@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import utils.SimilarityMatrix;
+import utils.SimilarityMatrix.NUMBER_PRECISION;
 import utils.parse.SimFileMatrixParser;
 import utils.parse.SimFileParser;
 import utils.parse.SimFileParser.SIM_FILE_FORMAT;
@@ -200,7 +201,7 @@ public class APRowSimDataSetFormatParser extends DataSetFormatParser {
 	 */
 	@SuppressWarnings("unused")
 	@Override
-	protected SimilarityMatrix parse(DataSet dataSet) {
+	protected SimilarityMatrix parse(DataSet dataSet, NUMBER_PRECISION precision) {
 		return null;
 	}
 

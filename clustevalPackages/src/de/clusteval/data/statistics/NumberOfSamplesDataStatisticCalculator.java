@@ -21,6 +21,7 @@ import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.DataSetConfig;
 import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
+import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 
@@ -66,7 +67,8 @@ public class NumberOfSamplesDataStatisticCalculator
 	@Override
 	protected NumberOfSamplesDataStatistic calculateResult()
 			throws IllegalArgumentException, IOException,
-			InvalidDataSetFormatVersionException, RegisterException {
+			InvalidDataSetFormatVersionException, RegisterException,
+			UnknownDataSetFormatException {
 
 		DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
 		RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig.getDataSet()
