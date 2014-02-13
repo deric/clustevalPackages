@@ -225,6 +225,10 @@
 			<fileset dir="bin" includes="**/SpearmanCorrelationRDistanceMeasure*.class" />
 			<fileset dir="src" includes="**/SpearmanCorrelationRDistanceMeasure*.java" />
 		</jar>
+		<jar destfile="repository/supp/distanceMeasures/SpearmanCorrelationShiftRDistanceMeasure.jar">
+			<fileset dir="bin" includes="**/SpearmanCorrelationShiftRDistanceMeasure*.class" />
+			<fileset dir="src" includes="**/SpearmanCorrelationShiftRDistanceMeasure*.java" />
+		</jar>
 		<jar destfile="repository/supp/distanceMeasures/HoeffdingDRDistanceMeasure.jar">
 			<fileset dir="bin" includes="**/HoeffdingDRDistanceMeasure*.class" />
 			<fileset dir="src" includes="**/HoeffdingDRDistanceMeasure*.java" />
