@@ -90,12 +90,39 @@ public class DivisiveParameterOptimizationMethod
 		// TODO: why?
 		this.totalIterationCount = terminateCount;
 
-		this.iterationPerParameter = ArraysExt.rep(
-				(int) Math.pow(this.totalIterationCount, 1.0 / params.size()),
-				params.size());
+		initIterationsPerParameter();
 
 		if (register)
 			this.register();
+	}
+
+	protected void initIterationsPerParameter() {
+
+		double remainingIterationCount = this.totalIterationCount;
+		int remainingNumberParams = params.size();
+
+		int[] iterations = new int[params.size()];
+		for (int i = 0; i < params.size(); i++) {
+			iterations[i] = -1;
+		}
+
+		// first we handle with the parameters that have a fixed number of
+		// options
+		for (int i = 0; i < params.size(); i++) {
+			final ProgramParameter<?> param = this.params.get(i);
+			if (param.getOptions() != null && param.getOptions().length > 0) {
+				iterations[i] = param.getOptions().length;
+				remainingIterationCount /= iterations[i];
+				remainingNumberParams--;
+			}
+		}
+
+		for (int i = 0; i < params.size(); i++) {
+			if (iterations[i] == -1)
+				iterations[i] = (int) Math.pow(remainingIterationCount,
+						1.0 / remainingNumberParams);
+		}
+		this.iterationPerParameter = iterations;
 	}
 
 	/**
@@ -112,7 +139,7 @@ public class DivisiveParameterOptimizationMethod
 
 		// TODO: why?
 		this.totalIterationCount = other.totalIterationCount;
-		
+
 		this.iterationPerParameter = other.iterationPerParameter;
 	}
 
@@ -162,7 +189,7 @@ public class DivisiveParameterOptimizationMethod
 			} else if (param.getClass().equals(StringProgramParameter.class)) {
 				StringProgramParameter paCast = (StringProgramParameter) param;
 				String[] options = paCast.getOptions();
-				this.iterationPerParameter[p] = options.length;
+				// this.iterationPerParameter[p] = options.length;
 				parameterValues.put(param, options);
 			}
 			/*
