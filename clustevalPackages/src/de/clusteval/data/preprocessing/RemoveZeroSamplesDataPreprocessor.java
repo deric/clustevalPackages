@@ -134,6 +134,6 @@ public class RemoveZeroSamplesDataPreprocessor extends DataPreprocessor {
 	@Override
 	public Set<String> getCompatibleDataSetFormats() {
 		return new HashSet<String>(
-				Arrays.asList(new String[]{"MatrixDataSetFormat"}));
+				Arrays.asList(new String[]{"SimMatrixDataSetFormat"}));
 	}
 }
