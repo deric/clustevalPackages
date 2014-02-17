@@ -57,7 +57,7 @@ public class RemoveZeroSamplesDataPreprocessor extends DataPreprocessor {
 	 * @param other
 	 * @throws RegisterException
 	 */
-	public RemoveZeroSamplesDataPreprocessor(DataPreprocessor other)
+	public RemoveZeroSamplesDataPreprocessor(RemoveZeroSamplesDataPreprocessor other)
 			throws RegisterException {
 		super(other);
 	}
