@@ -101,6 +101,10 @@
 
 	<target name="create_preprocessors_jars">
 		<echo>Create data preprocessor jars...</echo>
+		<jar destfile="repository/supp/preprocessing/RemoveZeroSamplesDataPreprocessor.jar">
+			<fileset dir="bin" includes="**/RemoveZeroSamplesDataPreprocessor.class" />
+			<fileset dir="src" includes="**/RemoveZeroSamplesDataPreprocessor.java" />
+		</jar>
 		<jar destfile="repository/supp/preprocessing/RangeNormalizationDataPreprocessor.jar">
 			<fileset dir="bin" includes="**/RangeNormalizationDataPreprocessor.class" />
 			<fileset dir="src" includes="**/RangeNormalizationDataPreprocessor.java" />
