@@ -90,20 +90,21 @@ public class HopkinsDataStatisticCalculator
 		double[][] absMatrix = matrix.getData();
 		dataSet.unloadFromMemory();
 
-		double[] hopkinsIterations = new double[10];
+		double[] hopkinsIterations = new double[100];
 		rEngine.assign("absMatrix", absMatrix);
+		rEngine.eval("library(pdist)");
 		// generate uniform datapoints
-		rEngine.eval("minMax <- rbind(apply(absMatrix,MARGIN=2,FUN=min),apply(absMatrix,MARGIN=2,FUN=max))");
 		for (int i = 0; i < hopkinsIterations.length; i++) {
-			rEngine.eval("print('" + i + "')");
-			rEngine.eval("newPoints <- apply(minMax,MARGIN=2,FUN=function(x) {return (runif(n=nrow(absMatrix),min=x[1],max=x[2]))})");
-			rEngine.eval("library(fields)");
-			rEngine.eval("origDistances <- rdist(absMatrix)");
+			rEngine.eval("minMax <- apply(absMatrix,MARGIN=2,FUN=function(x) {cbind(min(x),max(x))})");
+			rEngine.eval("numberPoints <- as.integer(nrow(absMatrix)*0.05)");
+			rEngine.eval("newPoints <- apply(minMax,MARGIN=2,FUN=function(x) {return (runif(n=numberPoints,min=x[1],max=x[2]))})");
+			rEngine.eval("pointSelection <- sample(1:nrow(absMatrix), numberPoints,replace=T)");
+			rEngine.eval("origDistances <- as.matrix(pdist(absMatrix[pointSelection,],absMatrix))");
 			rEngine.eval("origMinDistances <- apply(origDistances,MARGIN=1,FUN=function(x) { return (sort(x,partial=2)[2])})");
-			rEngine.eval("newDistances <- rdist(absMatrix,newPoints)");
-			rEngine.eval("newMinDistances <- apply(newDistances,MARGIN=1,FUN=function(x) { return (sort(x,partial=2)[2])})");
+			rEngine.eval("newDistances <- as.matrix(pdist(newPoints,absMatrix))");
+			rEngine.eval("newMinDistances <- apply(newDistances,MARGIN=1,FUN=function(x) { return (sort(x,partial=1)[1])})");
 			REXP result = rEngine
-					.eval("sum(origMinDistances)/(sum(origMinDistances)+sum(newMinDistances))");
+					.eval("sum(newMinDistances)/(sum(origMinDistances)+sum(newMinDistances))");
 			hopkinsIterations[i] = result.asDouble();
 		}
 		return new HopkinsDataStatistic(repository, false, changeDate, absPath,

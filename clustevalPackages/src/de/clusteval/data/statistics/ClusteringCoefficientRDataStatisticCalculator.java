@@ -94,7 +94,7 @@ public class ClusteringCoefficientRDataStatisticCalculator
 		rEngine.assign("simMatrix", similarities);
 		rEngine.eval("library('igraph')");
 		rEngine.eval("gr <- graph.adjacency(simMatrix,weighted=TRUE)");
-		rEngine.eval("gr <- simplify(gr, remove.loops=TRUE, remove.multiple=TRUE)");
+		rEngine.eval("gr <- simplify(as.undirected(gr,mode='collapse'), remove.loops=TRUE, remove.multiple=TRUE)");
 		rEngine.eval("trans <- transitivity(gr,type='weighted',vids=V(gr),weights=E(gr)$weight)");
 		REXP result = rEngine.eval("mean(trans[!is.na(trans)])");
 		return new ClusteringCoefficientRDataStatistic(repository, false,
