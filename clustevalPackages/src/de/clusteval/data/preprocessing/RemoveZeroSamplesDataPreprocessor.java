@@ -25,7 +25,6 @@ import org.rosuda.REngine.Rserve.RserveException;
 
 import utils.SimilarityMatrix;
 import de.clusteval.data.dataset.AbsoluteDataSet;
-import de.clusteval.data.dataset.DataMatrix;
 import de.clusteval.data.dataset.DataSet;
 import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
@@ -57,8 +56,8 @@ public class RemoveZeroSamplesDataPreprocessor extends DataPreprocessor {
 	 * @param other
 	 * @throws RegisterException
 	 */
-	public RemoveZeroSamplesDataPreprocessor(RemoveZeroSamplesDataPreprocessor other)
-			throws RegisterException {
+	public RemoveZeroSamplesDataPreprocessor(
+			RemoveZeroSamplesDataPreprocessor other) throws RegisterException {
 		super(other);
 	}
 
@@ -97,7 +96,7 @@ public class RemoveZeroSamplesDataPreprocessor extends DataPreprocessor {
 					newDataSet.setAbsolutePath(new File(dataSet
 							.getAbsolutePath() + ".remZeroNA"));
 					newDataSet.setDataSetContent(newMatrix);
-					newDataSet.writeToFile(true);
+					newDataSet.writeToFile(false);
 					newDataSet.unloadFromMemory();
 					return newDataSet;
 				} catch (REngineException e) {

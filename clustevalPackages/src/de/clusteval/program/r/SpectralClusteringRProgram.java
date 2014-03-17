@@ -169,7 +169,6 @@ public class SpectralClusteringRProgram extends RProgram {
 			rEngine.eval("rownames(x) <- ids");
 		} else {
 			rEngine.assign("x", x);
-			rEngine.eval("x <- as.kernelMatrix(x)");
 		}
 	}
 

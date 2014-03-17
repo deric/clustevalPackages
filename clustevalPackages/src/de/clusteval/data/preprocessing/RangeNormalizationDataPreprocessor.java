@@ -94,7 +94,7 @@ public class RangeNormalizationDataPreprocessor extends DataPreprocessor {
 					newDataSet.setAbsolutePath(new File(dataSet
 							.getAbsolutePath() + ".rangeNorm"));
 					newDataSet.setDataSetContent(newMatrix);
-					newDataSet.writeToFile(true);
+					newDataSet.writeToFile(false);
 					newDataSet.unloadFromMemory();
 					return newDataSet;
 				} catch (REngineException e) {
