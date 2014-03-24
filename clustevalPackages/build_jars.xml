@@ -205,6 +205,10 @@
 			<fileset dir="bin" includes="**/ProteinSequenceSimilarityDataSetType*.class" />
 			<fileset dir="src" includes="**/ProteinSequenceSimilarityDataSetType*.java" />
 		</jar>
+		<jar destfile="repository/supp/types/dataset/ProteinStructureSimilarityDataSetType.jar">
+			<fileset dir="bin" includes="**/ProteinStructureSimilarityDataSetType*.class" />
+			<fileset dir="src" includes="**/ProteinStructureSimilarityDataSetType*.java" />
+		</jar>
 		<jar destfile="repository/supp/types/dataset/OtherDataSetType.jar">
 			<fileset dir="bin" includes="**/OtherDataSetType*.class" />
 			<fileset dir="src" includes="**/OtherDataSetType*.java" />
