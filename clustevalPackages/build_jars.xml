@@ -265,6 +265,10 @@
 			<fileset dir="bin" includes="**/clusterONERunResultFormat*.class" />
 			<fileset dir="src" includes="**/clusterONERunResultFormat*.java" />
 		</jar>
+		<jar destfile="repository/supp/formats/runresult/RRWRunResultFormat.jar">
+			<fileset dir="bin" includes="**/RRWRunResultFormat*.class" />
+			<fileset dir="src" includes="**/RRWRunResultFormat*.java" />
+		</jar>
 		<jar destfile="repository/supp/formats/runresult/TransClustRunResultFormat.jar">
 			<fileset dir="bin" includes="**/TransClustRunResultFormat*.class" />
 			<fileset dir="src" includes="**/TransClustRunResultFormat*.java" />
