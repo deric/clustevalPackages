@@ -76,6 +76,8 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 
 		final String resultFile = resultFileName;
 
+		final String simFile = dataSet.getAbsolutePath() + ".sim";
+
 		if (!(new File(resultFile).exists())) {
 			this.log.debug("Converting input file...");
 
@@ -92,7 +94,7 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 						"")
 						+ ".fasta";
 				Config.blastFile = dataSet.getAbsolutePath();
-				Config.similarityFile = dataSet.getAbsolutePath() + ".sim";
+				Config.similarityFile = simFile;
 				Config.costModel = 0; // BeH
 				proteins2integers = new HashMap<Integer, String>();
 				integers2proteins = new HashMap<String, Integer>();
@@ -108,14 +110,13 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 			}
 			bw.close();
 
-			SimFileMatrixParser parser = new SimFileMatrixParser(
-					Config.similarityFile, SIM_FILE_FORMAT.ID_ID_SIM,
-					dataSet.getAbsolutePath() + ".id", ID_FILE_FORMAT.ID);
+			SimFileMatrixParser parser = new SimFileMatrixParser(simFile,
+					SIM_FILE_FORMAT.ID_ID_SIM, dataSet.getAbsolutePath()
+							+ ".id", ID_FILE_FORMAT.ID);
 			parser.process();
 			SimilarityMatrix sims = parser.getSimilarities();
 
-			bw = new BufferedWriter(new FileWriter(new File(
-					Config.similarityFile)));
+			bw = new BufferedWriter(new FileWriter(new File(simFile)));
 			String[] proteins = integers2proteins.keySet().toArray(
 					new String[0]);
 			for (int i = 0; i < sims.getRows(); i++) {
@@ -130,10 +131,9 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 			}
 			bw.close();
 
-			final SimFileMatrixParser p = new SimFileMatrixParser(
-					Config.similarityFile, SIM_FILE_FORMAT.ID_ID_SIM, null,
-					null, resultFile, OUTPUT_MODE.BURST,
-					SIM_FILE_FORMAT.MATRIX_HEADER);
+			final SimFileMatrixParser p = new SimFileMatrixParser(simFile,
+					SIM_FILE_FORMAT.ID_ID_SIM, null, null, resultFile,
+					OUTPUT_MODE.STREAM, SIM_FILE_FORMAT.MATRIX_HEADER);
 			p.process();
 			if (this.normalize) {
 				new SimilarityFileNormalizer(resultFile,
