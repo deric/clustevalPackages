@@ -145,7 +145,7 @@ public class DaviesBouldinIndexRClusteringQualityMeasure
 		if (exp != null)
 			result = exp.asDouble();
 		else
-			result = this.getMinimum();
+			result = this.getMaximum();
 
 		return ClusteringQualityMeasureValue.getForDouble(result);
 	}
@@ -192,7 +192,7 @@ public class DaviesBouldinIndexRClusteringQualityMeasure
 	protected boolean isBetterThanHelper(
 			ClusteringQualityMeasureValue quality1,
 			ClusteringQualityMeasureValue quality2) {
-		return quality1.getValue() > quality2.getValue();
+		return quality1.getValue() < quality2.getValue();
 	}
 
 	/*
