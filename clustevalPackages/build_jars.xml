@@ -13,6 +13,10 @@
 			<fileset dir="bin" includes="**/SilhouetteValueRClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/SilhouetteValueRClusteringQualityMeasure.java" />
 		</jar>
+		<jar destfile="repository/supp/clustering/qualityMeasures/SilhouetteValueGlobalRClusteringQualityMeasure.jar">
+			<fileset dir="bin" includes="**/SilhouetteValueGlobalRClusteringQualityMeasure.class" />
+			<fileset dir="src" includes="**/SilhouetteValueGlobalRClusteringQualityMeasure.java" />
+		</jar>
 		<jar destfile="repository/supp/clustering/qualityMeasures/TransClustF2ClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/TransClustF2ClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/TransClustF2ClusteringQualityMeasure.java" />
