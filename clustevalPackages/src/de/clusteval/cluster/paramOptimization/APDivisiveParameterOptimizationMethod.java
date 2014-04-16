@@ -154,7 +154,7 @@ public class APDivisiveParameterOptimizationMethod
 	protected ParameterSet getNextParameterSet(
 			final ParameterSet forcedParameterSet)
 			throws InternalAttributeException, RegisterException,
-			NoParameterSetFoundException {
+			NoParameterSetFoundException, InterruptedException {
 		ParameterSet iterationParamSet = null;
 		ParameterSet preferenceParamSet = null;
 
@@ -236,9 +236,11 @@ public class APDivisiveParameterOptimizationMethod
 	}
 
 	@Override
-	public void giveFeedbackNotTerminated(ClusteringQualitySet minimalQualities) {
-		super.giveQualityFeedback(minimalQualities);
-		this.iterationParamMethod.giveQualityFeedback(minimalQualities);
+	public void giveFeedbackNotTerminated(final ParameterSet parameterSet,
+			ClusteringQualitySet minimalQualities) {
+		super.giveQualityFeedback(parameterSet, minimalQualities);
+		this.iterationParamMethod.giveQualityFeedback(parameterSet,
+				minimalQualities);
 		lastIterationNotTerminated = true;
 	}
 
@@ -250,8 +252,9 @@ public class APDivisiveParameterOptimizationMethod
 	 * giveQualityFeedback(cluster.quality.ClusteringQualitySet)
 	 */
 	@Override
-	public void giveQualityFeedback(ClusteringQualitySet qualities) {
-		super.giveQualityFeedback(qualities);
+	public void giveQualityFeedback(final ParameterSet parameterSet,
+			ClusteringQualitySet qualities) {
+		super.giveQualityFeedback(parameterSet, qualities);
 		this.lastIterationNotTerminated = false;
 		this.iterationParamMethod = null;
 	}

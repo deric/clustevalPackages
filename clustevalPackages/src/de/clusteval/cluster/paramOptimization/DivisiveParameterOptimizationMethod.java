@@ -217,7 +217,7 @@ public class DivisiveParameterOptimizationMethod
 	protected ParameterSet getNextParameterSet(
 			final ParameterSet forcedParameterSet)
 			throws InternalAttributeException, RegisterException,
-			NoParameterSetFoundException {
+			NoParameterSetFoundException, InterruptedException {
 
 		this.increaseCurrentPos();
 

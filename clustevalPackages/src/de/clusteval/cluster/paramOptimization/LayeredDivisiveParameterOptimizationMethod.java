@@ -131,20 +131,29 @@ public class LayeredDivisiveParameterOptimizationMethod
 	 * ()
 	 */
 	@Override
-	protected ParameterSet getNextParameterSet(
+	protected synchronized ParameterSet getNextParameterSet(
 			final ParameterSet forcedParameterSet)
 			throws InternalAttributeException, RegisterException,
-			NoParameterSetFoundException {
+			NoParameterSetFoundException, InterruptedException {
 		if (this.currentDivisiveMethod == null
 				|| (!this.currentDivisiveMethod.hasNext() && this.currentLayer < this.layerCount)) {
+			boolean allParamSetsFinished = false;
+			while (!allParamSetsFinished) {
+				allParamSetsFinished = true;
+				for (ParameterSet set : this.getResult().getParameterSets())
+					if (this.getResult().get(set) == null) {
+						allParamSetsFinished = false;
+						this.wait();
+					}
+			}
 			this.applyNextDivisiveMethod();
 		}
 		ParameterSet result = this.currentDivisiveMethod.next(
 				forcedParameterSet,
 				this.currentDivisiveMethod.getCurrentCount() + 1);
 		if (this.getResult().getParameterSets().contains(result))
-			this.currentDivisiveMethod.giveQualityFeedback(this.getResult()
-					.get(result));
+			this.currentDivisiveMethod.giveQualityFeedback(result, this
+					.getResult().get(result));
 		return result;
 	}
 
@@ -169,10 +178,11 @@ public class LayeredDivisiveParameterOptimizationMethod
 	/**
 	 * @throws InternalAttributeException
 	 * @throws RegisterException
+	 * @throws InterruptedException
 	 * 
 	 */
 	protected void applyNextDivisiveMethod() throws InternalAttributeException,
-			RegisterException {
+			RegisterException, InterruptedException {
 		/*
 		 * First we take the new optimum of the last divisive layer, if there
 		 * was one
@@ -371,9 +381,13 @@ public class LayeredDivisiveParameterOptimizationMethod
 	 * (java.util.Map)
 	 */
 	@Override
-	public void giveQualityFeedback(ClusteringQualitySet qualities) {
-		super.giveQualityFeedback(qualities);
-		this.currentDivisiveMethod.giveQualityFeedback(qualities);
+	public synchronized void giveQualityFeedback(final ParameterSet paramSet,
+			ClusteringQualitySet qualities) {
+		super.giveQualityFeedback(paramSet, qualities);
+		this.currentDivisiveMethod.giveQualityFeedback(paramSet, qualities);
+		// wake up all threads, which are waiting for the parameter sets of the
+		// last divisive method to finish.
+		this.notifyAll();
 	}
 
 	/*
@@ -384,7 +398,7 @@ public class LayeredDivisiveParameterOptimizationMethod
 	@Override
 	public void reset(final File absResultPath)
 			throws ParameterOptimizationException, InternalAttributeException,
-			RegisterException, RunResultParseException {
+			RegisterException, RunResultParseException, InterruptedException {
 		this.currentLayer = 0;
 		this.remainingIterationCount = getTotalIterationCount();
 		if (this.originalParameters != null)
