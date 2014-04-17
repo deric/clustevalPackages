@@ -223,13 +223,15 @@ public class DivisiveParameterOptimizationMethod
 
 		ParameterSet result = new ParameterSet();
 
+		// 17.04.2014: changed in order to also return parameters that were in
+		// the parameter set not being optimization parameters, but e.g. default
+		// parameters or run parameters.
+		if (forcedParameterSet != null)
+			return forcedParameterSet;
+
 		for (ProgramParameter<?> param : this.params) {
-			if (forcedParameterSet != null) {
-				result.put(param.getName(),
-						forcedParameterSet.get(param.getName()));
-			} else
-				result.put(param.getName(),
-						parameterValues.get(param)[currentPos.get(param)] + "");
+			result.put(param.getName(),
+					parameterValues.get(param)[currentPos.get(param)] + "");
 		}
 
 		return result;

@@ -203,6 +203,8 @@ public class APParameterOptimizationMethod
 					newParamSet.putAll(iterationParamSet);
 					return newParamSet;
 				} catch (NoParameterSetFoundException e) {
+				} catch (ParameterSetAlreadyEvaluatedException e) {
+					// cannot happen
 				}
 			}
 		}
@@ -230,6 +232,8 @@ public class APParameterOptimizationMethod
 			e.printStackTrace();
 		} catch (RunResultParseException e) {
 			e.printStackTrace();
+		} catch (ParameterSetAlreadyEvaluatedException e) {
+			// cannot happen
 		}
 		ParameterSet newParamSet = new ParameterSet();
 		newParamSet.putAll(iterationParamSet);

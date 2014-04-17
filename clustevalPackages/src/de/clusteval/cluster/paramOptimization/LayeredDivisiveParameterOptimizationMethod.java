@@ -134,7 +134,8 @@ public class LayeredDivisiveParameterOptimizationMethod
 	protected synchronized ParameterSet getNextParameterSet(
 			final ParameterSet forcedParameterSet)
 			throws InternalAttributeException, RegisterException,
-			NoParameterSetFoundException, InterruptedException {
+			NoParameterSetFoundException, InterruptedException,
+			ParameterSetAlreadyEvaluatedException {
 		if (this.currentDivisiveMethod == null
 				|| (!this.currentDivisiveMethod.hasNext() && this.currentLayer < this.layerCount)) {
 			boolean allParamSetsFinished = false;
