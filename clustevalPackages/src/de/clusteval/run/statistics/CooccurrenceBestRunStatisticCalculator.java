@@ -16,9 +16,10 @@ package de.clusteval.run.statistics;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -158,15 +159,13 @@ public class CooccurrenceBestRunStatisticCalculator
 
 		// keep ids common to all results
 		results.get(0).loadIntoMemory();
-		Set<ClusterItem> setIds = new HashSet<ClusterItem>(results.get(0)
-				.getOptimalClustering().getClusterItems());
-		// set those ids to null later, which are not part of all clusterings.
-		// we keep this array to know for the columns/rows in sparseMatrix,
-		// whether we need them later
-		ClusterItem[] ids = setIds.toArray(new ClusterItem[0]);
+		Map<ClusterItem, Integer> setIds = new HashMap<ClusterItem, Integer>();
+		for (ClusterItem item : results.get(0).getOptimalClustering()
+				.getClusterItems())
+			setIds.put(item, setIds.size());
 
-		LongMatrix2D sparseMatrix = new SparseLongMatrix2D(ids.length,
-				ids.length);
+		LongMatrix2D sparseMatrix = new SparseLongMatrix2D(setIds.size(),
+				setIds.size());
 
 		// TODO: check for fuzzy?
 		for (ParameterOptimizationResult result : results) {
@@ -175,10 +174,9 @@ public class CooccurrenceBestRunStatisticCalculator
 
 			Set<ClusterItem> items = result.getOptimalClustering()
 					.getClusterItems();
-			for (int i = 0; i < ids.length; i++)
-				if (!items.contains(ids[i]))
-					ids[i] = null;
-			setIds.retainAll(items);
+			for (ClusterItem item : setIds.keySet())
+				if (!(items.contains(item)))
+					setIds.remove(item);
 
 			Map<ClusteringQualityMeasure, ParameterSet> paramSets = result
 					.getOptimalParameterSets();
@@ -194,12 +192,21 @@ public class CooccurrenceBestRunStatisticCalculator
 					for (Cluster cluster : cl.getClusters()) {
 						Set<ClusterItem> clusterItems = cluster.getFuzzyItems()
 								.keySet();
-						for (int i = 0; i < clusterItems.size(); i++)
-							for (int j = i; j < clusterItems.size(); j++) {
+						for (ClusterItem i1 : clusterItems) {
+							if (!setIds.containsKey(i1))
+								continue;
+							for (ClusterItem i2 : clusterItems) {
+								if (!setIds.containsKey(i2))
+									continue;
+								int i = setIds.get(i1);
+								int j = setIds.get(i2);
+								if (i > j)
+									continue;
 								long newVal = sparseMatrix.get(i, j) + 1;
 								sparseMatrix.setQuick(i, j, newVal);
 								sparseMatrix.setQuick(j, i, newVal);
 							}
+						}
 					}
 				}
 			} finally {
@@ -207,21 +214,20 @@ public class CooccurrenceBestRunStatisticCalculator
 			}
 		}
 
+		String[] subIds = new String[setIds.size()];
 		int[] whichIds = new int[setIds.size()];
 		int pos = 0;
-		for (int i = 0; i < ids.length; i++)
-			if (ids[i] != null)
-				whichIds[pos++] = i;
-
+		for (Entry<ClusterItem, Integer> e : setIds.entrySet()) {
+			whichIds[pos] = e.getValue();
+			subIds[pos++] = e.getKey().toString();
+		}
 		sparseMatrix = sparseMatrix.viewSelection(whichIds, whichIds);
 
 		// keep only those rows/columns (ids) in the sparseMatrix which are part
 		// of all clusterings (not null in ids array)
 
 		return new CooccurrenceBestRunStatistic(repository, false, changeDate,
-				absPath,
-				ArraysExt.toString(setIds.toArray(new ClusterItem[0])),
-				sparseMatrix);
+				absPath, ArraysExt.toString(subIds), sparseMatrix);
 	}
 
 	/*
