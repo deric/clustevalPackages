@@ -258,9 +258,8 @@ public class CooccurrenceRunStatisticCalculator
 				rEngine.eval("library(lattice)");
 				// TODO
 				rEngine.eval("png(filename='" + absFolderPath.getAbsolutePath()
-						+ ".png',width=" + lastResult.ids.length * 16
-						+ ",height=" + lastResult.ids.length * 16
-						+ ",units='px');");
+						+ ".png',width=" + lastResult.ids.length + ",height="
+						+ lastResult.ids.length + ",units='px');");
 				// rEngine.eval("plot <- ggfluctuation(as.table(cooccSorted), type='colour')+scale_fill_gradient(low='red',high='yellow')+opts(panel.grid.major = theme_blank(),panel.background = theme_blank(),panel.grid.minor = theme_blank(),axis.text.x=theme_text(size=8,angle=-45,vjust=1,hjust=0),axis.text.y= theme_text(size=8));");//+geom_text(aes(label=c(cooccSorted)),size=1);");
 				// rEngine.eval("ggsave(filename='"
 				// + absFolderPath.getAbsolutePath()
