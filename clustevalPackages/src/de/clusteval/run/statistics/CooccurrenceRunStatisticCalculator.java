@@ -16,14 +16,19 @@ package de.clusteval.run.statistics;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RserveException;
 
 import utils.ArraysExt;
+import cern.colt.matrix.tlong.LongMatrix1D;
+import cern.colt.matrix.tlong.LongMatrix1DProcedure;
+import cern.colt.matrix.tlong.LongMatrix2D;
 import cern.colt.matrix.tlong.impl.SparseLongMatrix2D;
 import de.clusteval.cluster.Cluster;
 import de.clusteval.cluster.ClusterItem;
@@ -151,56 +156,69 @@ public class CooccurrenceRunStatisticCalculator
 								this.repository.getBasePath(RunResult.class),
 								this.uniqueRunIdentifiers)), results, true,
 						true, false);
-		try {
-			for (ParameterOptimizationResult result : results)
-				result.loadIntoMemory();
 
-			// determine common ids
-			List<ClusterItem> ids = new ArrayList<ClusterItem>();
-			if (results.size() > 0
-					&& results.get(0).getOptimalClustering() != null) {
-				ids.addAll(results.get(0).getOptimalClustering()
-						.getClusterItems());
-			}
-			for (ParameterOptimizationResult result : results) {
-				ids.retainAll(result.getOptimalClustering().getClusterItems());
-			}
+		// keep ids common to all results
+		Set<ClusterItem> setIds = new HashSet<ClusterItem>(results.get(0)
+				.getOptimalClustering().getClusterItems());
+		// set those ids to null later, which are not part of all clusterings.
+		// we keep this array to know for the columns/rows in sparseMatrix,
+		// whether we need them later
+		ClusterItem[] ids = setIds.toArray(new ClusterItem[0]);
 
-			SparseLongMatrix2D sparseMatrix = new SparseLongMatrix2D(
-					ids.size(), ids.size());
+		LongMatrix2D sparseMatrix = new SparseLongMatrix2D(ids.length,
+				ids.length);
 
-			// TODO: check for fuzzy?
-			for (ParameterOptimizationResult result : results) {
+		// TODO: check for fuzzy?
+		for (ParameterOptimizationResult result : results) {
+			this.log.info("Processing result: " + result);
+			result.loadIntoMemory();
+
+			Set<ClusterItem> items = result.getOptimalClustering()
+					.getClusterItems();
+			for (int i = 0; i < ids.length; i++)
+				if (!items.contains(ids[i]))
+					ids[i] = null;
+			setIds.retainAll(items);
+
+			try {
 				for (ParameterSet paramSet : result.getParameterSets()) {
+					this.log.info("Processing parameter set: " + paramSet);
 					Clustering cl = result.getClustering(paramSet);
 
 					if (cl == null)
 						continue;
 
-					for (int i = 0; i < ids.size(); i++) {
-						for (int j = i; j < ids.size(); j++) {
-							Map<Cluster, Float> cl1 = cl.getClusterForItem(ids
-									.get(i));
-							Map<Cluster, Float> cl2 = cl.getClusterForItem(ids
-									.get(j));
-							if (cl1 != null && cl2 != null && cl1.equals(cl2)) {
+					for (Cluster cluster : cl.getClusters()) {
+						List<ClusterItem> clusterItems = new ArrayList<ClusterItem>(
+								cluster.getFuzzyItems().keySet());
+						for (int i = 0; i < clusterItems.size(); i++)
+							for (int j = i; j < clusterItems.size(); j++) {
 								sparseMatrix.set(i, j,
 										sparseMatrix.get(i, j) + 1);
 								sparseMatrix.set(j, i, sparseMatrix.get(i, j));
 							}
-						}
 					}
 				}
-			}
-
-			return new CooccurrenceRunStatistic(repository, false, changeDate,
-					absPath,
-					ArraysExt.toString(ids.toArray(new ClusterItem[0])),
-					sparseMatrix);
-		} finally {
-			for (ParameterOptimizationResult result : results)
+			} finally {
 				result.unloadFromMemory();
+			}
 		}
+
+		int[] whichIds = new int[setIds.size()];
+		int pos = 0;
+		for (int i = 0; i < ids.length; i++)
+			if (ids[i] != null)
+				whichIds[pos++] = i;
+
+		sparseMatrix = sparseMatrix.viewSelection(whichIds, whichIds);
+
+		// keep only those rows/columns (ids) in the sparseMatrix which are part
+		// of all clusterings (not null in ids array)
+
+		return new CooccurrenceRunStatistic(repository, false, changeDate,
+				absPath,
+				ArraysExt.toString(setIds.toArray(new ClusterItem[0])),
+				sparseMatrix);
 	}
 
 	/*
@@ -220,7 +238,7 @@ public class CooccurrenceRunStatisticCalculator
 	 */
 	@Override
 	public void writeOutputTo(File absFolderPath) {
-		SparseLongMatrix2D matrix = lastResult.cooccurrenceMatrix;
+		LongMatrix2D matrix = lastResult.cooccurrenceMatrix;
 		try {
 			MyRengine rEngine = repository.getRengineForCurrentThread();
 			try {

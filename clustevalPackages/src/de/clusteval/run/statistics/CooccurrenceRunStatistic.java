@@ -17,6 +17,7 @@ import java.io.File;
 
 import utils.ArraysExt;
 import utils.StringExt;
+import cern.colt.matrix.tlong.LongMatrix2D;
 import cern.colt.matrix.tlong.impl.SparseLongMatrix2D;
 import de.clusteval.framework.RLibraryRequirement;
 import de.clusteval.framework.repository.RegisterException;
@@ -31,7 +32,7 @@ public class CooccurrenceRunStatistic extends RunStatistic {
 
 	protected String[] ids;
 
-	protected SparseLongMatrix2D cooccurrenceMatrix;
+	protected LongMatrix2D cooccurrenceMatrix;
 
 	/**
 	 * @param repo
@@ -57,8 +58,7 @@ public class CooccurrenceRunStatistic extends RunStatistic {
 	 */
 	public CooccurrenceRunStatistic(Repository repo, boolean register,
 			long changeDate, File absPath, final String[] ids,
-			final SparseLongMatrix2D cooccurrenceMatrix)
-			throws RegisterException {
+			final LongMatrix2D cooccurrenceMatrix) throws RegisterException {
 		super(repo, register, changeDate, absPath);
 		this.ids = ids;
 		this.cooccurrenceMatrix = cooccurrenceMatrix;
@@ -77,8 +77,7 @@ public class CooccurrenceRunStatistic extends RunStatistic {
 		if (other.ids != null)
 			this.ids = other.ids.clone();
 		if (other.cooccurrenceMatrix != null)
-			this.cooccurrenceMatrix = (SparseLongMatrix2D) other.cooccurrenceMatrix
-					.copy();
+			this.cooccurrenceMatrix = other.cooccurrenceMatrix.copy();
 	}
 
 	/*
