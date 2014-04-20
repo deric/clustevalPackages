@@ -158,6 +158,7 @@ public class CooccurrenceRunStatisticCalculator
 						true, false);
 
 		// keep ids common to all results
+		results.get(0).loadIntoMemory();
 		Set<ClusterItem> setIds = new HashSet<ClusterItem>(results.get(0)
 				.getOptimalClustering().getClusterItems());
 		// set those ids to null later, which are not part of all clusterings.
