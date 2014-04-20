@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -26,8 +25,6 @@ import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RserveException;
 
 import utils.ArraysExt;
-import cern.colt.matrix.tlong.LongMatrix1D;
-import cern.colt.matrix.tlong.LongMatrix1DProcedure;
 import cern.colt.matrix.tlong.LongMatrix2D;
 import cern.colt.matrix.tlong.impl.SparseLongMatrix2D;
 import de.clusteval.cluster.Cluster;
@@ -190,13 +187,13 @@ public class CooccurrenceRunStatisticCalculator
 						continue;
 
 					for (Cluster cluster : cl.getClusters()) {
-						List<ClusterItem> clusterItems = new ArrayList<ClusterItem>(
-								cluster.getFuzzyItems().keySet());
+						Set<ClusterItem> clusterItems = cluster.getFuzzyItems()
+								.keySet();
 						for (int i = 0; i < clusterItems.size(); i++)
 							for (int j = i; j < clusterItems.size(); j++) {
-								sparseMatrix.set(i, j,
-										sparseMatrix.get(i, j) + 1);
-								sparseMatrix.set(j, i, sparseMatrix.get(i, j));
+								long newVal = sparseMatrix.get(i, j) + 1;
+								sparseMatrix.setQuick(i, j, newVal);
+								sparseMatrix.setQuick(j, i, newVal);
 							}
 					}
 				}
