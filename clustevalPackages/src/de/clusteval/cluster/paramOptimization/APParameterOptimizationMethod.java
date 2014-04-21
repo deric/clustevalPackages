@@ -152,7 +152,8 @@ public class APParameterOptimizationMethod
 	protected ParameterSet getNextParameterSet(
 			final ParameterSet forcedParameterSet)
 			throws InternalAttributeException, RegisterException,
-			NoParameterSetFoundException, InterruptedException {
+			NoParameterSetFoundException, InterruptedException,
+			ParameterSetAlreadyEvaluatedException {
 		ParameterSet iterationParamSet = null;
 		ParameterSet preferenceParamSet = null;
 
@@ -232,8 +233,6 @@ public class APParameterOptimizationMethod
 			e.printStackTrace();
 		} catch (RunResultParseException e) {
 			e.printStackTrace();
-		} catch (ParameterSetAlreadyEvaluatedException e) {
-			// cannot happen
 		}
 		ParameterSet newParamSet = new ParameterSet();
 		newParamSet.putAll(iterationParamSet);
