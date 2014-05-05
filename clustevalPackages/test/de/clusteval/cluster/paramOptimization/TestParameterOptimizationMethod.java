@@ -98,8 +98,8 @@ public class TestParameterOptimizationMethod {
 		ClustevalBackendServer.logLevel(Level.INFO);
 
 		List<ProgramParameter<?>> params = new ArrayList<ProgramParameter<?>>();
-		params.add(repo.getStaticObjectWithName(ProgramConfig.class, "TransClust_2")
-				.getParameterForName("T"));
+		params.add(repo.getStaticObjectWithName(ProgramConfig.class,
+				"TransClust_2").getParameterForName("T"));
 
 		LayeredDivisiveParameterOptimizationMethod method = new LayeredDivisiveParameterOptimizationMethod(
 				repo, false, System.currentTimeMillis(), new File("bla"), null,
@@ -175,10 +175,10 @@ public class TestParameterOptimizationMethod {
 		ClustevalBackendServer.logLevel(Level.INFO);
 
 		List<ProgramParameter<?>> params = new ArrayList<ProgramParameter<?>>();
-		params.add(repo.getStaticObjectWithName(ProgramConfig.class, "TransClust_2")
-				.getParameterForName("T"));
-		params.add(repo.getStaticObjectWithName(ProgramConfig.class, "TransClust_2")
-				.getParameterForName("T"));
+		params.add(repo.getStaticObjectWithName(ProgramConfig.class,
+				"TransClust_2").getParameterForName("T"));
+		params.add(repo.getStaticObjectWithName(ProgramConfig.class,
+				"TransClust_2").getParameterForName("T"));
 
 		LayeredDivisiveParameterOptimizationMethod method = new LayeredDivisiveParameterOptimizationMethod(
 				repo, false, System.currentTimeMillis(), new File("bla"), null,
@@ -247,6 +247,63 @@ public class TestParameterOptimizationMethod {
 
 		newIterations = method.getNextIterationsPerLayer();
 		Assert.assertEquals(9, newIterations);
+		Assert.assertEquals(0, method.remainingIterationCount);
+	}
+
+	/**
+	 * @throws FileNotFoundException
+	 * @throws RepositoryAlreadyExistsException
+	 * @throws InvalidRepositoryException
+	 * @throws RepositoryConfigNotFoundException
+	 * @throws RepositoryConfigurationException
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
+	 * @throws RegisterException
+	 * @throws InternalAttributeException
+	 */
+	@Test
+	public void testLayered2ParamsWith1Options() throws FileNotFoundException,
+			RepositoryAlreadyExistsException, InvalidRepositoryException,
+			RepositoryConfigNotFoundException,
+			RepositoryConfigurationException, SecurityException,
+			IllegalArgumentException, RegisterException,
+			InternalAttributeException, InterruptedException {
+
+		ClustevalBackendServer.logLevel(Level.INFO);
+
+		List<ProgramParameter<?>> params = new ArrayList<ProgramParameter<?>>();
+		params.add(repo.getStaticObjectWithName(ProgramConfig.class,
+				"TransClust_2").getParameterForName("T"));
+
+		ProgramParameter<?> withOptions = repo
+				.getStaticObjectWithName(ProgramConfig.class, "TransClust_2")
+				.getParameterForName("T").clone();
+		withOptions.setOptions(new String[]{"1", "2", "3", "4", "5", "6", "7"});
+		params.add(withOptions);
+
+		LayeredDivisiveParameterOptimizationMethod method = new LayeredDivisiveParameterOptimizationMethod(
+				repo, false, System.currentTimeMillis(), new File("bla"), null,
+				null, null, params, null, 1001, false);
+		method.remainingIterationCount = 1001;
+
+		Assert.assertEquals(1001, method.remainingIterationCount);
+
+		Assert.assertEquals(1001, method.getTotalIterationCount());
+
+		Assert.assertEquals(31, method.layerCount);
+
+		int newIterations;
+		for (int i = 0; i < 30; i++) {
+			newIterations = method.getNextIterationsPerLayer();
+			Assert.assertEquals(28, newIterations);
+			Assert.assertEquals(1001 - (i + 1) * 28,
+					method.remainingIterationCount);
+
+			method.currentLayer++;
+		}
+
+		newIterations = method.getNextIterationsPerLayer();
+		Assert.assertEquals(28, newIterations);
 		Assert.assertEquals(0, method.remainingIterationCount);
 	}
 }

@@ -330,19 +330,34 @@ public class LayeredDivisiveParameterOptimizationMethod
 
 	protected int getNextIterationsPerLayer() {
 		int newLayerIterations;
+
+		double remainingIterationCount = this.iterationsPerLayer;
+		int remainingParams = this.params.size();
+		final List<Integer> iterations = new ArrayList<Integer>();
+
+		// parameters that have a fixed number of options
+		for (int i = 0; i < params.size(); i++) {
+			final ProgramParameter<?> param = this.params.get(i);
+			if (param.getOptions() != null && param.getOptions().length > 0) {
+				iterations.add(param.getOptions().length);
+				remainingIterationCount /= param.getOptions().length;
+				remainingParams--;
+			}
+		}
+
+		// the iterations for the remaining parameters
+		newLayerIterations = (int) Math.pow(Math.floor(Math.pow(
+				remainingIterationCount, 1.0 / remainingParams)),
+				remainingParams);
+		for (Integer i : iterations)
+			newLayerIterations *= i;
+
 		if (currentLayer < layerCount - 1) {
-			newLayerIterations = (int) Math.pow(Math.floor(Math.pow(
-					this.iterationsPerLayer, 1.0 / this.params.size())),
-					this.params.size());
 			this.remainingIterationCount -= newLayerIterations;
 		} else {
 			/*
 			 * If this is the last layer, do the remaining number of iterations
 			 */
-			newLayerIterations = (int) Math.pow(Math.floor(Math.pow(
-			// this.remainingIterationCount, 1.0 / this.params.size())),
-					this.iterationsPerLayer, 1.0 / this.params.size())),
-					this.params.size());
 			this.remainingIterationCount = 0;
 		}
 		return newLayerIterations;

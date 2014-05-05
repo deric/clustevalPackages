@@ -96,6 +96,7 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 				Config.blastFile = dataSet.getAbsolutePath();
 				Config.similarityFile = simFile;
 				Config.costModel = 0; // BeH
+				Config.blastCutoff = 100000;
 				proteins2integers = new HashMap<Integer, String>();
 				integers2proteins = new HashMap<String, Integer>();
 				Creator c = new Creator();
