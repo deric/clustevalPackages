@@ -296,7 +296,9 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 			Config.fastaFile = dataSet.getAbsolutePath() + ".fasta";
 			Config.blastFile = dataSet.getAbsolutePath() + ".strip";
 			Config.similarityFile = dataSet.getAbsolutePath() + ".sim";
-			Config.costModel = 0; // BeH
+			// Config.costModel = 0; // BeH
+			Config.costModel = 1; // SoH
+			// Config.costModel = 2; // Coverage BeH
 			final HashMap<Integer, String> proteins2integers = new HashMap<Integer, String>();
 			final HashMap<String, Integer> integers2proteins = new HashMap<String, Integer>();
 			Creator c = new Creator();
