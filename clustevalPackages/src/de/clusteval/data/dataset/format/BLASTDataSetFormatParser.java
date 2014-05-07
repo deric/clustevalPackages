@@ -96,8 +96,9 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 				Config.blastFile = dataSet.getAbsolutePath();
 				Config.similarityFile = simFile;
 				// Config.costModel = 0; // BeH
-				Config.costModel = 1; // SoH
-				// Config.costModel = 2; // Coverage BeH
+				// Config.costModel = 1; // SoH
+				Config.costModel = 2; // Coverage BeH
+				Config.coverageFactor = 20;
 				Config.blastCutoff = 100000;
 				proteins2integers = new HashMap<Integer, String>();
 				integers2proteins = new HashMap<String, Integer>();
@@ -299,8 +300,9 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 			Config.blastFile = dataSet.getAbsolutePath() + ".strip";
 			Config.similarityFile = dataSet.getAbsolutePath() + ".sim";
 			// Config.costModel = 0; // BeH
-			Config.costModel = 1; // SoH
-			// Config.costModel = 2; // Coverage BeH
+			// Config.costModel = 1; // SoH
+			Config.costModel = 2; // Coverage BeH
+			Config.coverageFactor = 20;
 			Config.blastCutoff = 100000;
 			final HashMap<Integer, String> proteins2integers = new HashMap<Integer, String>();
 			final HashMap<String, Integer> integers2proteins = new HashMap<String, Integer>();
