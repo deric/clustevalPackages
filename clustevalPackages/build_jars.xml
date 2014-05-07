@@ -403,5 +403,9 @@
 			<fileset dir="bin" includes="**/DBSCANClusteringRProgram*.class" />
 			<fileset dir="src" includes="**/DBSCANClusteringRProgram*.java" />
 		</jar>
+		<jar destfile="repository/programs/SOMClusteringRProgram.jar">
+			<fileset dir="bin" includes="**/SOMClusteringRProgram*.class" />
+			<fileset dir="src" includes="**/SOMClusteringRProgram*.java" />
+		</jar>
 	</target>
 </project>
