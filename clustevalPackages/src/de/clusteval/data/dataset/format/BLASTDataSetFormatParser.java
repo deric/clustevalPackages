@@ -95,7 +95,9 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 						+ ".fasta";
 				Config.blastFile = dataSet.getAbsolutePath();
 				Config.similarityFile = simFile;
-				Config.costModel = 0; // BeH
+				// Config.costModel = 0; // BeH
+				Config.costModel = 1; // SoH
+				// Config.costModel = 2; // Coverage BeH
 				Config.blastCutoff = 100000;
 				proteins2integers = new HashMap<Integer, String>();
 				integers2proteins = new HashMap<String, Integer>();
@@ -299,6 +301,7 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 			// Config.costModel = 0; // BeH
 			Config.costModel = 1; // SoH
 			// Config.costModel = 2; // Coverage BeH
+			Config.blastCutoff = 100000;
 			final HashMap<Integer, String> proteins2integers = new HashMap<Integer, String>();
 			final HashMap<String, Integer> integers2proteins = new HashMap<String, Integer>();
 			Creator c = new Creator();
