@@ -42,7 +42,7 @@ import file.FileUtils;
  * 
  */
 @RLibraryRequirement(requiredRLibraries = {"kohonen"})
-public class SOMClusteringRProgram extends RelativeDataRProgram {
+public class SOMClusteringRProgram extends AbsoluteDataRProgram {
 
 	/**
 	 * @param repository
@@ -112,7 +112,7 @@ public class SOMClusteringRProgram extends RelativeDataRProgram {
 	public Set<DataSetFormat> getCompatibleDataSetFormats()
 			throws UnknownDataSetFormatException {
 		return new HashSet<DataSetFormat>(DataSetFormat.parseFromString(
-				repository, new String[]{"SimMatrixDataSetFormat"}));
+				repository, new String[]{"MatrixDataSetFormat"}));
 	}
 
 	/*

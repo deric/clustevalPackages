@@ -149,13 +149,23 @@ public class LayeredDivisiveParameterOptimizationMethod
 			}
 			this.applyNextDivisiveMethod();
 		}
-		ParameterSet result = this.currentDivisiveMethod.next(
-				forcedParameterSet,
-				this.currentDivisiveMethod.getCurrentCount() + 1);
-		if (this.getResult().getParameterSets().contains(result))
-			this.currentDivisiveMethod.giveQualityFeedback(result, this
-					.getResult().get(result));
-		return result;
+		try {
+			ParameterSet result = this.currentDivisiveMethod.next(
+					forcedParameterSet,
+					this.currentDivisiveMethod.getCurrentCount() + 1);
+
+			if (this.getResult().getParameterSets().contains(result))
+				this.currentDivisiveMethod.giveQualityFeedback(result, this
+						.getResult().get(result));
+			return result;
+		} catch (ParameterSetAlreadyEvaluatedException e) {
+			// 09.05.2014: we have to adapt the iteration number of the current
+			// divisive method to the iteration number of this layered method
+			throw new ParameterSetAlreadyEvaluatedException(
+					++this.currentCount, this.getResult()
+							.getIterationNumberForParameterSet(
+									e.getParameterSet()), e.getParameterSet());
+		}
 	}
 
 	/*
