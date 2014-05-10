@@ -221,6 +221,14 @@
 			<fileset dir="bin" includes="**/SyntheticDataSetType*.class" />
 			<fileset dir="src" includes="**/SyntheticDataSetType*.java" />
 		</jar>
+		<jar destfile="repository/supp/types/dataset/SocialNetworkDataSetType.jar">
+			<fileset dir="bin" includes="**/SocialNetworkDataSetType*.class" />
+			<fileset dir="src" includes="**/SocialNetworkDataSetType*.java" />
+		</jar>
+		<jar destfile="repository/supp/types/dataset/WordSenseDisambiguationDataSetType.jar">
+			<fileset dir="bin" includes="**/WordSenseDisambiguationDataSetType*.class" />
+			<fileset dir="src" includes="**/WordSenseDisambiguationDataSetType*.java" />
+		</jar>
 	</target>
 
 	<target name="create_distanceMeasure_jars">
