@@ -88,7 +88,7 @@ public class KMeansClusteringRProgram extends AbsoluteDataRProgram {
 	 */
 	@Override
 	public String getInvocationFormat() {
-		return "kmeans(x,centers=(%k%))";
+		return "kmeans(x,centers=(%k%), nstart=%nstart%)";
 	}
 
 	/*

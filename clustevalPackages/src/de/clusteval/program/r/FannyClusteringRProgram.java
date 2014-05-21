@@ -70,7 +70,7 @@ public class FannyClusteringRProgram extends RelativeDataRProgram {
 	 */
 	@Override
 	public String getInvocationFormat() {
-		return "fanny(x,k=%k%)";
+		return "fanny(x,k=%k%, memb.exp = %membexp%)";
 	}
 
 	/*
