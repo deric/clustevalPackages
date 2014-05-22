@@ -80,7 +80,7 @@ public class FannyClusteringRProgram extends AbsoluteAndRelativeDataRProgram {
 	 */
 	@Override
 	public String getAlias() {
-		return "Fuzzy Clustering";
+		return "fanny";
 	}
 
 	/*
