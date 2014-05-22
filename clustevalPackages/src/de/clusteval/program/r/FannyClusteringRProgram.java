@@ -39,7 +39,7 @@ import file.FileUtils;
  * 
  */
 @RLibraryRequirement(requiredRLibraries = {"cluster"})
-public class FannyClusteringRProgram extends RelativeDataRProgram {
+public class FannyClusteringRProgram extends AbsoluteAndRelativeDataRProgram {
 
 	/**
 	 * @param repository
