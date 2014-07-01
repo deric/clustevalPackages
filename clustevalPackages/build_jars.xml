@@ -415,5 +415,9 @@
 			<fileset dir="bin" includes="**/SOMClusteringRProgram*.class" />
 			<fileset dir="src" includes="**/SOMClusteringRProgram*.java" />
 		</jar>
+		<jar destfile="repository/programs/ClusterDPClusteringRProgram.jar">
+			<fileset dir="bin" includes="**/ClusterDPClusteringRProgram*.class" />
+			<fileset dir="src" includes="**/ClusterDPClusteringRProgram*.java" />
+		</jar>
 	</target>
 </project>
