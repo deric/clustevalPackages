@@ -87,11 +87,9 @@ public class ClusterDPClusteringRProgram extends RelativeDataRProgram {
 
 		// define function for this program
 		this.rEngine
-				.eval("clusterdp <- function(rhomin, deltamin) {"
+				.eval("clusterdp <- function(dc, k) {"
 						+ "  d <- as.matrix(x);"
 						+ "  ND <- nrow(d);"
-						+ "  percent<-2.0;"
-						+ "  dc <- quantile(d,1-percent/100.0);"
 						+ "  rho <- c();"
 						+ "  for (  i in 1 : ND ) {"
 						+ "    rho[i]<-0.;"
@@ -126,16 +124,14 @@ public class ClusterDPClusteringRProgram extends RelativeDataRProgram {
 						+ "     };"
 						+ "  };"
 						+ "  delta[ordrho[1]]<-max(delta);"
-						+ "  NCLUST <- 0;"
-						+ "  rhomin <- min(rho)*(1-as.numeric(rhomin))+max(rho)*(as.numeric(rhomin));"
-						+ "  deltamin <-min(delta)*(1-as.numeric(deltamin))+max(delta)*(as.numeric(deltamin));"
+						+ "  rhodelta <- c();"
+						+ "  for (i in 1:ND) { rhodelta[i]=rho[i]*delta[i];};"
+						+ "  ordrhodelta <- sort(rhodelta,decreasing=T, index.return=T);"
 						+ "  cl <- c();" + "  icl <- c();"
 						+ "  for (i in 1:ND) {" + "    cl[i]=-1;" + "  };"
-						+ "  for (i in 1:ND) {"
-						+ "    if ( (rho[i]>rhomin) && (delta[i]>deltamin)) {"
-						+ "      NCLUST <- NCLUST+1;"
-						+ "      cl[i] <- NCLUST;" + "      icl[NCLUST]=i;"
-						+ "    };" + "  };" + "  " + "  for (  i in 1 : ND ) {"
+						+ "  for (i in 1:k) {"
+						+ "    cl[ordrhodelta$ix[i]] <- i;" + "      icl[i]=i;"
+						+ "  };" + "  " + "  for (  i in 1 : ND ) {"
 						+ "    if (cl[ordrho[i]]==-1)"
 						+ "      cl[ordrho[i]]<-cl[nneigh[ordrho[i]]];"
 						+ "  };" + "  result <- cl;" + "};" + "return (0);");
@@ -148,7 +144,7 @@ public class ClusterDPClusteringRProgram extends RelativeDataRProgram {
 	 */
 	@Override
 	public String getInvocationFormat() {
-		return "clusterdp(%rhomin%, %deltamin%)";
+		return "clusterdp(%dc%, %k%)";
 	}
 
 	/*
