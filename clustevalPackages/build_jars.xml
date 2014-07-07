@@ -101,6 +101,10 @@
 			<fileset dir="bin" includes="**/GapStatisticParameterOptimizationMethod.class" />
 			<fileset dir="src" includes="**/GapStatisticParameterOptimizationMethod.java" />
 		</jar>
+		<jar destfile="repository/supp/clustering/paramOptimization/FlatteningLayeredDivisiveParameterOptimizationMethod.jar">
+			<fileset dir="bin" includes="**/FlatteningLayeredDivisiveParameterOptimizationMethod.class" />
+			<fileset dir="src" includes="**/FlatteningLayeredDivisiveParameterOptimizationMethod.java" />
+		</jar>
 	</target>
 
 	<target name="create_preprocessors_jars">
