@@ -35,38 +35,37 @@ import de.clusteval.run.result.format.UnknownRunResultFormatException;
 import file.FileUtils;
 
 /**
- * This class is an implementation of K-Means Clustering based on the
- * R-framework implementation in the kmeans() method which is contained in the
- * standard functionality of R.
+ * This class is an implementation of DBSCAN using the R-framework
+ * implementation of the package <b>fpc</b> in method <b>dbscan</b>.
  * 
  * @author Christian Wiwie
  * 
  */
-@RLibraryRequirement(requiredRLibraries = {"stats"})
-public class KMeansClusteringRProgram extends AbsoluteDataRProgram {
+@RLibraryRequirement(requiredRLibraries = {"fpc"})
+public class DBSCANClusteringRProgram extends RelativeDataRProgram {
 
 	/**
 	 * @param repository
 	 * @throws RegisterException
 	 */
-	public KMeansClusteringRProgram(Repository repository)
+	public DBSCANClusteringRProgram(Repository repository)
 			throws RegisterException {
 		super(repository, new File(FileUtils.buildPath(
 				repository.getBasePath(Program.class),
-				"KMeansClusteringRProgram.jar")).lastModified(), new File(
+				"DBSCANClusteringRProgram.jar")).lastModified(), new File(
 				FileUtils.buildPath(repository.getBasePath(Program.class),
-						"KMeansClusteringRProgram.jar")));
+						"DBSCANClusteringRProgram.jar")));
 	}
 
 	/**
-	 * The copy constructor of K-Means clustering.
+	 * The copy constructor of Spectral clustering.
 	 * 
 	 * @param other
 	 *            The object to clone.
 	 * 
 	 * @throws RegisterException
 	 */
-	public KMeansClusteringRProgram(KMeansClusteringRProgram other)
+	public DBSCANClusteringRProgram(DBSCANClusteringRProgram other)
 			throws RegisterException {
 		this(other.repository);
 	}
@@ -78,7 +77,7 @@ public class KMeansClusteringRProgram extends AbsoluteDataRProgram {
 	 */
 	@Override
 	public String getAlias() {
-		return "k-Means";
+		return "DBSCAN";
 	}
 
 	/*
@@ -88,7 +87,7 @@ public class KMeansClusteringRProgram extends AbsoluteDataRProgram {
 	 */
 	@Override
 	public String getInvocationFormat() {
-		return "kmeans(x,centers=(%k%), nstart=%nstart%)";
+		return "dbscan(x,MinPts=%MinPts%,eps=%eps%)";
 	}
 
 	/*
@@ -113,7 +112,7 @@ public class KMeansClusteringRProgram extends AbsoluteDataRProgram {
 	public Set<DataSetFormat> getCompatibleDataSetFormats()
 			throws UnknownDataSetFormatException {
 		return new HashSet<DataSetFormat>(DataSetFormat.parseFromString(
-				repository, new String[]{"MatrixDataSetFormat"}));
+				repository, new String[]{"SimMatrixDataSetFormat"}));
 	}
 
 	/*

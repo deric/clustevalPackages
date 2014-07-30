@@ -77,7 +77,7 @@ public class KMedoidsClusteringRProgram extends RelativeDataRProgram {
 	 */
 	@Override
 	public String getAlias() {
-		return "Partitioning Around Medoids";
+		return "k-Medoids (PAM)";
 	}
 
 	/*
