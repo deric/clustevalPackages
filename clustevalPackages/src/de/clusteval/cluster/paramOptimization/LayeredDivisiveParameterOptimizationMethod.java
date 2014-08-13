@@ -409,11 +409,15 @@ public class LayeredDivisiveParameterOptimizationMethod
 	@Override
 	public synchronized void giveQualityFeedback(final ParameterSet paramSet,
 			ClusteringQualitySet qualities) {
-		super.giveQualityFeedback(paramSet, qualities);
-		this.currentDivisiveMethod.giveQualityFeedback(paramSet, qualities);
-		// wake up all threads, which are waiting for the parameter sets of the
-		// last divisive method to finish.
-		this.notifyAll();
+		try {
+			super.giveQualityFeedback(paramSet, qualities);
+			this.currentDivisiveMethod.giveQualityFeedback(paramSet, qualities);
+			// wake up all threads, which are waiting for the parameter sets of
+			// the
+			// last divisive method to finish.
+		} finally {
+			this.notifyAll();
+		}
 	}
 
 	/*

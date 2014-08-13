@@ -83,15 +83,23 @@ public class SensitivityClusteringQualityMeasure
 		double tp = 0.0;
 		double fn = 0.0;
 
-		/*
-		 * Ensure, that goldstandard contains only objects, that are also in the
-		 * dataset. Otherwise precision will be calculated incorrectly, because
-		 * it directly depends on the number of items in a cluster in the
-		 * goldstandard.
-		 */
 		Set<ClusterItem> gsClusterItems = new HashSet<ClusterItem>(
 				gsClustering.getClusterItems());
-		gsClusterItems.retainAll(clustering.getClusterItems());
+		Set<ClusterItem> clusterItems = new HashSet<ClusterItem>(
+				clustering.getClusterItems());
+		gsClusterItems.removeAll(clusterItems);
+		for (ClusterItem onlyInGs : gsClusterItems)
+			gsClustering.removeClusterItem(onlyInGs);
+
+		/*
+		 * Ensure, that clustering contains only objects, that are also in the
+		 * goldstandard.
+		 */
+		gsClusterItems = new HashSet<ClusterItem>(
+				gsClustering.getClusterItems());
+		clusterItems.removeAll(gsClusterItems);
+		for (ClusterItem onlyInClustering : clusterItems)
+			clustering.removeClusterItem(onlyInClustering);
 
 		ClusterItem[] items = gsClusterItems.toArray(new ClusterItem[0]);
 		/*

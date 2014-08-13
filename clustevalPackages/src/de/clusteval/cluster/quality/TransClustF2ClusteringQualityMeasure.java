@@ -85,18 +85,23 @@ public class TransClustF2ClusteringQualityMeasure
 
 		double fmeasure = 0;
 
-		/*
-		 * Ensure, that goldstandard contains only objects, that are also in the
-		 * dataset. Otherwise precision will be calculated incorrectly, because
-		 * it directly depends on the number of items in a cluster in the
-		 * goldstandard.
-		 */
 		Set<ClusterItem> gsClusterItems = new HashSet<ClusterItem>(
 				gsClustering.getClusterItems());
-		Set<ClusterItem> clusterItems = clustering.getClusterItems();
+		Set<ClusterItem> clusterItems = new HashSet<ClusterItem>(
+				clustering.getClusterItems());
 		gsClusterItems.removeAll(clusterItems);
 		for (ClusterItem onlyInGs : gsClusterItems)
 			gsClustering.removeClusterItem(onlyInGs);
+
+		/*
+		 * Ensure, that clustering contains only objects, that are also in the
+		 * goldstandard.
+		 */
+		gsClusterItems = new HashSet<ClusterItem>(
+				gsClustering.getClusterItems());
+		clusterItems.removeAll(gsClusterItems);
+		for (ClusterItem onlyInClustering : clusterItems)
+			clustering.removeClusterItem(onlyInClustering);
 
 		for (Cluster gsCluster : gsClustering) {
 			final float proteinsInReference = gsCluster.fuzzySize();

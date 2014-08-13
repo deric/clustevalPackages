@@ -1,127 +1,176 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="create_jars" name="Create loadable jars for framework">
-	<target name="create_jars" depends="create_quality_jars,create_optimMethod_jars,create_datasetFormat_jars,create_datasetTypes_jars,create_runresultFormat_jars,create_dataStatistic_jars,create_rprogram_jars,create_distanceMeasure_jars,create_runStatistic_jars,create_runDataStatistic_jars,create_datasetGenerator_jars,create_preprocessors_jars,create_context_jars">
+	<target name="create_jars"
+		depends="create_quality_jars,create_optimMethod_jars,create_datasetFormat_jars,create_datasetTypes_jars,create_runresultFormat_jars,create_dataStatistic_jars,create_rprogram_jars,create_distanceMeasure_jars,create_runStatistic_jars,create_runDataStatistic_jars,create_datasetGenerator_jars,create_dataRandomizer_jars,create_preprocessors_jars,create_context_jars">
 	</target>
 
 	<target name="create_quality_jars">
 		<echo>Create quality measure jars...</echo>
-		<jar destfile="repository/supp/clustering/qualityMeasures/SilhouetteValueClusteringQualityMeasure.jar">
-			<fileset dir="bin" includes="**/SilhouetteValueClusteringQualityMeasure.class" />
-			<fileset dir="src" includes="**/SilhouetteValueClusteringQualityMeasure.java" />
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/SilhouetteValueClusteringQualityMeasure.jar">
+			<fileset dir="bin"
+				includes="**/SilhouetteValueClusteringQualityMeasure.class" />
+			<fileset dir="src"
+				includes="**/SilhouetteValueClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/SilhouetteValueRClusteringQualityMeasure.jar">
-			<fileset dir="bin" includes="**/SilhouetteValueRClusteringQualityMeasure.class" />
-			<fileset dir="src" includes="**/SilhouetteValueRClusteringQualityMeasure.java" />
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/SilhouetteValueRClusteringQualityMeasure.jar">
+			<fileset dir="bin"
+				includes="**/SilhouetteValueRClusteringQualityMeasure.class" />
+			<fileset dir="src"
+				includes="**/SilhouetteValueRClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/SilhouetteValueGlobalRClusteringQualityMeasure.jar">
-			<fileset dir="bin" includes="**/SilhouetteValueGlobalRClusteringQualityMeasure.class" />
-			<fileset dir="src" includes="**/SilhouetteValueGlobalRClusteringQualityMeasure.java" />
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/SilhouetteValueGlobalRClusteringQualityMeasure.jar">
+			<fileset dir="bin"
+				includes="**/SilhouetteValueGlobalRClusteringQualityMeasure.class" />
+			<fileset dir="src"
+				includes="**/SilhouetteValueGlobalRClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/TransClustF2ClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/TransClustF2ClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/TransClustF2ClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/TransClustF2ClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/PairwiseF2ClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/PairwiseF2ClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/PairwiseF2ClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/PairwiseF2ClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/TransClustFClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/TransClustFClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/TransClustFClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/TransClustFClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/RandIndexClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/RandIndexClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/RandIndexClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/RandIndexClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/RandIndexRClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/RandIndexRClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/RandIndexRClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/RandIndexRClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/JaccardIndexRClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/JaccardIndexRClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/JaccardIndexRClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/JaccardIndexRClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/FowlkesMallowsIndexRClusteringQualityMeasure.jar">
-			<fileset dir="bin" includes="**/FowlkesMallowsIndexRClusteringQualityMeasure.class" />
-			<fileset dir="src" includes="**/FowlkesMallowsIndexRClusteringQualityMeasure.java" />
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/FowlkesMallowsIndexRClusteringQualityMeasure.jar">
+			<fileset dir="bin"
+				includes="**/FowlkesMallowsIndexRClusteringQualityMeasure.class" />
+			<fileset dir="src"
+				includes="**/FowlkesMallowsIndexRClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/FDRClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/FDRClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/FDRClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/FDRClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/FPRClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/FPRClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/FPRClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/FPRClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/SensitivityClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/SensitivityClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/SensitivityClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/SensitivityClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/SpecificityClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/SpecificityClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/SpecificityClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/SpecificityClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/VMeasureClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/VMeasureClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/VMeasureClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/VMeasureClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/DunnIndexRClusteringQualityMeasure.jar">
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/DunnIndexRClusteringQualityMeasure.jar">
 			<fileset dir="bin" includes="**/DunnIndexRClusteringQualityMeasure.class" />
 			<fileset dir="src" includes="**/DunnIndexRClusteringQualityMeasure.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/qualityMeasures/DaviesBouldinIndexRClusteringQualityMeasure.jar">
-			<fileset dir="bin" includes="**/DaviesBouldinIndexRClusteringQualityMeasure.class" />
-			<fileset dir="src" includes="**/DaviesBouldinIndexRClusteringQualityMeasure.java" />
+		<jar
+			destfile="repository/supp/clustering/qualityMeasures/DaviesBouldinIndexRClusteringQualityMeasure.jar">
+			<fileset dir="bin"
+				includes="**/DaviesBouldinIndexRClusteringQualityMeasure.class" />
+			<fileset dir="src"
+				includes="**/DaviesBouldinIndexRClusteringQualityMeasure.java" />
 		</jar>
 	</target>
 
 	<target name="create_optimMethod_jars">
 		<echo>Create optimization method jars...</echo>
-		<jar destfile="repository/supp/clustering/paramOptimization/DivisiveParameterOptimizationMethod.jar">
+		<jar
+			destfile="repository/supp/clustering/paramOptimization/DivisiveParameterOptimizationMethod.jar">
 			<fileset dir="bin" includes="**/DivisiveParameterOptimizationMethod.class" />
 			<fileset dir="src" includes="**/DivisiveParameterOptimizationMethod.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/paramOptimization/LayeredDivisiveParameterOptimizationMethod.jar">
-			<fileset dir="bin" includes="**/LayeredDivisiveParameterOptimizationMethod.class" />
-			<fileset dir="src" includes="**/LayeredDivisiveParameterOptimizationMethod.java" />
+		<jar
+			destfile="repository/supp/clustering/paramOptimization/LayeredDivisiveParameterOptimizationMethod.jar">
+			<fileset dir="bin"
+				includes="**/LayeredDivisiveParameterOptimizationMethod.class" />
+			<fileset dir="src"
+				includes="**/LayeredDivisiveParameterOptimizationMethod.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/paramOptimization/APDivisiveParameterOptimizationMethod.jar">
+		<jar
+			destfile="repository/supp/clustering/paramOptimization/APDivisiveParameterOptimizationMethod.jar">
 			<fileset dir="bin" includes="**/APDivisiveParameterOptimizationMethod.class" />
 			<fileset dir="src" includes="**/APDivisiveParameterOptimizationMethod.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/paramOptimization/APParameterOptimizationMethod.jar">
+		<jar
+			destfile="repository/supp/clustering/paramOptimization/APParameterOptimizationMethod.jar">
 			<fileset dir="bin" includes="**/APParameterOptimizationMethod.class" />
 			<fileset dir="src" includes="**/APParameterOptimizationMethod.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/paramOptimization/TransClustQuantileParameterOptimizationMethod.jar">
-			<fileset dir="bin" includes="**/TransClustQuantileParameterOptimizationMethod.class" />
-			<fileset dir="src" includes="**/TransClustQuantileParameterOptimizationMethod.java" />
+		<jar
+			destfile="repository/supp/clustering/paramOptimization/TransClustQuantileParameterOptimizationMethod.jar">
+			<fileset dir="bin"
+				includes="**/TransClustQuantileParameterOptimizationMethod.class" />
+			<fileset dir="src"
+				includes="**/TransClustQuantileParameterOptimizationMethod.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/paramOptimization/GapStatisticParameterOptimizationMethod.jar">
-			<fileset dir="bin" includes="**/GapStatisticParameterOptimizationMethod.class" />
-			<fileset dir="src" includes="**/GapStatisticParameterOptimizationMethod.java" />
+		<jar
+			destfile="repository/supp/clustering/paramOptimization/GapStatisticParameterOptimizationMethod.jar">
+			<fileset dir="bin"
+				includes="**/GapStatisticParameterOptimizationMethod.class" />
+			<fileset dir="src"
+				includes="**/GapStatisticParameterOptimizationMethod.java" />
 		</jar>
-		<jar destfile="repository/supp/clustering/paramOptimization/FlatteningLayeredDivisiveParameterOptimizationMethod.jar">
-			<fileset dir="bin" includes="**/FlatteningLayeredDivisiveParameterOptimizationMethod.class" />
-			<fileset dir="src" includes="**/FlatteningLayeredDivisiveParameterOptimizationMethod.java" />
+		<jar
+			destfile="repository/supp/clustering/paramOptimization/FlatteningLayeredDivisiveParameterOptimizationMethod.jar">
+			<fileset dir="bin"
+				includes="**/FlatteningLayeredDivisiveParameterOptimizationMethod.class" />
+			<fileset dir="src"
+				includes="**/FlatteningLayeredDivisiveParameterOptimizationMethod.java" />
 		</jar>
 	</target>
 
 	<target name="create_preprocessors_jars">
 		<echo>Create data preprocessor jars...</echo>
-		<jar destfile="repository/supp/preprocessing/RemoveZeroSamplesDataPreprocessor.jar">
+		<jar
+			destfile="repository/supp/preprocessing/RemoveZeroSamplesDataPreprocessor.jar">
 			<fileset dir="bin" includes="**/RemoveZeroSamplesDataPreprocessor.class" />
 			<fileset dir="src" includes="**/RemoveZeroSamplesDataPreprocessor.java" />
 		</jar>
-		<jar destfile="repository/supp/preprocessing/RemoveSymmetricZeroFeaturesDataPreprocessor.jar">
-			<fileset dir="bin" includes="**/RemoveSymmetricZeroFeaturesDataPreprocessor.class" />
-			<fileset dir="src" includes="**/RemoveSymmetricZeroFeaturesDataPreprocessor.java" />
+		<jar
+			destfile="repository/supp/preprocessing/RemoveSymmetricZeroFeaturesDataPreprocessor.jar">
+			<fileset dir="bin"
+				includes="**/RemoveSymmetricZeroFeaturesDataPreprocessor.class" />
+			<fileset dir="src"
+				includes="**/RemoveSymmetricZeroFeaturesDataPreprocessor.java" />
 		</jar>
-		<jar destfile="repository/supp/preprocessing/RangeNormalizationDataPreprocessor.jar">
+		<jar
+			destfile="repository/supp/preprocessing/RangeNormalizationDataPreprocessor.jar">
 			<fileset dir="bin" includes="**/RangeNormalizationDataPreprocessor.class" />
 			<fileset dir="src" includes="**/RangeNormalizationDataPreprocessor.java" />
 		</jar>
-		<jar destfile="repository/supp/preprocessing/VarianceNormalizationDataPreprocessor.jar">
+		<jar
+			destfile="repository/supp/preprocessing/VarianceNormalizationDataPreprocessor.jar">
 			<fileset dir="bin" includes="**/VarianceNormalizationDataPreprocessor.class" />
 			<fileset dir="src" includes="**/VarianceNormalizationDataPreprocessor.java" />
 		</jar>
@@ -149,11 +198,13 @@
 			<fileset dir="bin" includes="**/CuboidDataSetGenerator*.class" />
 			<fileset dir="src" includes="**/CuboidDataSetGenerator*.java" />
 		</jar>
-		<jar destfile="repository/supp/generators/dataset/Gaussian2DDataSetGenerator.jar">
+		<jar
+			destfile="repository/supp/generators/dataset/Gaussian2DDataSetGenerator.jar">
 			<fileset dir="bin" includes="**/Gaussian2DDataSetGenerator*.class" />
 			<fileset dir="src" includes="**/Gaussian2DDataSetGenerator*.java" />
 		</jar>
-		<jar destfile="repository/supp/generators/dataset/HyperCubeCornersDataSetGenerator.jar">
+		<jar
+			destfile="repository/supp/generators/dataset/HyperCubeCornersDataSetGenerator.jar">
 			<fileset dir="bin" includes="**/HyperCubeCornersDataSetGenerator*.class" />
 			<fileset dir="src" includes="**/HyperCubeCornersDataSetGenerator*.java" />
 		</jar>
@@ -161,13 +212,23 @@
 			<fileset dir="bin" includes="**/RingnormDataSetGenerator*.class" />
 			<fileset dir="src" includes="**/RingnormDataSetGenerator*.java" />
 		</jar>
-		<jar destfile="repository/supp/generators/dataset/SimplexCornersDataSetGenerator.jar">
+		<jar
+			destfile="repository/supp/generators/dataset/SimplexCornersDataSetGenerator.jar">
 			<fileset dir="bin" includes="**/SimplexCornersDataSetGenerator*.class" />
 			<fileset dir="src" includes="**/SimplexCornersDataSetGenerator*.java" />
 		</jar>
 		<jar destfile="repository/supp/generators/dataset/SpiralsDataSetGenerator.jar">
 			<fileset dir="bin" includes="**/SpiralsDataSetGenerator*.class" />
 			<fileset dir="src" includes="**/SpiralsDataSetGenerator*.java" />
+		</jar>
+	</target>
+
+	<target name="create_dataRandomizer_jars">
+		<echo>Create data randomizer jars...</echo>
+		<jar
+			destfile="repository/supp/randomizers/data/RemoveAndAddNoiseDataRandomizer.jar">
+			<fileset dir="bin" includes="**/RemoveAndAddNoiseDataRandomizer*.class" />
+			<fileset dir="src" includes="**/RemoveAndAddNoiseDataRandomizer*.java" />
 		</jar>
 	</target>
 
@@ -181,7 +242,8 @@
 			<fileset dir="bin" includes="**/BLASTDataSetFormat*.class" />
 			<fileset dir="src" includes="**/BLASTDataSetFormat*.java" />
 		</jar>
-		<jar destfile="repository/supp/formats/dataset/TransClustSimMatrixDataSetFormat.jar">
+		<jar
+			destfile="repository/supp/formats/dataset/TransClustSimMatrixDataSetFormat.jar">
 			<fileset dir="bin" includes="**/TransClustSimMatrixDataSetFormat*.class" />
 			<fileset dir="src" includes="**/TransClustSimMatrixDataSetFormat*.java" />
 		</jar>
@@ -209,12 +271,15 @@
 			<fileset dir="bin" includes="**/PPIDataSetType*.class" />
 			<fileset dir="src" includes="**/PPIDataSetType*.java" />
 		</jar>
-		<jar destfile="repository/supp/types/dataset/ProteinSequenceSimilarityDataSetType.jar">
+		<jar
+			destfile="repository/supp/types/dataset/ProteinSequenceSimilarityDataSetType.jar">
 			<fileset dir="bin" includes="**/ProteinSequenceSimilarityDataSetType*.class" />
 			<fileset dir="src" includes="**/ProteinSequenceSimilarityDataSetType*.java" />
 		</jar>
-		<jar destfile="repository/supp/types/dataset/ProteinStructureSimilarityDataSetType.jar">
-			<fileset dir="bin" includes="**/ProteinStructureSimilarityDataSetType*.class" />
+		<jar
+			destfile="repository/supp/types/dataset/ProteinStructureSimilarityDataSetType.jar">
+			<fileset dir="bin"
+				includes="**/ProteinStructureSimilarityDataSetType*.class" />
 			<fileset dir="src" includes="**/ProteinStructureSimilarityDataSetType*.java" />
 		</jar>
 		<jar destfile="repository/supp/types/dataset/OtherDataSetType.jar">
@@ -229,7 +294,8 @@
 			<fileset dir="bin" includes="**/SocialNetworkDataSetType*.class" />
 			<fileset dir="src" includes="**/SocialNetworkDataSetType*.java" />
 		</jar>
-		<jar destfile="repository/supp/types/dataset/WordSenseDisambiguationDataSetType.jar">
+		<jar
+			destfile="repository/supp/types/dataset/WordSenseDisambiguationDataSetType.jar">
 			<fileset dir="bin" includes="**/WordSenseDisambiguationDataSetType*.class" />
 			<fileset dir="src" includes="**/WordSenseDisambiguationDataSetType*.java" />
 		</jar>
@@ -245,21 +311,29 @@
 			<fileset dir="bin" includes="**/AbsoluteDistanceMeasure*.class" />
 			<fileset dir="src" includes="**/AbsoluteDistanceMeasure*.java" />
 		</jar>
-		<jar destfile="repository/supp/distanceMeasures/PearsonCorrelationRDistanceMeasure.jar">
+		<jar
+			destfile="repository/supp/distanceMeasures/PearsonCorrelationRDistanceMeasure.jar">
 			<fileset dir="bin" includes="**/PearsonCorrelationRDistanceMeasure*.class" />
 			<fileset dir="src" includes="**/PearsonCorrelationRDistanceMeasure*.java" />
 		</jar>
-		<jar destfile="repository/supp/distanceMeasures/PearsonCorrelationShiftRDistanceMeasure.jar">
-			<fileset dir="bin" includes="**/PearsonCorrelationShiftRDistanceMeasure*.class" />
-			<fileset dir="src" includes="**/PearsonCorrelationShiftRDistanceMeasure*.java" />
+		<jar
+			destfile="repository/supp/distanceMeasures/PearsonCorrelationShiftRDistanceMeasure.jar">
+			<fileset dir="bin"
+				includes="**/PearsonCorrelationShiftRDistanceMeasure*.class" />
+			<fileset dir="src"
+				includes="**/PearsonCorrelationShiftRDistanceMeasure*.java" />
 		</jar>
-		<jar destfile="repository/supp/distanceMeasures/SpearmanCorrelationRDistanceMeasure.jar">
+		<jar
+			destfile="repository/supp/distanceMeasures/SpearmanCorrelationRDistanceMeasure.jar">
 			<fileset dir="bin" includes="**/SpearmanCorrelationRDistanceMeasure*.class" />
 			<fileset dir="src" includes="**/SpearmanCorrelationRDistanceMeasure*.java" />
 		</jar>
-		<jar destfile="repository/supp/distanceMeasures/SpearmanCorrelationShiftRDistanceMeasure.jar">
-			<fileset dir="bin" includes="**/SpearmanCorrelationShiftRDistanceMeasure*.class" />
-			<fileset dir="src" includes="**/SpearmanCorrelationShiftRDistanceMeasure*.java" />
+		<jar
+			destfile="repository/supp/distanceMeasures/SpearmanCorrelationShiftRDistanceMeasure.jar">
+			<fileset dir="bin"
+				includes="**/SpearmanCorrelationShiftRDistanceMeasure*.class" />
+			<fileset dir="src"
+				includes="**/SpearmanCorrelationShiftRDistanceMeasure*.java" />
 		</jar>
 		<jar destfile="repository/supp/distanceMeasures/HoeffdingDRDistanceMeasure.jar">
 			<fileset dir="bin" includes="**/HoeffdingDRDistanceMeasure*.class" />
@@ -289,7 +363,8 @@
 			<fileset dir="bin" includes="**/TransClustRunResultFormat*.class" />
 			<fileset dir="src" includes="**/TransClustRunResultFormat*.java" />
 		</jar>
-		<jar destfile="repository/supp/formats/runresult/TabSeparatedRunResultFormat.jar">
+		<jar
+			destfile="repository/supp/formats/runresult/TabSeparatedRunResultFormat.jar">
 			<fileset dir="bin" includes="**/TabSeparatedRunResultFormat*.class" />
 			<fileset dir="src" includes="**/TabSeparatedRunResultFormat*.java" />
 		</jar>
@@ -297,27 +372,33 @@
 
 	<target name="create_dataStatistic_jars">
 		<echo>Create data statistic jars...</echo>
-		<jar destfile="repository/supp/statistics/data/IntraInterDistributionDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/data/IntraInterDistributionDataStatistic.jar">
 			<fileset dir="bin" includes="**/IntraInterDistributionDataStatistic*.class" />
 			<fileset dir="src" includes="**/IntraInterDistributionDataStatistic*.java" />
 		</jar>
-		<jar destfile="repository/supp/statistics/data/IntraInterOverlapDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/data/IntraInterOverlapDataStatistic.jar">
 			<fileset dir="bin" includes="**/IntraInterOverlapDataStatistic*.class" />
 			<fileset dir="src" includes="**/IntraInterOverlapDataStatistic*.java" />
 		</jar>
-		<jar destfile="repository/supp/statistics/data/SimilarityDistributionDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/data/SimilarityDistributionDataStatistic.jar">
 			<fileset dir="bin" includes="**/SimilarityDistributionDataStatistic*.class" />
 			<fileset dir="src" includes="**/SimilarityDistributionDataStatistic*.java" />
 		</jar>
-		<jar destfile="repository/supp/statistics/data/ClusteringCoefficientDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/data/ClusteringCoefficientDataStatistic.jar">
 			<fileset dir="bin" includes="**/ClusteringCoefficientDataStatistic*.class" />
 			<fileset dir="src" includes="**/ClusteringCoefficientDataStatistic*.java" />
 		</jar>
-		<jar destfile="repository/supp/statistics/data/ClusteringCoefficientRDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/data/ClusteringCoefficientRDataStatistic.jar">
 			<fileset dir="bin" includes="**/ClusteringCoefficientRDataStatistic*.class" />
 			<fileset dir="src" includes="**/ClusteringCoefficientRDataStatistic*.java" />
 		</jar>
-		<jar destfile="repository/supp/statistics/data/NodeDegreeDistributionDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/data/NodeDegreeDistributionDataStatistic.jar">
 			<fileset dir="bin" includes="**/NodeDegreeDistributionDataStatistic*.class" />
 			<fileset dir="src" includes="**/NodeDegreeDistributionDataStatistic*.java" />
 		</jar>
@@ -337,7 +418,8 @@
 			<fileset dir="bin" includes="**/GraphDensityRDataStatistic*.class" />
 			<fileset dir="src" includes="**/GraphDensityRDataStatistic*.java" />
 		</jar>
-		<jar destfile="repository/supp/statistics/data/GraphDiversityAverageRDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/data/GraphDiversityAverageRDataStatistic.jar">
 			<fileset dir="bin" includes="**/GraphDiversityAverageRDataStatistic*.class" />
 			<fileset dir="src" includes="**/GraphDiversityAverageRDataStatistic*.java" />
 		</jar>
@@ -349,11 +431,13 @@
 			<fileset dir="bin" includes="**/HopkinsDataStatistic*.class" />
 			<fileset dir="src" includes="**/HopkinsDataStatistic*.java" />
 		</jar>
-		<jar destfile="repository/supp/statistics/data/NumberOfSamplesDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/data/NumberOfSamplesDataStatistic.jar">
 			<fileset dir="bin" includes="**/NumberOfSamplesDataStatistic*.class" />
 			<fileset dir="src" includes="**/NumberOfSamplesDataStatistic*.java" />
 		</jar>
-		<jar destfile="repository/supp/statistics/data/ClassSizeDistributionDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/data/ClassSizeDistributionDataStatistic.jar">
 			<fileset dir="bin" includes="**/ClassSizeDistributionDataStatistic*.class" />
 			<fileset dir="src" includes="**/ClassSizeDistributionDataStatistic*.java" />
 		</jar>
@@ -368,22 +452,26 @@
 			<fileset dir="bin" includes="**/CooccurrenceBestRunStatistic*.class" />
 			<fileset dir="src" includes="**/CooccurrenceBestRunStatistic*.java" />
 		</jar>
-		<jar destfile="repository/supp/statistics/run/ParameterImportanceRunStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/run/ParameterImportanceRunStatistic.jar">
 			<fileset dir="bin" includes="**/ParameterImportanceRunStatistic*.class" />
 			<fileset dir="src" includes="**/ParameterImportanceRunStatistic*.java" />
 		</jar>
 	</target>
 
 	<target name="create_runDataStatistic_jars">
-		<jar destfile="repository/supp/statistics/rundata/LinearModelRunDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/rundata/LinearModelRunDataStatistic.jar">
 			<fileset dir="bin" includes="**/LinearModelRunDataStatistic*.class" />
 			<fileset dir="src" includes="**/LinearModelRunDataStatistic*.java" />
 		</jar>
-		<jar destfile="repository/supp/statistics/rundata/LinearModelRidgeRunDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/rundata/LinearModelRidgeRunDataStatistic.jar">
 			<fileset dir="bin" includes="**/LinearModelRidgeRunDataStatistic*.class" />
 			<fileset dir="src" includes="**/LinearModelRidgeRunDataStatistic*.java" />
 		</jar>
-		<jar destfile="repository/supp/statistics/rundata/LinearModelLassoRunDataStatistic.jar">
+		<jar
+			destfile="repository/supp/statistics/rundata/LinearModelLassoRunDataStatistic.jar">
 			<fileset dir="bin" includes="**/LinearModelLassoRunDataStatistic*.class" />
 			<fileset dir="src" includes="**/LinearModelLassoRunDataStatistic*.java" />
 		</jar>
