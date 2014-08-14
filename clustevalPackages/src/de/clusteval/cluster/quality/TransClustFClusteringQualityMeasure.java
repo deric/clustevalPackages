@@ -81,8 +81,6 @@ public class TransClustFClusteringQualityMeasure
 			final Clustering clustering, Clustering gsClustering,
 			final DataConfig dataConfig) {
 
-		final float proteins = clustering.fuzzySize();
-
 		double fmeasure = 0;
 
 		/*
@@ -106,9 +104,12 @@ public class TransClustFClusteringQualityMeasure
 		gsClusterItems = new HashSet<ClusterItem>(
 				gsClustering.getClusterItems());
 		clusterItems.removeAll(gsClusterItems);
+		
 		for (ClusterItem onlyInClustering : clusterItems)
 			clustering.removeClusterItem(onlyInClustering);
 
+		final float proteins = clustering.fuzzySize();
+		
 		for (Cluster gsCluster : gsClustering) {
 			final float proteinsInReference = gsCluster.fuzzySize();
 			// final double maxValue = findMax(clustering, gsCluster);

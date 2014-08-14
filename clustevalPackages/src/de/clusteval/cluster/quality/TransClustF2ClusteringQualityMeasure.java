@@ -81,8 +81,6 @@ public class TransClustF2ClusteringQualityMeasure
 			final Clustering clustering, Clustering gsClustering,
 			final DataConfig dataConfig) {
 
-		final float proteins = clustering.fuzzySize();
-
 		double fmeasure = 0;
 
 		Set<ClusterItem> gsClusterItems = new HashSet<ClusterItem>(
@@ -102,6 +100,8 @@ public class TransClustF2ClusteringQualityMeasure
 		clusterItems.removeAll(gsClusterItems);
 		for (ClusterItem onlyInClustering : clusterItems)
 			clustering.removeClusterItem(onlyInClustering);
+
+		final float proteins = clustering.fuzzySize();
 
 		for (Cluster gsCluster : gsClustering) {
 			final float proteinsInReference = gsCluster.fuzzySize();
