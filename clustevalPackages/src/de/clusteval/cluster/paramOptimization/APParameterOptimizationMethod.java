@@ -15,7 +15,10 @@ package de.clusteval.cluster.paramOptimization;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import de.clusteval.cluster.quality.ClusteringQualityMeasure;
 import de.clusteval.cluster.quality.ClusteringQualitySet;
@@ -33,15 +36,15 @@ import de.clusteval.utils.InternalAttributeException;
  * @author Christian Wiwie
  * 
  */
+@LoadableClassParentAnnotation(parent = "LayeredDivisiveParameterOptimizationMethod")
 public class APParameterOptimizationMethod
 		extends
 			LayeredDivisiveParameterOptimizationMethod
 		implements
 			IDivergingParameterOptimizationMethod {
 
-	protected boolean lastIterationNotTerminated;
 	protected int numberTriesOnNotTerminated;
-	protected DivisiveParameterOptimizationMethod iterationParamMethod;
+	protected Map<ParameterSet, DivisiveParameterOptimizationMethod> iterationParamMethods;
 	protected List<ProgramParameter<?>> allParams;
 
 	/**
@@ -84,6 +87,7 @@ public class APParameterOptimizationMethod
 				iterationPerParameter, isResume);
 		this.allParams = params;
 		this.numberTriesOnNotTerminated = 3; // TODO
+		this.iterationParamMethods = new HashMap<ParameterSet, DivisiveParameterOptimizationMethod>();
 
 		if (register)
 			this.register();
@@ -102,6 +106,8 @@ public class APParameterOptimizationMethod
 
 		this.allParams = ProgramParameter.cloneParameterList(params);
 		this.numberTriesOnNotTerminated = other.numberTriesOnNotTerminated; // TODO
+		this.iterationParamMethods = new HashMap<ParameterSet, DivisiveParameterOptimizationMethod>(
+				other.iterationParamMethods);
 	}
 
 	/**
@@ -133,11 +139,11 @@ public class APParameterOptimizationMethod
 	@Override
 	public boolean hasNext() {
 		boolean hasNext = super.hasNext();
-		if (this.lastIterationNotTerminated) {
-			if (this.iterationParamMethod.hasNext()) {
+		for (DivisiveParameterOptimizationMethod method : this.iterationParamMethods
+				.values())
+			if (method.hasNext()) {
 				return true;
 			}
-		}
 		return hasNext;
 	}
 
@@ -157,47 +163,24 @@ public class APParameterOptimizationMethod
 		ParameterSet iterationParamSet = null;
 		ParameterSet preferenceParamSet = null;
 
-		if (this.lastIterationNotTerminated) {
+		// if there are old parameters which didn't terminate, first finish
+		// those with more iterations
+		Iterator<ParameterSet> existingMethods = this.iterationParamMethods
+				.keySet().iterator();
+		while (existingMethods.hasNext()) {
+			ParameterSet notTerminatedParameterSet = existingMethods.next();
+			DivisiveParameterOptimizationMethod method = this.iterationParamMethods
+					.get(notTerminatedParameterSet);
 
-			/*
-			 * We ensure that we have a method for the iteration parameters
-			 */
-			if (this.iterationParamMethod == null) {
-				/*
-				 * If we do not have another iteration parameter, we create our
-				 * next preference parameter set.
-				 */
-				try {
-					List<ProgramParameter<?>> iterationParams = new ArrayList<ProgramParameter<?>>(
-							this.allParams);
-					iterationParams.removeAll(this.params);
-					this.iterationParamMethod = new DivisiveParameterOptimizationMethod(
-							repository, false, changeDate, absPath, run,
-							programConfig, dataConfig, iterationParams,
-							optimizationCriterion, (int) Math.pow(
-									this.numberTriesOnNotTerminated,
-									iterationParams.size()), isResume);
-					this.iterationParamMethod.reset(new File(this.getResult()
-							.getAbsolutePath()));
-				} catch (ParameterOptimizationException e) {
-					e.printStackTrace();
-				} catch (RunResultParseException e) {
-					e.printStackTrace();
-				}
-			}
 			/*
 			 * If we have another iteration parameter set we just merge it with
 			 * our current one.
 			 */
-			if (this.iterationParamMethod.hasNext()) {
+			if (method.hasNext()) {
 				try {
-					iterationParamSet = this.iterationParamMethod.next(
-							forcedParameterSet,
-							this.iterationParamMethod.getCurrentCount() + 1);
-					preferenceParamSet = this
-							.getResult()
-							.getParameterSets()
-							.get(this.getResult().getParameterSets().size() - 1);
+					iterationParamSet = method.next(forcedParameterSet,
+							method.getCurrentCount() + 1);
+					preferenceParamSet = notTerminatedParameterSet;
 
 					ParameterSet newParamSet = new ParameterSet();
 					newParamSet.putAll(preferenceParamSet);
@@ -207,27 +190,26 @@ public class APParameterOptimizationMethod
 				} catch (ParameterSetAlreadyEvaluatedException e) {
 					// cannot happen
 				}
-			}
+			} else
+				this.iterationParamMethods.remove(notTerminatedParameterSet);
 		}
 
-		/*
-		 * The last iteration terminated or we have no other iteration parameter
-		 * left.
-		 */
+		DivisiveParameterOptimizationMethod method = null;
+
+		// at this point we know, that no old parameter sets exist we can or
+		// have to finish, so we create a new one
 		try {
 			List<ProgramParameter<?>> iterationParams = new ArrayList<ProgramParameter<?>>(
 					this.allParams);
 			iterationParams.removeAll(this.params);
-			this.iterationParamMethod = new DivisiveParameterOptimizationMethod(
-					repository, false, changeDate, absPath, run, programConfig,
-					dataConfig, iterationParams, optimizationCriterion,
-					(int) Math.pow(this.numberTriesOnNotTerminated,
+			method = new DivisiveParameterOptimizationMethod(repository, false,
+					changeDate, absPath, run, programConfig, dataConfig,
+					iterationParams, optimizationCriterion, (int) Math.pow(
+							this.numberTriesOnNotTerminated,
 							iterationParams.size()), isResume);
-			this.iterationParamMethod.reset(new File(this.getResult()
-					.getAbsolutePath()));
-			iterationParamSet = this.iterationParamMethod.next(
-					forcedParameterSet,
-					this.iterationParamMethod.getCurrentCount() + 1);
+			method.reset(new File(this.getResult().getAbsolutePath()));
+			iterationParamSet = method.next(forcedParameterSet,
+					method.getCurrentCount() + 1);
 			preferenceParamSet = super.getNextParameterSet(forcedParameterSet);
 		} catch (ParameterOptimizationException e) {
 			e.printStackTrace();
@@ -237,6 +219,9 @@ public class APParameterOptimizationMethod
 		ParameterSet newParamSet = new ParameterSet();
 		newParamSet.putAll(iterationParamSet);
 		newParamSet.putAll(preferenceParamSet);
+
+		this.iterationParamMethods.put(newParamSet, method);
+
 		return newParamSet;
 	}
 
@@ -244,9 +229,9 @@ public class APParameterOptimizationMethod
 	public void giveFeedbackNotTerminated(final ParameterSet parameterSet,
 			ClusteringQualitySet minimalQualities) {
 		super.giveQualityFeedback(parameterSet, minimalQualities);
-		this.iterationParamMethod.giveQualityFeedback(parameterSet,
-				minimalQualities);
-		lastIterationNotTerminated = true;
+
+		this.iterationParamMethods.get(parameterSet).giveQualityFeedback(
+				parameterSet, minimalQualities);
 	}
 
 	/*
@@ -260,7 +245,6 @@ public class APParameterOptimizationMethod
 	public void giveQualityFeedback(final ParameterSet parameterSet,
 			ClusteringQualitySet qualities) {
 		super.giveQualityFeedback(parameterSet, qualities);
-		this.lastIterationNotTerminated = false;
-		this.iterationParamMethod = null;
+		this.iterationParamMethods.remove(parameterSet);
 	}
 }
