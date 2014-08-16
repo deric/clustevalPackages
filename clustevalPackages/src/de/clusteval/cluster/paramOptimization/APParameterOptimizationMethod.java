@@ -137,7 +137,7 @@ public class APParameterOptimizationMethod
 	 * hasNext()
 	 */
 	@Override
-	public boolean hasNext() {
+	public synchronized boolean hasNext() {
 		boolean hasNext = super.hasNext();
 		for (DivisiveParameterOptimizationMethod method : this.iterationParamMethods
 				.values())
@@ -155,7 +155,7 @@ public class APParameterOptimizationMethod
 	 * getNextParameterSet()
 	 */
 	@Override
-	protected ParameterSet getNextParameterSet(
+	protected synchronized ParameterSet getNextParameterSet(
 			final ParameterSet forcedParameterSet)
 			throws InternalAttributeException, RegisterException,
 			NoParameterSetFoundException, InterruptedException,
@@ -226,12 +226,16 @@ public class APParameterOptimizationMethod
 	}
 
 	@Override
-	public void giveFeedbackNotTerminated(final ParameterSet parameterSet,
+	public synchronized void giveFeedbackNotTerminated(
+			final ParameterSet parameterSet,
 			ClusteringQualitySet minimalQualities) {
 		super.giveQualityFeedback(parameterSet, minimalQualities);
 
-		this.iterationParamMethods.get(parameterSet).giveQualityFeedback(
-				parameterSet, minimalQualities);
+		// we don't have a param method for this parameter set if we discovered
+		// earlier, that there are no new possible iteration params
+		if (this.iterationParamMethods.containsKey(parameterSet))
+			this.iterationParamMethods.get(parameterSet).giveQualityFeedback(
+					parameterSet, minimalQualities);
 	}
 
 	/*
@@ -242,8 +246,8 @@ public class APParameterOptimizationMethod
 	 * giveQualityFeedback(cluster.quality.ClusteringQualitySet)
 	 */
 	@Override
-	public void giveQualityFeedback(final ParameterSet parameterSet,
-			ClusteringQualitySet qualities) {
+	public synchronized void giveQualityFeedback(
+			final ParameterSet parameterSet, ClusteringQualitySet qualities) {
 		super.giveQualityFeedback(parameterSet, qualities);
 		this.iterationParamMethods.remove(parameterSet);
 	}
