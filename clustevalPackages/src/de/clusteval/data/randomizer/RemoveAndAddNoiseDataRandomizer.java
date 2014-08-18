@@ -223,9 +223,11 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 							writer.append("// dataSetFormatVersion = 1");
 							writer.newLine();
 							for (int row = 0; row < coords.length; row++) {
-								writer.append(newIds[row] + "\t"
-										+ coords[row][0] + "\t"
-										+ coords[row][1]);
+								writer.append(newIds[row]);
+								for (int col = 0; col < coords.length; col++) {
+									writer.append(String.format("\t%s",
+											coords[row][col]));
+								}
 								writer.newLine();
 							}
 							writer.close();
