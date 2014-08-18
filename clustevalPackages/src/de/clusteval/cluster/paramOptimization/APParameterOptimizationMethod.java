@@ -104,7 +104,7 @@ public class APParameterOptimizationMethod
 			final APParameterOptimizationMethod other) throws RegisterException {
 		super(other);
 
-		this.allParams = ProgramParameter.cloneParameterList(params);
+		this.allParams = ProgramParameter.cloneParameterList(other.allParams);
 		this.numberTriesOnNotTerminated = other.numberTriesOnNotTerminated; // TODO
 		this.iterationParamMethods = new HashMap<ParameterSet, DivisiveParameterOptimizationMethod>(
 				other.iterationParamMethods);
@@ -250,5 +250,16 @@ public class APParameterOptimizationMethod
 			final ParameterSet parameterSet, ClusteringQualitySet qualities) {
 		super.giveQualityFeedback(parameterSet, qualities);
 		this.iterationParamMethods.remove(parameterSet);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.clusteval.cluster.paramOptimization.ParameterOptimizationMethod#
+	 * getOptimizationParameter()
+	 */
+	@Override
+	public List<ProgramParameter<?>> getOptimizationParameter() {
+		return this.allParams;
 	}
 }

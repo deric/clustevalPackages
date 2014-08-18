@@ -449,6 +449,7 @@ public class TestParameterOptimizationMethod {
 			if (!method.hasNext())
 				break;
 			parameterSet = method.next();
+
 			System.out.println(parameterSet);
 			method.giveFeedbackNotTerminated(parameterSet,
 					new ClusteringQualitySet());
