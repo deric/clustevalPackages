@@ -144,6 +144,10 @@ public class LayeredDivisiveParameterOptimizationMethod
 				for (ParameterSet set : this.getResult().getParameterSets())
 					if (this.getResult().get(set) == null) {
 						allParamSetsFinished = false;
+						this.log.warn(String
+								.format("Null quality: %s\t%d", set, this
+										.getResult()
+										.getIterationNumberForParameterSet(set)));
 						this.wait();
 					}
 			}
