@@ -220,7 +220,7 @@ public class APParameterOptimizationMethod
 		newParamSet.putAll(iterationParamSet);
 		newParamSet.putAll(preferenceParamSet);
 
-		this.iterationParamMethods.put(newParamSet, method);
+		this.iterationParamMethods.put(preferenceParamSet, method);
 
 		return newParamSet;
 	}
@@ -231,11 +231,16 @@ public class APParameterOptimizationMethod
 			ClusteringQualitySet minimalQualities) {
 		super.giveQualityFeedback(parameterSet, minimalQualities);
 
+		ParameterSet preference = new ParameterSet();
+		preference.put("preference", parameterSet.get("preference"));
+		ParameterSet iteration = parameterSet.clone();
+		iteration.remove("preference");
+
 		// we don't have a param method for this parameter set if we discovered
 		// earlier, that there are no new possible iteration params
-		if (this.iterationParamMethods.containsKey(parameterSet))
-			this.iterationParamMethods.get(parameterSet).giveQualityFeedback(
-					parameterSet, minimalQualities);
+		if (this.iterationParamMethods.containsKey(preference))
+			this.iterationParamMethods.get(preference).giveQualityFeedback(
+					iteration, minimalQualities);
 	}
 
 	/*
@@ -249,7 +254,9 @@ public class APParameterOptimizationMethod
 	public synchronized void giveQualityFeedback(
 			final ParameterSet parameterSet, ClusteringQualitySet qualities) {
 		super.giveQualityFeedback(parameterSet, qualities);
-		this.iterationParamMethods.remove(parameterSet);
+		ParameterSet preference = new ParameterSet();
+		preference.put("preference", parameterSet.get("preference"));
+		this.iterationParamMethods.remove(preference);
 	}
 
 	/*
