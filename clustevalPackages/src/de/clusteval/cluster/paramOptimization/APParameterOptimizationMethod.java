@@ -172,6 +172,21 @@ public class APParameterOptimizationMethod
 			DivisiveParameterOptimizationMethod method = this.iterationParamMethods
 					.get(notTerminatedParameterSet);
 
+			// check if all previous iterations have a result, if not don't
+			// create another iteration parameter set for this, because
+			// otherwise we will create tons of parameter sets for the same
+			// preference parameter
+			boolean unfinishedIteration = false;
+			for (ParameterSet old : method.getResult().getParameterSets())
+				// we found a parameter set for which we don't have a result yet
+				// -> check next method/ preference parameter
+				if (method.getResult().get(old) == null) {
+					unfinishedIteration = true;
+					break;
+				}
+			if (unfinishedIteration)
+				continue;
+
 			/*
 			 * If we have another iteration parameter set we just merge it with
 			 * our current one.
