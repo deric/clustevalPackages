@@ -130,31 +130,36 @@ public class APRunResultFormatParser extends RunResultFormatParser {
 	@Override
 	public void finishProcess() {
 		super.finishProcess();
-		// move input file
-		String folderPath = new File(this.absoluteFilePath).getParentFile()
-				.getParentFile().getAbsolutePath();
-		String newFileName = new File(this.absoluteFilePath).getParentFile()
-				.getName();
-		String fileName1 = new File(this.absoluteFilePath).getName();
-		new File(this.absoluteFilePath).renameTo(new File(folderPath
-				+ System.getProperty("file.separator") + fileName1));
 
 		// move converted output file
-		folderPath = new File(this.outputFile).getParentFile().getParentFile()
-				.getAbsolutePath();
-		String fileName2 = new File(this.outputFile).getName();
+		String folderPath = new File(this.outputFile).getParentFile()
+				.getParentFile().getAbsolutePath();
+		String fileName2 = new File(this.absoluteFilePath).getParentFile()
+				.getName();
 		new File(this.outputFile).renameTo(new File(folderPath
+				+ System.getProperty("file.separator") + fileName2 + ".conv"));
+
+		// move input file
+		folderPath = new File(this.absoluteFilePath).getParentFile()
+				.getParentFile().getAbsolutePath();
+
+		String newFileName = new File(this.absoluteFilePath).getParentFile()
+				.getName();
+		// rename folder, otherwise there may be a naming conflict (depending on
+		// timing)
+		new File(this.absoluteFilePath).getParentFile().renameTo(
+				new File(new File(this.absoluteFilePath).getParentFile()
+						.getAbsolutePath() + "_2"));
+		String newAbsFilePath = FileUtils.buildPath(
+				new File(this.absoluteFilePath).getParentFile()
+						.getAbsolutePath() + "_2", new File(
+						this.absoluteFilePath).getName());
+
+		new File(newAbsFilePath).renameTo(new File(folderPath
 				+ System.getProperty("file.separator") + fileName2));
 
-		FileUtils.delete(new File(this.absoluteFilePath).getParentFile());
-
-		new File(folderPath + System.getProperty("file.separator") + fileName1)
-				.renameTo(new File(folderPath
-						+ System.getProperty("file.separator") + newFileName));
-		new File(folderPath + System.getProperty("file.separator") + fileName2)
-				.renameTo(new File(folderPath
-						+ System.getProperty("file.separator") + newFileName
-						+ ".conv"));
+		FileUtils.delete(new File(new File(this.absoluteFilePath)
+				.getParentFile().getAbsolutePath() + "_2"));
 	}
 
 	/*
