@@ -142,8 +142,10 @@ public class VMeasureClusteringQualityMeasure extends ClusteringQualityMeasure {
 		double h_c = 0.0;
 		for (Cluster clazz : classLabels.keySet()) {
 			int classLabel = classLabels.get(clazz);
-			h_c += -(contingency_sum_k[classLabel] / gsClustering.size() * Math
-					.log(contingency_sum_k[classLabel] / gsClustering.size()));
+			if (contingency_sum_k[classLabel] > 0.0)
+				h_c += -(contingency_sum_k[classLabel] / gsClustering.size() * Math
+						.log(contingency_sum_k[classLabel]
+								/ gsClustering.size()));
 		}
 
 		double homogeneity = h_c == 0.0 ? 1 : (1 - h_c_k / h_c);
@@ -234,8 +236,11 @@ public class VMeasureClusteringQualityMeasure extends ClusteringQualityMeasure {
 		return "V-Measure";
 	}
 
-	/* (non-Javadoc)
-	 * @see de.clusteval.cluster.quality.ClusteringQualityMeasure#supportsFuzzyClusterings()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.clusteval.cluster.quality.ClusteringQualityMeasure#
+	 * supportsFuzzyClusterings()
 	 */
 	@Override
 	public boolean supportsFuzzyClusterings() {

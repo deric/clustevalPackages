@@ -244,18 +244,23 @@ public class APParameterOptimizationMethod
 	public synchronized void giveFeedbackNotTerminated(
 			final ParameterSet parameterSet,
 			ClusteringQualitySet minimalQualities) {
-		super.giveQualityFeedback(parameterSet, minimalQualities);
+		try {
+			super.giveQualityFeedback(parameterSet, minimalQualities);
 
-		ParameterSet preference = new ParameterSet();
-		preference.put("preference", parameterSet.get("preference"));
-		ParameterSet iteration = parameterSet.clone();
-		iteration.remove("preference");
+			ParameterSet preference = new ParameterSet();
+			preference.put("preference", parameterSet.get("preference"));
+			ParameterSet iteration = parameterSet.clone();
+			iteration.remove("preference");
 
-		// we don't have a param method for this parameter set if we discovered
-		// earlier, that there are no new possible iteration params
-		if (this.iterationParamMethods.containsKey(preference))
-			this.iterationParamMethods.get(preference).giveQualityFeedback(
-					iteration, minimalQualities);
+			// we don't have a param method for this parameter set if we
+			// discovered
+			// earlier, that there are no new possible iteration params
+			if (this.iterationParamMethods.containsKey(preference))
+				this.iterationParamMethods.get(preference).giveQualityFeedback(
+						iteration, minimalQualities);
+		} finally {
+			this.notifyAll();
+		}
 	}
 
 	/*

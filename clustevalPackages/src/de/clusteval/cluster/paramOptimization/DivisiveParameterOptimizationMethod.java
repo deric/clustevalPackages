@@ -230,6 +230,12 @@ public class DivisiveParameterOptimizationMethod
 			return forcedParameterSet;
 
 		for (ProgramParameter<?> param : this.params) {
+			// we may not have values for that parameter
+			if (parameterValues.get(param).length == 0)
+				throw new NoParameterSetFoundException(
+						String.format(
+								"No new parameter set could be found: There are no possible values for parameter %s",
+								param.getName()));
 			result.put(param.getName(),
 					parameterValues.get(param)[currentPos.get(param)] + "");
 		}

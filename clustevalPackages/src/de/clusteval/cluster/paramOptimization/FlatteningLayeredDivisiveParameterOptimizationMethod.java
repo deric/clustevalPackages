@@ -139,7 +139,7 @@ public class FlatteningLayeredDivisiveParameterOptimizationMethod
 				for (ParameterSet set : this.getResult().getParameterSets())
 					if (this.getResult().get(set) == null) {
 						allParamSetsFinished = false;
-						this.wait();
+						this.wait(1000);
 					}
 			}
 			this.applyNextDivisiveMethod();
