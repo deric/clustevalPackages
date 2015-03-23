@@ -27,7 +27,7 @@ import de.clusteval.framework.repository.Repository;
  * @author Christian Wiwie
  * 
  */
-public class SpearmanCorrelationRDistanceMeasure extends DistanceMeasureR {
+public class AbsoluteSpearmanCorrelationRDistanceMeasure extends DistanceMeasureR {
 
 	/**
 	 * @param repository
@@ -36,7 +36,7 @@ public class SpearmanCorrelationRDistanceMeasure extends DistanceMeasureR {
 	 * @param absPath
 	 * @throws RegisterException
 	 */
-	public SpearmanCorrelationRDistanceMeasure(Repository repository,
+	public AbsoluteSpearmanCorrelationRDistanceMeasure(Repository repository,
 			boolean register, long changeDate, File absPath)
 			throws RegisterException {
 		super(repository, register, changeDate, absPath);
@@ -49,8 +49,8 @@ public class SpearmanCorrelationRDistanceMeasure extends DistanceMeasureR {
 	 *            The object to clone.
 	 * @throws RegisterException
 	 */
-	public SpearmanCorrelationRDistanceMeasure(
-			final SpearmanCorrelationRDistanceMeasure other)
+	public AbsoluteSpearmanCorrelationRDistanceMeasure(
+			final AbsoluteSpearmanCorrelationRDistanceMeasure other)
 			throws RegisterException {
 		super(other);
 	}
@@ -68,7 +68,7 @@ public class SpearmanCorrelationRDistanceMeasure extends DistanceMeasureR {
 		rEngine.assign("p2", point2);
 		double result = rEngine.eval("cor(p1,p2,method='spearman')").asDouble();
 		// convert to distance
-		return 1.0 - (result + 1) / 2;
+		return 1.0 - Math.abs(result);
 	}
 
 	/*
@@ -103,7 +103,7 @@ public class SpearmanCorrelationRDistanceMeasure extends DistanceMeasureR {
 			throws REngineException, REXPMismatchException {
 		return rEngine
 				.eval(String
-						.format("1-(cor(cbind(matrix.t[,%d:%d]), cbind(matrix.t), method='spearman')+1)/2",
+						.format("1-abs(cor(cbind(matrix.t[,%d:%d]), cbind(matrix.t), method='spearman'))",
 								firstRow, lastRow)).asDoubleMatrix();
 	}
 }
