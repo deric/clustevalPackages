@@ -324,6 +324,11 @@
 				includes="**/PearsonCorrelationShiftRDistanceMeasure*.java" />
 		</jar>
 		<jar
+			destfile="repository/supp/distanceMeasures/AbsoluteSpearmanCorrelationRDistanceMeasure.jar">
+			<fileset dir="bin" includes="**/AbsoluteSpearmanCorrelationRDistanceMeasure*.class" />
+			<fileset dir="src" includes="**/AbsoluteSpearmanCorrelationRDistanceMeasure*.java" />
+		</jar>
+		<jar
 			destfile="repository/supp/distanceMeasures/SpearmanCorrelationRDistanceMeasure.jar">
 			<fileset dir="bin" includes="**/SpearmanCorrelationRDistanceMeasure*.class" />
 			<fileset dir="src" includes="**/SpearmanCorrelationRDistanceMeasure*.java" />

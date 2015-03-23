@@ -68,7 +68,7 @@ public class SpearmanCorrelationRDistanceMeasure extends DistanceMeasureR {
 		rEngine.assign("p2", point2);
 		double result = rEngine.eval("cor(p1,p2,method='spearman')").asDouble();
 		// convert to distance
-		return 1.0 - Math.abs(result);
+		return 1.0 - (result + 1) / 2;
 	}
 
 	/*
@@ -103,7 +103,7 @@ public class SpearmanCorrelationRDistanceMeasure extends DistanceMeasureR {
 			throws REngineException, REXPMismatchException {
 		return rEngine
 				.eval(String
-						.format("1-abs(cor(cbind(matrix.t[,%d:%d]), cbind(matrix.t), method='spearman'))",
+						.format("1-(cor(cbind(matrix.t[,%d:%d]), cbind(matrix.t), method='spearman')+1)/2",
 								firstRow, lastRow)).asDoubleMatrix();
 	}
 }
