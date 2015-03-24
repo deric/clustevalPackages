@@ -312,6 +312,11 @@
 			<fileset dir="src" includes="**/AbsoluteDistanceMeasure*.java" />
 		</jar>
 		<jar
+			destfile="repository/supp/distanceMeasures/AbsolutePearsonCorrelationRDistanceMeasure.jar">
+			<fileset dir="bin" includes="**/AbsolutePearsonCorrelationRDistanceMeasure*.class" />
+			<fileset dir="src" includes="**/AbsolutePearsonCorrelationRDistanceMeasure*.java" />
+		</jar>
+		<jar
 			destfile="repository/supp/distanceMeasures/PearsonCorrelationRDistanceMeasure.jar">
 			<fileset dir="bin" includes="**/PearsonCorrelationRDistanceMeasure*.class" />
 			<fileset dir="src" includes="**/PearsonCorrelationRDistanceMeasure*.java" />

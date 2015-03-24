@@ -27,7 +27,7 @@ import de.clusteval.framework.repository.Repository;
  * @author Christian Wiwie
  * 
  */
-public class PearsonCorrelationRDistanceMeasure extends DistanceMeasureR {
+public class AbsolutePearsonCorrelationRDistanceMeasure extends DistanceMeasureR {
 
 	/**
 	 * @param repository
@@ -36,7 +36,7 @@ public class PearsonCorrelationRDistanceMeasure extends DistanceMeasureR {
 	 * @param absPath
 	 * @throws RegisterException
 	 */
-	public PearsonCorrelationRDistanceMeasure(Repository repository,
+	public AbsolutePearsonCorrelationRDistanceMeasure(Repository repository,
 			boolean register, long changeDate, File absPath)
 			throws RegisterException {
 		super(repository, register, changeDate, absPath);
@@ -49,8 +49,8 @@ public class PearsonCorrelationRDistanceMeasure extends DistanceMeasureR {
 	 *            The object to clone.
 	 * @throws RegisterException
 	 */
-	public PearsonCorrelationRDistanceMeasure(
-			final PearsonCorrelationRDistanceMeasure other)
+	public AbsolutePearsonCorrelationRDistanceMeasure(
+			final AbsolutePearsonCorrelationRDistanceMeasure other)
 			throws RegisterException {
 		super(other);
 	}
@@ -66,9 +66,9 @@ public class PearsonCorrelationRDistanceMeasure extends DistanceMeasureR {
 			REngineException {
 		rEngine.assign("p1", point1);
 		rEngine.assign("p2", point2);
-		double result = rEngine.eval("cor(p1,p2,method='pearson')").asDouble();
+		double result = rEngine.eval("cor(p1,p2)").asDouble();
 		// convert to distance
-		return 1.0 - (result + 1) / 2;
+		return 1.0 - Math.abs(result);
 	}
 
 	/*
@@ -103,7 +103,7 @@ public class PearsonCorrelationRDistanceMeasure extends DistanceMeasureR {
 			throws REngineException, REXPMismatchException {
 		return rEngine
 				.eval(String
-						.format("1-(cor(cbind(matrix.t[,%d:%d]), cbind(matrix.t), method='pearson')+1)/2",
+						.format("1-abs(cor(cbind(matrix.t[,%d:%d]), cbind(matrix.t), method='pearson'))",
 								firstRow, lastRow)).asDoubleMatrix();
 	}
 }
