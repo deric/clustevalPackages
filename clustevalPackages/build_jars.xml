@@ -170,9 +170,19 @@
 			<fileset dir="src" includes="**/RangeNormalizationDataPreprocessor.java" />
 		</jar>
 		<jar
+			destfile="repository/supp/preprocessing/SampleRangeNormalizationDataPreprocessor.jar">
+			<fileset dir="bin" includes="**/SampleRangeNormalizationDataPreprocessor.class" />
+			<fileset dir="src" includes="**/SampleRangeNormalizationDataPreprocessor.java" />
+		</jar>
+		<jar
 			destfile="repository/supp/preprocessing/VarianceNormalizationDataPreprocessor.jar">
 			<fileset dir="bin" includes="**/VarianceNormalizationDataPreprocessor.class" />
 			<fileset dir="src" includes="**/VarianceNormalizationDataPreprocessor.java" />
+		</jar>
+		<jar
+			destfile="repository/supp/preprocessing/SampleVarianceNormalizationDataPreprocessor.jar">
+			<fileset dir="bin" includes="**/SampleVarianceNormalizationDataPreprocessor.class" />
+			<fileset dir="src" includes="**/SampleVarianceNormalizationDataPreprocessor.java" />
 		</jar>
 	</target>
 
@@ -504,6 +514,10 @@
 		<jar destfile="repository/programs/KMedoidsClusteringRProgram.jar">
 			<fileset dir="bin" includes="**/KMedoidsClusteringRProgram*.class" />
 			<fileset dir="src" includes="**/KMedoidsClusteringRProgram*.java" />
+		</jar>
+		<jar destfile="repository/programs/PPAMClusteringRProgram.jar">
+			<fileset dir="bin" includes="**/PPAMClusteringRProgram*.class" />
+			<fileset dir="src" includes="**/PPAMClusteringRProgram*.java" />
 		</jar>
 		<jar destfile="repository/programs/FannyClusteringRProgram.jar">
 			<fileset dir="bin" includes="**/FannyClusteringRProgram*.class" />
