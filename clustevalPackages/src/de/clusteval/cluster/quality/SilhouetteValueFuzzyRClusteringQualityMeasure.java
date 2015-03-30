@@ -236,6 +236,6 @@ public class SilhouetteValueFuzzyRClusteringQualityMeasure
 	 */
 	@Override
 	public boolean supportsFuzzyClusterings() {
-		return false;
+		return true;
 	}
 }
