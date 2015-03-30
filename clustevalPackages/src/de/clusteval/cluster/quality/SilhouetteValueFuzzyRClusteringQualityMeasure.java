@@ -38,7 +38,7 @@ import de.clusteval.framework.repository.Repository;
  * @author Christian Wiwie
  */
 @RLibraryRequirement(requiredRLibraries = {"cluster"})
-public class SilhouetteValueRClusteringQualityMeasure
+public class SilhouetteValueFuzzyRClusteringQualityMeasure
 		extends
 			ClusteringQualityMeasureR {
 
@@ -49,7 +49,7 @@ public class SilhouetteValueRClusteringQualityMeasure
 	 * @param absPath
 	 * @throws RegisterException
 	 */
-	public SilhouetteValueRClusteringQualityMeasure(Repository repo,
+	public SilhouetteValueFuzzyRClusteringQualityMeasure(Repository repo,
 			boolean register, long changeDate, File absPath,
 			ClusteringQualityMeasureParameters parameters)
 			throws RegisterException {
@@ -63,8 +63,8 @@ public class SilhouetteValueRClusteringQualityMeasure
 	 *            The object to clone.
 	 * @throws RegisterException
 	 */
-	public SilhouetteValueRClusteringQualityMeasure(
-			final SilhouetteValueRClusteringQualityMeasure other)
+	public SilhouetteValueFuzzyRClusteringQualityMeasure(
+			final SilhouetteValueFuzzyRClusteringQualityMeasure other)
 			throws RegisterException {
 		super(other);
 	}
@@ -76,7 +76,7 @@ public class SilhouetteValueRClusteringQualityMeasure
 	 */
 	@Override
 	public String getAlias() {
-		return "Silhouette Value (R)";
+		return "Silhouette Value Fuzzy (R)";
 	}
 
 	/*
@@ -97,6 +97,14 @@ public class SilhouetteValueRClusteringQualityMeasure
 		if (clustering.getClusters().size() < 2)
 			return ClusteringQualityMeasureValue.getForDouble(-1.0);
 
+		// by default we include all fuzzy coefficients;
+		// double threshold = parameters.containsKey("threshold") ? Double
+		// .valueOf(parameters.get("threshold")) : 0.0;
+
+		// fuzzyfactor
+		double alpha = parameters.containsKey("alpha") ? Double
+				.valueOf(parameters.get("alpha")) : 1.0;
+
 		RelativeDataSet dataSet = (RelativeDataSet) (dataConfig
 				.getDatasetConfig().getDataSet().getInStandardFormat());
 
@@ -109,17 +117,35 @@ public class SilhouetteValueRClusteringQualityMeasure
 		for (Cluster cl : clustering.getClusters())
 			clusterToId.put(cl, clusterToId.size() + 1);
 
-		int[] clusterIds = new int[simMatrix.getIds().size()];
+		double[][] fuzzyCoeffs = new double[simMatrix.getIds().size()][2];
+		int[][] fuzzyClusters = new int[simMatrix.getIds().size()][2];
+
 		Map<String, Integer> keyToId = simMatrix.getIds();
 		Iterator<ClusterItem> itemIter = clustering.getClusterItems()
 				.iterator();
 		while (itemIter.hasNext()) {
 			ClusterItem item = itemIter.next();
-			/*
-			 * TODO: Take the first one, does not work for fuzzy clusters
-			 */
-			clusterIds[keyToId.get(item.getId())] = clusterToId.get(item
-					.getFuzzyClusters().keySet().iterator().next());
+
+			int itemIndex = keyToId.get(item.getId());
+
+			for (Map.Entry<Cluster, Float> e : item.getFuzzyClusters()
+					.entrySet()) {
+
+				int clusterIndex = clusterToId.get(e.getKey());
+
+				// maintain clusters with two largest fuzzy coefficient
+				if (e.getValue() > fuzzyCoeffs[itemIndex][0]) {
+					fuzzyCoeffs[itemIndex][1] = fuzzyCoeffs[itemIndex][0];
+					fuzzyClusters[itemIndex][1] = fuzzyClusters[itemIndex][0];
+
+					fuzzyCoeffs[itemIndex][0] = e.getValue();
+					fuzzyClusters[itemIndex][0] = clusterIndex;
+				} else if (e.getValue() > fuzzyCoeffs[itemIndex][1]) {
+					fuzzyCoeffs[itemIndex][1] = e.getValue();
+					fuzzyClusters[itemIndex][1] = clusterIndex;
+				}
+			}
+
 		}
 		double[][] similarities = simMatrix.toArray();
 		/*
@@ -132,7 +158,10 @@ public class SilhouetteValueRClusteringQualityMeasure
 		 * Pass the arrays to R
 		 */
 		double result;
-		rEngine.assign("clusterIds", clusterIds);
+		rEngine.assign("fuzzyCoeffs", fuzzyCoeffs);
+		rEngine.assign("fuzzyClusters", fuzzyClusters);
+		rEngine.eval("alpha <- " + alpha);
+		rEngine.eval("clusterIds <- fuzzyClusters[,1]");
 		rEngine.eval("names(clusterIds) <- as.character(1:"
 				+ similarities.length + ")");
 
@@ -144,10 +173,11 @@ public class SilhouetteValueRClusteringQualityMeasure
 
 		rEngine.eval("library(cluster)");
 		rEngine.eval("sil <- silhouette(x=clusterIds,dmatrix=sim)");
-		REXP exp = rEngine.eval("summary(sil)$avg.width");
-		if (exp != null)
+		REXP exp = rEngine
+				.eval("sum((fuzzyCoeffs[,1]-fuzzyCoeffs[,2])**alpha * sil[,3])/sum((fuzzyCoeffs[,1]-fuzzyCoeffs[,2])**alpha)");
+		if (exp != null) {
 			result = exp.asDouble();
-		else
+		} else
 			result = this.getMinimum();
 
 		return ClusteringQualityMeasureValue.getForDouble(result);

@@ -37,8 +37,9 @@ public class FPRClusteringQualityMeasure extends ClusteringQualityMeasure {
 	 * @throws RegisterException
 	 */
 	public FPRClusteringQualityMeasure(Repository repo, boolean register,
-			long changeDate, File absPath) throws RegisterException {
-		super(repo, register, changeDate, absPath);
+			long changeDate, File absPath,
+			ClusteringQualityMeasureParameters parameters) throws RegisterException {
+		super(repo, register, changeDate, absPath, parameters);
 	}
 
 	/**

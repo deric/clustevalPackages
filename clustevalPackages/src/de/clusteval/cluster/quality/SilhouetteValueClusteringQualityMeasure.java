@@ -42,9 +42,10 @@ public class SilhouetteValueClusteringQualityMeasure
 	 * @throws RegisterException
 	 */
 	public SilhouetteValueClusteringQualityMeasure(Repository repo,
-			boolean register, long changeDate, File absPath)
+			boolean register, long changeDate, File absPath,
+			ClusteringQualityMeasureParameters parameters)
 			throws RegisterException {
-		super(repo, register, changeDate, absPath);
+		super(repo, register, changeDate, absPath, parameters);
 	}
 
 	/**

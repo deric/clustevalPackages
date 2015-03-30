@@ -21,6 +21,13 @@
 				includes="**/SilhouetteValueRClusteringQualityMeasure.java" />
 		</jar>
 		<jar
+			destfile="repository/supp/clustering/qualityMeasures/SilhouetteValueFuzzyRClusteringQualityMeasure.jar">
+			<fileset dir="bin"
+				includes="**/SilhouetteValueFuzzyRClusteringQualityMeasure.class" />
+			<fileset dir="src"
+				includes="**/SilhouetteValueFuzzyRClusteringQualityMeasure.java" />
+		</jar>
+		<jar
 			destfile="repository/supp/clustering/qualityMeasures/SilhouetteValueGlobalRClusteringQualityMeasure.jar">
 			<fileset dir="bin"
 				includes="**/SilhouetteValueGlobalRClusteringQualityMeasure.class" />

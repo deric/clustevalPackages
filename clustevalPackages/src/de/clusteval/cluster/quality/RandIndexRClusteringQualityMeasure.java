@@ -51,9 +51,10 @@ public class RandIndexRClusteringQualityMeasure
 	 * @throws RegisterException
 	 */
 	public RandIndexRClusteringQualityMeasure(Repository repo,
-			boolean register, long changeDate, File absPath)
+			boolean register, long changeDate, File absPath,
+			ClusteringQualityMeasureParameters parameters)
 			throws RegisterException {
-		super(repo, register, changeDate, absPath);
+		super(repo, register, changeDate, absPath, parameters);
 	}
 
 	/**
