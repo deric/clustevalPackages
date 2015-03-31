@@ -527,6 +527,10 @@
 			<fileset dir="bin" includes="**/KMeansClusteringRProgram*.class" />
 			<fileset dir="src" includes="**/KMeansClusteringRProgram*.java" />
 		</jar>
+		<jar destfile="repository/programs/CMeansClusteringRProgram.jar">
+			<fileset dir="bin" includes="**/CMeansClusteringRProgram*.class" />
+			<fileset dir="src" includes="**/CMeansClusteringRProgram*.java" />
+		</jar>
 		<jar destfile="repository/programs/KMedoidsClusteringRProgram.jar">
 			<fileset dir="bin" includes="**/KMedoidsClusteringRProgram*.class" />
 			<fileset dir="src" includes="**/KMedoidsClusteringRProgram*.java" />
