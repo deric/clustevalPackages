@@ -68,6 +68,7 @@ import de.clusteval.run.result.ParameterOptimizationResult;
 import de.clusteval.run.result.RunResult;
 import de.clusteval.run.result.RunResultParseException;
 import de.clusteval.run.result.format.UnknownRunResultFormatException;
+import de.clusteval.run.result.postprocessing.UnknownRunResultPostprocessorException;
 import de.clusteval.utils.InvalidConfigurationFileException;
 import file.FileUtils;
 
@@ -138,7 +139,8 @@ public class ParameterImportanceRunStatisticCalculator
 			UnknownDataPreprocessorException,
 			IncompatibleDataSetConfigPreprocessorException,
 			UnknownContextException, IncompatibleContextException,
-			UnknownParameterType, InterruptedException {
+			UnknownParameterType, InterruptedException,
+			UnknownRunResultPostprocessorException {
 
 		List<ParameterOptimizationResult> results = new ArrayList<ParameterOptimizationResult>();
 

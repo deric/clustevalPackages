@@ -97,10 +97,6 @@ public class SilhouetteValueFuzzyRClusteringQualityMeasure
 		if (clustering.getClusters().size() < 2)
 			return ClusteringQualityMeasureValue.getForDouble(-1.0);
 
-		// by default we include all fuzzy coefficients;
-		// double threshold = parameters.containsKey("threshold") ? Double
-		// .valueOf(parameters.get("threshold")) : 0.0;
-
 		// fuzzyfactor
 		double alpha = parameters.containsKey("alpha") ? Double
 				.valueOf(parameters.get("alpha")) : 1.0;

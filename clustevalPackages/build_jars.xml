@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="create_jars" name="Create loadable jars for framework">
 	<target name="create_jars"
-		depends="create_quality_jars,create_optimMethod_jars,create_datasetFormat_jars,create_datasetTypes_jars,create_runresultFormat_jars,create_dataStatistic_jars,create_rprogram_jars,create_distanceMeasure_jars,create_runStatistic_jars,create_runDataStatistic_jars,create_datasetGenerator_jars,create_dataRandomizer_jars,create_preprocessors_jars,create_context_jars">
+		depends="create_quality_jars,create_optimMethod_jars,create_datasetFormat_jars,create_datasetTypes_jars,create_runresultFormat_jars,create_dataStatistic_jars,create_rprogram_jars,create_distanceMeasure_jars,create_runStatistic_jars,create_runDataStatistic_jars,create_datasetGenerator_jars,create_dataRandomizer_jars,create_preprocessors_jars,create_context_jars,create_postprocessors_jars">
 	</target>
 
 	<target name="create_quality_jars">
@@ -190,6 +190,15 @@
 			destfile="repository/supp/preprocessing/SampleVarianceNormalizationDataPreprocessor.jar">
 			<fileset dir="bin" includes="**/SampleVarianceNormalizationDataPreprocessor.class" />
 			<fileset dir="src" includes="**/SampleVarianceNormalizationDataPreprocessor.java" />
+		</jar>
+	</target>
+
+	<target name="create_postprocessors_jars">
+		<echo>Create runresult postprocessor jars...</echo>
+		<jar
+			destfile="repository/supp/postprocessing/FuzzyCoefficientThresholdRunResultPostprocessor.jar">
+			<fileset dir="bin" includes="**/FuzzyCoefficientThresholdRunResultPostprocessor.class" />
+			<fileset dir="src" includes="**/FuzzyCoefficientThresholdRunResultPostprocessor.java" />
 		</jar>
 	</target>
 
