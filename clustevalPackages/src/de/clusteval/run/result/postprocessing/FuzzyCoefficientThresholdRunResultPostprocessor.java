@@ -66,7 +66,8 @@ public class FuzzyCoefficientThresholdRunResultPostprocessor
 				.valueOf(parameters.get("threshold")) : 0.0;
 		// iterate over elements; only keep those fuzzy coefficients >=
 		// threshold and readjust the remaining ones
-		for (ClusterItem item : clusteringPreprocessed.getClusterItems()) {
+		for (ClusterItem item : new HashSet<ClusterItem>(
+				clusteringPreprocessed.getClusterItems())) {
 			Map<Cluster, Float> coeffs = item.getFuzzyClusters();
 
 			// identify clusters with coeff < threshold
@@ -81,7 +82,7 @@ public class FuzzyCoefficientThresholdRunResultPostprocessor
 
 			// remove those clusters
 			for (Cluster cl : toBeRemoved)
-				cl.remove(item);
+				clusteringPreprocessed.removeClusterItem(item, cl);
 
 			// read coeffs for remaining clusters
 			if (coeffs.isEmpty())
@@ -96,8 +97,6 @@ public class FuzzyCoefficientThresholdRunResultPostprocessor
 			}
 		}
 
-		for (ClusterItem item : itemsToBeRemoved)
-			clusteringPreprocessed.removeClusterItem(item);
 		return clusteringPreprocessed;
 	}
 
