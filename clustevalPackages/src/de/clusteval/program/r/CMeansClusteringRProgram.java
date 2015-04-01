@@ -43,7 +43,7 @@ import file.FileUtils;
  * 
  */
 @RLibraryRequirement(requiredRLibraries = {"e1071"})
-public class CMeansClusteringRProgram extends AbsoluteDataRProgram {
+public class CMeansClusteringRProgram extends AbsoluteAndRelativeDataRProgram {
 
 	/**
 	 * @param repository
@@ -113,7 +113,8 @@ public class CMeansClusteringRProgram extends AbsoluteDataRProgram {
 	public Set<DataSetFormat> getCompatibleDataSetFormats()
 			throws UnknownDataSetFormatException {
 		return new HashSet<DataSetFormat>(DataSetFormat.parseFromString(
-				repository, new String[]{"MatrixDataSetFormat"}));
+				repository, new String[]{"MatrixDataSetFormat",
+						"SimMatrixDataSetFormat"}));
 	}
 
 	/*

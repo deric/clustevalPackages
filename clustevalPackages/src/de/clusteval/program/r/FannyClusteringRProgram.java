@@ -105,7 +105,8 @@ public class FannyClusteringRProgram extends AbsoluteAndRelativeDataRProgram {
 	public Set<DataSetFormat> getCompatibleDataSetFormats()
 			throws UnknownDataSetFormatException {
 		return new HashSet<DataSetFormat>(DataSetFormat.parseFromString(
-				repository, new String[]{"MatrixDataSetFormat"}));
+				repository, new String[]{"MatrixDataSetFormat",
+						"SimMatrixDataSetFormat"}));
 	}
 
 	/*
