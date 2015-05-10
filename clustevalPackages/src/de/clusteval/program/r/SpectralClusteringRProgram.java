@@ -93,10 +93,10 @@ public class SpectralClusteringRProgram extends AbsoluteAndRelativeDataRProgram 
 	 */
 	@Override
 	public String getInvocationFormat() {
-		return "{ for (i in 1:30) {" + "resultNew <- specc(x,centers=%k%);"
+		return "{ for (i in 1:10) {tryCatch({" + "resultNew <- specc(x,centers=%k%);"
 				+ "if (sum(resultNew@withinss) < minWithinss) {"
-				+ "resultTmp <- resultNew;"
-				+ "minWithinss <- sum(resultNew@withinss);" + "};" + "};"
+				+ "resultTmp <<- resultNew;"
+				+ "minWithinss <<- sum(resultNew@withinss);" + "};});" + "};"
 				+ "resultTmp}";
 	}
 
