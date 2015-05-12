@@ -238,6 +238,10 @@
 			<fileset dir="bin" includes="**/RingnormDataSetGenerator*.class" />
 			<fileset dir="src" includes="**/RingnormDataSetGenerator*.java" />
 		</jar>
+		<jar destfile="repository/supp/generators/dataset/TwonormDataSetGenerator.jar">
+			<fileset dir="bin" includes="**/TwonormDataSetGenerator*.class" />
+			<fileset dir="src" includes="**/TwonormDataSetGenerator*.java" />
+		</jar>
 		<jar
 			destfile="repository/supp/generators/dataset/SimplexCornersDataSetGenerator.jar">
 			<fileset dir="bin" includes="**/SimplexCornersDataSetGenerator*.class" />
