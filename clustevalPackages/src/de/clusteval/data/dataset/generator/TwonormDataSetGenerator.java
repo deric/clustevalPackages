@@ -171,8 +171,14 @@ public class TwonormDataSetGenerator extends DataSetGenerator {
 				writer.append("// dataSetFormatVersion = 1");
 				writer.newLine();
 				for (int row = 0; row < coords.length; row++) {
-					writer.append((row + 1) + "\t" + coords[row][0] + "\t"
-							+ coords[row][1]);
+					StringBuilder sb = new StringBuilder();
+					sb.append((row + 1));
+					sb.append("\t");
+					for (int i = 0; i < coords[row].length; i++) {
+						sb.append(coords[row][i] + "\t");
+					}
+					sb.deleteCharAt(sb.length() - 1);
+					writer.append(sb.toString());
 					writer.newLine();
 				}
 				writer.close();
