@@ -47,22 +47,30 @@ public class MCODERunResultFormatParser extends RunResultFormatParser {
 			String[] value) {
 		StringBuilder sb = new StringBuilder();
 		if (currentLine == 0) {
-			String d = null, cutoff = null;
+			String v = null, cutoff = null, fluff = null, haircut = null;
 			for (String pa : params.keySet())
-				if (pa.equals("d")) {
-					d = params.get(pa);
+				if (pa.equals("v")) {
+					v = params.get(pa);
 				} else if (pa.equals("cutoff")) {
 					cutoff = params.get(pa);
+				} else if (pa.equals("fluff")) {
+					fluff = params.get(pa);
+				} else if (pa.equals("haircut")) {
+					haircut = params.get(pa);
 				}
 
-			sb.append("d,cutoff");
+			sb.append("v,cutoff,haircut,fluff");
 			sb.append("\t");
 			sb.append("Clustering");
 			sb.append(System.getProperty("line.separator"));
 
-			sb.append(d);
+			sb.append(v);
 			sb.append(",");
 			sb.append(cutoff);
+			sb.append(",");
+			sb.append(haircut);
+			sb.append(",");
+			sb.append(fluff);
 			sb.append("\t");
 		}
 		sb.append(StringExt.paste(",", StringExt.append(value, ":1.0")));
