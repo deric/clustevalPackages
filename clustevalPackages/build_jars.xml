@@ -391,6 +391,10 @@
 			<fileset dir="bin" includes="**/MCLRunResultFormat*.class" />
 			<fileset dir="src" includes="**/MCLRunResultFormat*.java" />
 		</jar>
+		<jar destfile="repository/supp/formats/runresult/MCODERunResultFormat.jar">
+			<fileset dir="bin" includes="**/MCODERunResultFormat*.class" />
+			<fileset dir="src" includes="**/MCODERunResultFormat*.java" />
+		</jar>
 		<jar destfile="repository/supp/formats/runresult/clusterONERunResultFormat.jar">
 			<fileset dir="bin" includes="**/clusterONERunResultFormat*.class" />
 			<fileset dir="src" includes="**/clusterONERunResultFormat*.java" />
