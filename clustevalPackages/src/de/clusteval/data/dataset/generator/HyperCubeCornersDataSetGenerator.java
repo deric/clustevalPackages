@@ -29,6 +29,7 @@ import org.rosuda.REngine.Rserve.RserveException;
 
 import de.clusteval.data.dataset.AbsoluteDataSet;
 import de.clusteval.data.dataset.DataSet;
+import de.clusteval.data.dataset.DataSet.WEBSITE_VISIBILITY;
 import de.clusteval.data.dataset.format.AbsoluteDataSetFormat;
 import de.clusteval.data.dataset.format.DataSetFormat;
 import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
@@ -198,7 +199,7 @@ public class HyperCubeCornersDataSetGenerator extends DataSetGenerator {
 						(AbsoluteDataSetFormat) DataSetFormat.parseFromString(
 								repository, "MatrixDataSetFormat"),
 						DataSetType.parseFromString(repository,
-								"OtherDataSetType"));
+								"OtherDataSetType"), WEBSITE_VISIBILITY.HIDE);
 
 			} catch (IOException e) {
 				e.printStackTrace();

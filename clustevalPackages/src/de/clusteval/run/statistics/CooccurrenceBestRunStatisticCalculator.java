@@ -14,7 +14,6 @@
 package de.clusteval.run.statistics;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RserveException;
 
@@ -32,51 +30,14 @@ import cern.colt.matrix.tlong.impl.SparseLongMatrix2D;
 import de.clusteval.cluster.Cluster;
 import de.clusteval.cluster.ClusterItem;
 import de.clusteval.cluster.Clustering;
-import de.clusteval.cluster.paramOptimization.IncompatibleParameterOptimizationMethodException;
-import de.clusteval.cluster.paramOptimization.InvalidOptimizationParameterException;
-import de.clusteval.cluster.paramOptimization.UnknownParameterOptimizationMethodException;
 import de.clusteval.cluster.quality.ClusteringQualityMeasure;
-import de.clusteval.cluster.quality.UnknownClusteringQualityMeasureException;
-import de.clusteval.context.IncompatibleContextException;
-import de.clusteval.context.UnknownContextException;
-import de.clusteval.data.DataConfigNotFoundException;
-import de.clusteval.data.DataConfigurationException;
-import de.clusteval.data.dataset.DataSetConfigNotFoundException;
-import de.clusteval.data.dataset.DataSetConfigurationException;
-import de.clusteval.data.dataset.DataSetNotFoundException;
-import de.clusteval.data.dataset.IncompatibleDataSetConfigPreprocessorException;
-import de.clusteval.data.dataset.NoDataSetException;
-import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
-import de.clusteval.data.dataset.type.UnknownDataSetTypeException;
-import de.clusteval.data.distance.UnknownDistanceMeasureException;
-import de.clusteval.data.goldstandard.GoldStandardConfigNotFoundException;
-import de.clusteval.data.goldstandard.GoldStandardConfigurationException;
-import de.clusteval.data.goldstandard.GoldStandardNotFoundException;
-import de.clusteval.data.goldstandard.format.UnknownGoldStandardFormatException;
-import de.clusteval.data.preprocessing.UnknownDataPreprocessorException;
-import de.clusteval.data.statistics.UnknownDataStatisticException;
-import de.clusteval.framework.repository.InvalidRepositoryException;
+import de.clusteval.data.statistics.RunStatisticCalculateException;
 import de.clusteval.framework.repository.MyRengine;
-import de.clusteval.framework.repository.NoRepositoryFoundException;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
-import de.clusteval.framework.repository.RepositoryAlreadyExistsException;
-import de.clusteval.framework.repository.config.RepositoryConfigNotFoundException;
-import de.clusteval.framework.repository.config.RepositoryConfigurationException;
-import de.clusteval.program.NoOptimizableProgramParameterException;
 import de.clusteval.program.ParameterSet;
-import de.clusteval.program.UnknownParameterType;
-import de.clusteval.program.UnknownProgramParameterException;
-import de.clusteval.program.UnknownProgramTypeException;
-import de.clusteval.program.r.UnknownRProgramException;
-import de.clusteval.run.InvalidRunModeException;
-import de.clusteval.run.RunException;
 import de.clusteval.run.result.ParameterOptimizationResult;
 import de.clusteval.run.result.RunResult;
-import de.clusteval.run.result.RunResultParseException;
-import de.clusteval.run.result.format.UnknownRunResultFormatException;
-import de.clusteval.run.result.postprocessing.UnknownRunResultPostprocessorException;
-import de.clusteval.utils.InvalidConfigurationFileException;
 import file.FileUtils;
 
 /**
@@ -120,116 +81,95 @@ public class CooccurrenceBestRunStatisticCalculator
 	 */
 	@Override
 	protected CooccurrenceBestRunStatistic calculateResult()
-			throws UnknownGoldStandardFormatException,
-			UnknownDataSetFormatException, IllegalArgumentException,
-			IOException, GoldStandardConfigurationException,
-			DataSetConfigurationException, DataSetNotFoundException,
-			DataSetConfigNotFoundException,
-			GoldStandardConfigNotFoundException, DataConfigurationException,
-			DataConfigNotFoundException, UnknownRunResultFormatException,
-			UnknownClusteringQualityMeasureException, InvalidRunModeException,
-			UnknownParameterOptimizationMethodException,
-			NoOptimizableProgramParameterException,
-			UnknownProgramParameterException,
-			InvalidConfigurationFileException,
-			RepositoryAlreadyExistsException, InvalidRepositoryException,
-			NoRepositoryFoundException, GoldStandardNotFoundException,
-			InvalidOptimizationParameterException, RunException,
-			UnknownDataStatisticException, UnknownProgramTypeException,
-			UnknownRProgramException,
-			IncompatibleParameterOptimizationMethodException,
-			UnknownDistanceMeasureException, UnknownRunStatisticException,
-			RepositoryConfigNotFoundException,
-			RepositoryConfigurationException, ConfigurationException,
-			RegisterException, UnknownDataSetTypeException, NoDataSetException,
-			UnknownRunDataStatisticException, RunResultParseException,
-			UnknownDataPreprocessorException,
-			IncompatibleDataSetConfigPreprocessorException,
-			UnknownContextException, IncompatibleContextException,
-			UnknownParameterType, InterruptedException,
-			UnknownRunResultPostprocessorException {
+			throws RunStatisticCalculateException {
 
-		List<ParameterOptimizationResult> results = new ArrayList<ParameterOptimizationResult>();
+		try {
 
-		ParameterOptimizationResult
-				.parseFromRunResultFolder(
-						this.repository,
-						new File(FileUtils.buildPath(
-								this.repository.getBasePath(RunResult.class),
-								this.uniqueRunIdentifiers)), results, true,
-						true, false);
+			List<ParameterOptimizationResult> results = new ArrayList<ParameterOptimizationResult>();
 
-		// keep ids common to all results
-		results.get(0).loadIntoMemory();
-		Map<ClusterItem, Integer> setIds = new HashMap<ClusterItem, Integer>();
-		for (ClusterItem item : results.get(0).getOptimalClustering()
-				.getClusterItems())
-			setIds.put(item, setIds.size());
+			ParameterOptimizationResult.parseFromRunResultFolder(
+					this.repository,
+					new File(FileUtils.buildPath(
+							this.repository.getBasePath(RunResult.class),
+							this.uniqueRunIdentifiers)), results, true, true,
+					false);
 
-		LongMatrix2D sparseMatrix = new SparseLongMatrix2D(setIds.size(),
-				setIds.size());
+			// keep ids common to all results
+			results.get(0).loadIntoMemory();
+			Map<ClusterItem, Integer> setIds = new HashMap<ClusterItem, Integer>();
+			for (ClusterItem item : results.get(0).getOptimalClustering()
+					.getClusterItems())
+				setIds.put(item, setIds.size());
 
-		// TODO: check for fuzzy?
-		for (ParameterOptimizationResult result : results) {
-			this.log.info("Processing result: " + result);
-			result.loadIntoMemory();
+			LongMatrix2D sparseMatrix = new SparseLongMatrix2D(setIds.size(),
+					setIds.size());
 
-			Set<ClusterItem> items = result.getOptimalClustering()
-					.getClusterItems();
-			for (ClusterItem item : setIds.keySet())
-				if (!(items.contains(item)))
-					setIds.remove(item);
+			// TODO: check for fuzzy?
+			for (ParameterOptimizationResult result : results) {
+				this.log.info("Processing result: " + result);
+				result.loadIntoMemory();
 
-			Map<ClusteringQualityMeasure, ParameterSet> paramSets = result
-					.getOptimalParameterSets();
+				Set<ClusterItem> items = result.getOptimalClustering()
+						.getClusterItems();
+				for (ClusterItem item : setIds.keySet())
+					if (!(items.contains(item)))
+						setIds.remove(item);
 
-			try {
-				for (ParameterSet paramSet : paramSets.values()) {
-					this.log.info("Processing parameter set: " + paramSet);
-					Clustering cl = result.getClustering(paramSet);
+				Map<ClusteringQualityMeasure, ParameterSet> paramSets = result
+						.getOptimalParameterSets();
 
-					if (cl == null)
-						continue;
+				try {
+					for (ParameterSet paramSet : paramSets.values()) {
+						this.log.info("Processing parameter set: " + paramSet);
+						Clustering cl = result.getClustering(paramSet);
 
-					for (Cluster cluster : cl.getClusters()) {
-						Set<ClusterItem> clusterItems = cluster.getFuzzyItems()
-								.keySet();
-						for (ClusterItem i1 : clusterItems) {
-							if (!setIds.containsKey(i1))
-								continue;
-							for (ClusterItem i2 : clusterItems) {
-								if (!setIds.containsKey(i2))
+						if (cl == null)
+							continue;
+
+						for (Cluster cluster : cl.getClusters()) {
+							Set<ClusterItem> clusterItems = cluster
+									.getFuzzyItems().keySet();
+							for (ClusterItem i1 : clusterItems) {
+								if (!setIds.containsKey(i1))
 									continue;
-								int i = setIds.get(i1);
-								int j = setIds.get(i2);
-								if (i > j)
-									continue;
-								long newVal = sparseMatrix.get(i, j) + 1;
-								sparseMatrix.setQuick(i, j, newVal);
-								sparseMatrix.setQuick(j, i, newVal);
+								for (ClusterItem i2 : clusterItems) {
+									if (!setIds.containsKey(i2))
+										continue;
+									int i = setIds.get(i1);
+									int j = setIds.get(i2);
+									if (i > j)
+										continue;
+									long newVal = sparseMatrix.get(i, j) + 1;
+									sparseMatrix.setQuick(i, j, newVal);
+									sparseMatrix.setQuick(j, i, newVal);
+								}
 							}
 						}
 					}
+				} finally {
+					result.unloadFromMemory();
 				}
-			} finally {
-				result.unloadFromMemory();
 			}
+
+			String[] subIds = new String[setIds.size()];
+			int[] whichIds = new int[setIds.size()];
+			int pos = 0;
+			for (Entry<ClusterItem, Integer> e : setIds.entrySet()) {
+				whichIds[pos] = e.getValue();
+				subIds[pos++] = e.getKey().toString();
+			}
+			sparseMatrix = sparseMatrix.viewSelection(whichIds, whichIds);
+
+			// keep only those rows/columns (ids) in the sparseMatrix which are
+			// part
+			// of all clusterings (not null in ids array)
+
+			return new CooccurrenceBestRunStatistic(repository, false,
+					changeDate, absPath, ArraysExt.toString(subIds),
+					sparseMatrix);
+		} catch (Exception e) {
+			throw new RunStatisticCalculateException(e);
 		}
-
-		String[] subIds = new String[setIds.size()];
-		int[] whichIds = new int[setIds.size()];
-		int pos = 0;
-		for (Entry<ClusterItem, Integer> e : setIds.entrySet()) {
-			whichIds[pos] = e.getValue();
-			subIds[pos++] = e.getKey().toString();
-		}
-		sparseMatrix = sparseMatrix.viewSelection(whichIds, whichIds);
-
-		// keep only those rows/columns (ids) in the sparseMatrix which are part
-		// of all clusterings (not null in ids array)
-
-		return new CooccurrenceBestRunStatistic(repository, false, changeDate,
-				absPath, ArraysExt.toString(subIds), sparseMatrix);
 	}
 
 	/*

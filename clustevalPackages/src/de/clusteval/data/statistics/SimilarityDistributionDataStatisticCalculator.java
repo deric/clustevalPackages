@@ -14,7 +14,6 @@
 package de.clusteval.data.statistics;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RserveException;
@@ -25,9 +24,7 @@ import utils.SimilarityMatrix;
 import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.DataSetConfig;
 import de.clusteval.data.dataset.RelativeDataSet;
-import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
 import de.clusteval.data.dataset.format.RelativeDataSetFormat;
-import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
@@ -78,30 +75,33 @@ public class SimilarityDistributionDataStatisticCalculator
 	 */
 	@Override
 	protected SimilarityDistributionDataStatistic calculateResult()
-			throws IllegalArgumentException, IOException,
-			InvalidDataSetFormatVersionException, RegisterException,
-			UnknownDataSetFormatException {
-		DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
-		RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig.getDataSet()
-				.getInStandardFormat());
+			throws DataStatisticCalculateException {
+		try {
+			DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
+			RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig
+					.getDataSet().getInStandardFormat());
 
-		if (!dataSet.isInMemory())
-			dataSet.loadIntoMemory();
-		SimilarityMatrix simMatrix = dataSet.getDataSetContent();
-		if (dataSet.isInMemory())
-			dataSet.unloadFromMemory();
+			if (!dataSet.isInMemory())
+				dataSet.loadIntoMemory();
+			SimilarityMatrix simMatrix = dataSet.getDataSetContent();
+			if (dataSet.isInMemory())
+				dataSet.unloadFromMemory();
 
-		Pair<double[], int[]> distribution = simMatrix.toDistributionArray(100);
+			Pair<double[], int[]> distribution = simMatrix
+					.toDistributionArray(100);
 
-		double[] distr = ArraysExt.toDoubleArray(distribution.getSecond());
+			double[] distr = ArraysExt.toDoubleArray(distribution.getSecond());
 
-		distr = ArraysExt.scaleBy(distr, ArraysExt.sum(distr));
+			distr = ArraysExt.scaleBy(distr, ArraysExt.sum(distr));
 
-		SimilarityDistributionDataStatistic result = new SimilarityDistributionDataStatistic(
-				repository, false, changeDate, absPath,
-				distribution.getFirst(), distr);
-		lastResult = result;
-		return result;
+			SimilarityDistributionDataStatistic result = new SimilarityDistributionDataStatistic(
+					repository, false, changeDate, absPath,
+					distribution.getFirst(), distr);
+			lastResult = result;
+			return result;
+		} catch (Exception e) {
+			throw new DataStatisticCalculateException(e);
+		}
 	}
 
 	@Override

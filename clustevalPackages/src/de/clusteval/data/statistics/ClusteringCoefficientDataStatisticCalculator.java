@@ -68,47 +68,48 @@ public class ClusteringCoefficientDataStatisticCalculator
 
 	@Override
 	protected ClusteringCoefficientDataStatistic calculateResult()
-			throws IllegalArgumentException, IOException,
-			InvalidDataSetFormatVersionException, RegisterException,
-			UnknownDataSetFormatException {
-
-		DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
-		RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig.getDataSet()
-				.getInStandardFormat());
-
-		if (!dataSet.isInMemory())
-			dataSet.loadIntoMemory();
-		SimilarityMatrix simMatrix = dataSet.getDataSetContent();
-		if (dataSet.isInMemory())
-			dataSet.unloadFromMemory();
-
-		double[][] similarities = simMatrix.toArray();
-		similarities = ArraysExt.scaleBy(similarities,
-				ArraysExt.max(similarities), true);
-
+			throws DataStatisticCalculateException {
 		try {
-			MyRengine rEngine = repository.getRengineForCurrentThread();
-			try {
-				rEngine.assign("simMatrix", similarities);
-				rEngine.eval("library('igraph')");
-				rEngine.eval("gr <- graph.adjacency(simMatrix,weighted=TRUE)");
-				rEngine.eval("gr <- simplify(as.undirected(gr,mode='collapse'), remove.loops=TRUE, remove.multiple=TRUE)");
-				rEngine.eval("trans <- transitivity(gr,type='global',vids=V(gr))");
-				REXP result = rEngine.eval("trans");
-				return new ClusteringCoefficientDataStatistic(repository,
-						false, changeDate, absPath, result.asDouble());
-			} catch (REngineException e) {
-				e.printStackTrace();
-			} catch (REXPMismatchException e) {
-				e.printStackTrace();
-			} finally {
-				rEngine.clear();
-			}
-		} catch (RserveException e) {
-			e.printStackTrace();
-		}
+			DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
+			RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig
+					.getDataSet().getInStandardFormat());
 
-		return null;
+			if (!dataSet.isInMemory())
+				dataSet.loadIntoMemory();
+			SimilarityMatrix simMatrix = dataSet.getDataSetContent();
+			if (dataSet.isInMemory())
+				dataSet.unloadFromMemory();
+
+			double[][] similarities = simMatrix.toArray();
+			similarities = ArraysExt.scaleBy(similarities,
+					ArraysExt.max(similarities), true);
+
+			try {
+				MyRengine rEngine = repository.getRengineForCurrentThread();
+				try {
+					rEngine.assign("simMatrix", similarities);
+					rEngine.eval("library('igraph')");
+					rEngine.eval("gr <- graph.adjacency(simMatrix,weighted=TRUE)");
+					rEngine.eval("gr <- simplify(as.undirected(gr,mode='collapse'), remove.loops=TRUE, remove.multiple=TRUE)");
+					rEngine.eval("trans <- transitivity(gr,type='global',vids=V(gr))");
+					REXP result = rEngine.eval("trans");
+					return new ClusteringCoefficientDataStatistic(repository,
+							false, changeDate, absPath, result.asDouble());
+				} catch (REngineException e) {
+					e.printStackTrace();
+				} catch (REXPMismatchException e) {
+					e.printStackTrace();
+				} finally {
+					rEngine.clear();
+				}
+			} catch (RserveException e) {
+				e.printStackTrace();
+			}
+
+			return null;
+		} catch (Exception e) {
+			throw new DataStatisticCalculateException(e);
+		}
 	}
 
 	/*

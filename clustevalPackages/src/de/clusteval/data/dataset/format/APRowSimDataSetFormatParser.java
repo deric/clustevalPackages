@@ -27,6 +27,7 @@ import utils.parse.TextFileParser.OUTPUT_MODE;
 import de.clusteval.data.dataset.DataSet;
 import de.clusteval.data.dataset.DataSetAttributeParser;
 import de.clusteval.data.dataset.RelativeDataSet;
+import de.clusteval.data.dataset.DataSet.WEBSITE_VISIBILITY;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.utils.FormatVersion;
 
@@ -98,7 +99,7 @@ public class APRowSimDataSetFormatParser extends DataSetFormatParser {
 								.getCurrentDataSetFormatVersion(
 										APRowSimDataSetFormat.class
 												.getSimpleName())),
-				dataSet.getDataSetType());
+				dataSet.getDataSetType(), WEBSITE_VISIBILITY.HIDE);
 	}
 
 	class APSimFileConverter extends SimFileMatrixParser {

@@ -29,6 +29,7 @@ import utils.parse.TextFileParser.OUTPUT_MODE;
 import de.clusteval.data.dataset.DataSet;
 import de.clusteval.data.dataset.DataSetAttributeFilterer;
 import de.clusteval.data.dataset.RelativeDataSet;
+import de.clusteval.data.dataset.DataSet.WEBSITE_VISIBILITY;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.utils.FormatVersion;
 import de.costmatrixcreation.main.Args;
@@ -154,7 +155,8 @@ public class BLASTDataSetFormatParser extends DataSetFormatParser {
 						"SimMatrixDataSetFormat");
 		return new RelativeDataSet(dataSet.getRepository(), false,
 				System.currentTimeMillis(), new File(resultFileName),
-				dataSet.getAlias(), targetFormat, dataSet.getDataSetType());
+				dataSet.getAlias(), targetFormat, dataSet.getDataSetType(),
+				WEBSITE_VISIBILITY.HIDE);
 	}
 
 	/*

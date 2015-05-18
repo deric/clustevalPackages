@@ -14,14 +14,11 @@
 package de.clusteval.data.statistics;
 
 import java.io.File;
-import java.io.IOException;
 
 import utils.SimilarityMatrix;
 import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.DataSetConfig;
 import de.clusteval.data.dataset.RelativeDataSet;
-import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
-import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 
@@ -66,22 +63,23 @@ public class NumberOfSamplesDataStatisticCalculator
 	 */
 	@Override
 	protected NumberOfSamplesDataStatistic calculateResult()
-			throws IllegalArgumentException, IOException,
-			InvalidDataSetFormatVersionException, RegisterException,
-			UnknownDataSetFormatException {
+			throws DataStatisticCalculateException {
+		try {
+			DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
+			RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig
+					.getDataSet().getInStandardFormat());
 
-		DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
-		RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig.getDataSet()
-				.getInStandardFormat());
+			if (!dataSet.isInMemory())
+				dataSet.loadIntoMemory();
+			SimilarityMatrix simMatrix = dataSet.getDataSetContent();
+			if (dataSet.isInMemory())
+				dataSet.unloadFromMemory();
 
-		if (!dataSet.isInMemory())
-			dataSet.loadIntoMemory();
-		SimilarityMatrix simMatrix = dataSet.getDataSetContent();
-		if (dataSet.isInMemory())
-			dataSet.unloadFromMemory();
-
-		return new NumberOfSamplesDataStatistic(repository, false, changeDate,
-				absPath, simMatrix.getIds().size());
+			return new NumberOfSamplesDataStatistic(repository, false,
+					changeDate, absPath, simMatrix.getIds().size());
+		} catch (Exception e) {
+			throw new DataStatisticCalculateException(e);
+		}
 	}
 
 	/*

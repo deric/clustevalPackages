@@ -27,6 +27,7 @@ import utils.parse.TextFileParser.OUTPUT_MODE;
 import de.clusteval.data.dataset.DataSet;
 import de.clusteval.data.dataset.DataSetAttributeFilterer;
 import de.clusteval.data.dataset.RelativeDataSet;
+import de.clusteval.data.dataset.DataSet.WEBSITE_VISIBILITY;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.utils.FormatVersion;
 
@@ -99,7 +100,7 @@ public class RowSimDataSetFormatParser extends DataSetFormatParser {
 				dataSet.getAlias(),
 				(RelativeDataSetFormat) DataSetFormat.parseFromString(
 						dataSet.getRepository(), "SimMatrixDataSetFormat"),
-				dataSet.getDataSetType());
+				dataSet.getDataSetType(), WEBSITE_VISIBILITY.HIDE);
 	}
 
 	/*
@@ -162,7 +163,7 @@ public class RowSimDataSetFormatParser extends DataSetFormatParser {
 						dataSet.getChangeDate(), new File(resultFileName),
 						dataSet.getRepository().getCurrentDataSetFormatVersion(
 								RowSimDataSetFormat.class.getSimpleName())),
-				dataSet.getDataSetType());
+				dataSet.getDataSetType(), WEBSITE_VISIBILITY.HIDE);
 	}
 
 	/**

@@ -18,13 +18,14 @@ import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RserveException;
 
+import utils.Pair;
 import utils.SimilarityMatrix;
 import de.clusteval.cluster.Clustering;
-import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.AbsoluteDataSet;
 import de.clusteval.data.dataset.DataMatrix;
-import de.clusteval.data.dataset.DataSetConfig;
+import de.clusteval.data.dataset.DataSet;
 import de.clusteval.data.dataset.RelativeDataSet;
+import de.clusteval.data.dataset.DataSet.WEBSITE_VISIBILITY;
 import de.clusteval.data.dataset.format.AbsoluteDataSetFormat;
 import de.clusteval.data.dataset.format.DataSetFormat;
 import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
@@ -33,7 +34,6 @@ import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.data.dataset.type.DataSetType;
 import de.clusteval.data.dataset.type.UnknownDataSetTypeException;
 import de.clusteval.data.goldstandard.GoldStandard;
-import de.clusteval.data.goldstandard.GoldStandardConfig;
 import de.clusteval.data.goldstandard.format.UnknownGoldStandardFormatException;
 import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
@@ -131,15 +131,13 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 	 * de.clusteval.data.dataset.randomizer.DataRandomizer#randomizeDataConfig()
 	 */
 	@Override
-	protected DataConfig randomizeDataConfig() {
+	protected Pair<DataSet, GoldStandard> randomizeDataConfig() {
 		if (this.dataConfig.getDatasetConfig().getDataSet() instanceof AbsoluteDataSet) {
 			final AbsoluteDataSet dataSet = (AbsoluteDataSet) this.dataConfig
 					.getDatasetConfig().getDataSet();
 			final GoldStandard goldStandard = this.dataConfig
 					.getGoldstandardConfig().getGoldstandard();
 
-			String postFix = "_remove_" + removePercentage + "_noise_"
-					+ addPercentage;
 			try {
 				dataSet.loadIntoMemory();
 				DataMatrix matrix = dataSet.getDataSetContent();
@@ -200,20 +198,29 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 						File dataSetFile = new File(dataConfig
 								.getDatasetConfig().getDataSet()
 								.getAbsolutePath()
-								+ postFix);
+								+ "_"
+								+ this.uniqueId
+								+ "_"
+								+ getDataSetFileNamePostFix());
+
 						File goldStandardFile = new File(dataConfig
 								.getGoldstandardConfig().getGoldstandard()
 								.getAbsolutePath()
-								+ postFix);
+								+ "_"
+								+ this.uniqueId
+								+ "_"
+								+ getDataSetFileNamePostFix());
 
 						try {
 							// write dataset file
 							BufferedWriter writer = new BufferedWriter(
 									new FileWriter(dataSetFile));
 							// writer header
-							String newAlias = dataConfig.getDatasetConfig()
-									.getDataSet().getAlias()
-									+ postFix;
+							String newAlias = this.uniqueId
+									+ "_"
+									+ dataConfig.getDatasetConfig()
+											.getDataSet().getAlias()
+									+ getDataSetFileNamePostFix();
 							writer.append("// alias = " + newAlias);
 							writer.newLine();
 							writer.append("// dataSetFormat = MatrixDataSetFormat");
@@ -240,23 +247,8 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 											.parseFromString(repository,
 													"MatrixDataSetFormat"),
 									DataSetType.parseFromString(repository,
-											"SyntheticDataSetType"));
-
-							// write dataset config file
-							writer = new BufferedWriter(new FileWriter(
-									FileUtils.buildPath(repository
-											.getBasePath(DataSetConfig.class),
-											this.dataConfig.getDatasetConfig()
-													.toString()
-													+ postFix
-													+ ".dsconfig")));
-							writer.append("datasetName = "
-									+ newDs.getMajorName());
-							writer.newLine();
-							writer.append("datasetFile = "
-									+ newDs.getMinorName());
-							writer.newLine();
-							writer.close();
+											"SyntheticDataSetType"),
+									WEBSITE_VISIBILITY.HIDE);
 
 							// write goldstandard file
 							writer = new BufferedWriter(new FileWriter(
@@ -273,42 +265,8 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 									goldStandardFile.lastModified(),
 									goldStandardFile);
 
-							// write goldstandard config file
-							writer = new BufferedWriter(
-									new FileWriter(
-											FileUtils.buildPath(
-													repository
-															.getBasePath(GoldStandardConfig.class),
-													this.dataConfig
-															.getGoldstandardConfig()
-															.toString()
-															+ postFix
-															+ ".gsconfig")));
-							writer.append("goldstandardName = "
-									+ newGsObject.getMajorName());
-							writer.newLine();
-							writer.append("goldstandardFile = "
-									+ newGsObject.getMinorName());
-							writer.newLine();
-							writer.close();
-
-							// write data config file
-							writer = new BufferedWriter(new FileWriter(
-									FileUtils.buildPath(repository
-											.getBasePath(DataConfig.class),
-											this.dataConfig.getName() + postFix
-													+ ".dataconfig")));
-							writer.append("datasetConfig = "
-									+ new File(this.dataConfig
-											.getDatasetConfig().toString()
-											+ postFix));
-							writer.newLine();
-							writer.append("goldstandardConfig = "
-									+ new File(this.dataConfig
-											.getGoldstandardConfig().toString()
-											+ postFix));
-							writer.newLine();
-							writer.close();
+							return new Pair<DataSet, GoldStandard>(newDs,
+									newGsObject);
 
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -343,6 +301,7 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 				dataSet.unloadFromMemory();
 				goldStandard.unloadFromMemory();
 			}
+
 			return null;
 		}
 		//
@@ -353,8 +312,6 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 		final GoldStandard goldStandard = this.dataConfig
 				.getGoldstandardConfig().getGoldstandard();
 
-		String postFix = "_remove_" + removePercentage + "_noise_"
-				+ addPercentage;
 		try {
 			dataSet.loadIntoMemory();
 			SimilarityMatrix matrix = dataSet.getDataSetContent();
@@ -418,22 +375,30 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 							.asStrings();
 
 					// the new dataset into file
-					File dataSetFile = new File(dataConfig.getDatasetConfig()
-							.getDataSet().getAbsolutePath()
-							+ postFix);
+					File dataSetFile = new File(FileUtils.buildPath(dataConfig
+							.getDatasetConfig().getDataSet().getAbsolutePath()
+							+ "_"
+							+ this.uniqueId
+							+ "_"
+							+ getDataSetFileNamePostFix()));
 					File goldStandardFile = new File(dataConfig
 							.getGoldstandardConfig().getGoldstandard()
 							.getAbsolutePath()
-							+ postFix);
+							+ "_"
+							+ this.uniqueId
+							+ "_"
+							+ getDataSetFileNamePostFix());
 
 					try {
 						// write dataset file
 						BufferedWriter writer = new BufferedWriter(
 								new FileWriter(dataSetFile));
 						// writer header
-						String newAlias = dataConfig.getDatasetConfig()
-								.getDataSet().getAlias()
-								+ postFix;
+						String newAlias = this.uniqueId
+								+ "_"
+								+ dataConfig.getDatasetConfig().getDataSet()
+										.getAlias()
+								+ getDataSetFileNamePostFix();
 						writer.append("// alias = " + newAlias);
 						writer.newLine();
 						writer.append("// dataSetFormat = SimMatrixDataSetFormat");
@@ -463,21 +428,8 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 										.parseFromString(repository,
 												"SimMatrixDataSetFormat"),
 								DataSetType.parseFromString(repository,
-										"SyntheticDataSetType"));
-
-						// write dataset config file
-						writer = new BufferedWriter(new FileWriter(
-								FileUtils.buildPath(repository
-										.getBasePath(DataSetConfig.class),
-										this.dataConfig.getDatasetConfig()
-												.toString()
-												+ postFix
-												+ ".dsconfig")));
-						writer.append("datasetName = " + newDs.getMajorName());
-						writer.newLine();
-						writer.append("datasetFile = " + newDs.getMinorName());
-						writer.newLine();
-						writer.close();
+										"SyntheticDataSetType"),
+								WEBSITE_VISIBILITY.HIDE);
 
 						// write goldstandard file
 						writer = new BufferedWriter(new FileWriter(
@@ -494,38 +446,8 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 								goldStandardFile.lastModified(),
 								goldStandardFile);
 
-						// write goldstandard config file
-						writer = new BufferedWriter(new FileWriter(
-								FileUtils.buildPath(repository
-										.getBasePath(GoldStandardConfig.class),
-										this.dataConfig.getGoldstandardConfig()
-												.toString()
-												+ postFix
-												+ ".gsconfig")));
-						writer.append("goldstandardName = "
-								+ newGsObject.getMajorName());
-						writer.newLine();
-						writer.append("goldstandardFile = "
-								+ newGsObject.getMinorName());
-						writer.newLine();
-						writer.close();
-
-						// write data config file
-						writer = new BufferedWriter(new FileWriter(
-								FileUtils.buildPath(repository
-										.getBasePath(DataConfig.class),
-										this.dataConfig.getName() + postFix
-												+ ".dataconfig")));
-						writer.append("datasetConfig = "
-								+ new File(this.dataConfig.getDatasetConfig()
-										.toString() + postFix));
-						writer.newLine();
-						writer.append("goldstandardConfig = "
-								+ new File(this.dataConfig
-										.getGoldstandardConfig().toString()
-										+ postFix));
-						writer.newLine();
-						writer.close();
+						return new Pair<DataSet, GoldStandard>(newDs,
+								newGsObject);
 
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -560,7 +482,18 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 			dataSet.unloadFromMemory();
 			goldStandard.unloadFromMemory();
 		}
-		return null;
 
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.clusteval.data.randomizer.DataRandomizer#getDataSetFileNamePostFix()
+	 */
+	@Override
+	protected String getDataSetFileNamePostFix() {
+		return "remove_" + removePercentage + "_noise_" + addPercentage;
 	}
 }

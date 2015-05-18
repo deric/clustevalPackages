@@ -14,7 +14,6 @@
 package de.clusteval.data.statistics;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +23,7 @@ import de.clusteval.cluster.ClusterItem;
 import de.clusteval.cluster.Clustering;
 import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.DataSet;
-import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
-import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.data.goldstandard.GoldStandard;
-import de.clusteval.data.goldstandard.format.UnknownGoldStandardFormatException;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 
@@ -72,35 +68,39 @@ public class ClassSizeDistributionDataStatisticCalculator
 	 */
 	@Override
 	protected ClassSizeDistributionDataStatistic calculateResult()
-			throws IllegalArgumentException, RegisterException,
-			UnknownGoldStandardFormatException, UnknownDataSetFormatException,
-			InvalidDataSetFormatVersionException, IOException {
-		DataSet ds = dataConfig.getDatasetConfig().getDataSet();
-		ds.loadIntoMemory();
-		List<String> dataSetIds = ds.getIds();
-		ds.unloadFromMemory();
-		GoldStandard gs = dataConfig.getGoldstandardConfig().getGoldstandard();
-		gs.loadIntoMemory();
-		Clustering clazzes = gs.getClustering();
-		gs.unloadFromMemory();
+			throws DataStatisticCalculateException {
+		try {
+			DataSet ds = dataConfig.getDatasetConfig().getDataSet();
+			ds.loadIntoMemory();
+			List<String> dataSetIds = ds.getIds();
+			ds.unloadFromMemory();
+			GoldStandard gs = dataConfig.getGoldstandardConfig()
+					.getGoldstandard();
+			gs.loadIntoMemory();
+			Clustering clazzes = gs.getClustering();
+			gs.unloadFromMemory();
 
-		double[] fuzzySizes = new double[clazzes.getClusters().size()];
-		String[] classLabels = new String[clazzes.getClusters().size()];
-		Iterator<Cluster> it = clazzes.getClusters().iterator();
-		for (int i = 0; i < classLabels.length; i++) {
-			Cluster clazz = it.next();
-			classLabels[i] = clazz.getId();
+			double[] fuzzySizes = new double[clazzes.getClusters().size()];
+			String[] classLabels = new String[clazzes.getClusters().size()];
+			Iterator<Cluster> it = clazzes.getClusters().iterator();
+			for (int i = 0; i < classLabels.length; i++) {
+				Cluster clazz = it.next();
+				classLabels[i] = clazz.getId();
 
-			Map<ClusterItem, Float> fuzzyItems = clazz.getFuzzyItems();
-			for (Map.Entry<ClusterItem, Float> item : fuzzyItems.entrySet())
-				if (dataSetIds.contains(item.getKey().getId()))
-					fuzzySizes[i] += item.getValue();
+				Map<ClusterItem, Float> fuzzyItems = clazz.getFuzzyItems();
+				for (Map.Entry<ClusterItem, Float> item : fuzzyItems.entrySet())
+					if (dataSetIds.contains(item.getKey().getId()))
+						fuzzySizes[i] += item.getValue();
+			}
+
+			ClassSizeDistributionDataStatistic result = new ClassSizeDistributionDataStatistic(
+					repository, false, changeDate, absPath, classLabels,
+					fuzzySizes);
+			lastResult = result;
+			return result;
+		} catch (Exception e) {
+			throw new DataStatisticCalculateException(e);
 		}
-
-		ClassSizeDistributionDataStatistic result = new ClassSizeDistributionDataStatistic(
-				repository, false, changeDate, absPath, classLabels, fuzzySizes);
-		lastResult = result;
-		return result;
 	}
 
 	@SuppressWarnings("unused")

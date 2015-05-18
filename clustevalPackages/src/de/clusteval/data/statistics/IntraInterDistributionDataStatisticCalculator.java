@@ -14,7 +14,6 @@
 package de.clusteval.data.statistics;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,12 +29,9 @@ import de.clusteval.cluster.Clustering;
 import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.DataSetConfig;
 import de.clusteval.data.dataset.RelativeDataSet;
-import de.clusteval.data.dataset.format.InvalidDataSetFormatVersionException;
 import de.clusteval.data.dataset.format.RelativeDataSetFormat;
-import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.data.goldstandard.GoldStandard;
 import de.clusteval.data.goldstandard.GoldStandardConfig;
-import de.clusteval.data.goldstandard.format.UnknownGoldStandardFormatException;
 import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
@@ -86,59 +82,61 @@ public class IntraInterDistributionDataStatisticCalculator
 	 */
 	@Override
 	protected IntraInterDistributionDataStatistic calculateResult()
-			throws IncompatibleDataConfigDataStatisticException,
-			UnknownGoldStandardFormatException, IllegalArgumentException,
-			IOException, InvalidDataSetFormatVersionException,
-			RegisterException, UnknownDataSetFormatException {
-		if (!dataConfig.hasGoldStandardConfig())
-			throw new IncompatibleDataConfigDataStatisticException(
-					"IntraInterDistribution requires a goldstandard, which the DataConfig "
-							+ dataConfig + " does not provide.");
+			throws DataStatisticCalculateException {
+		try {
+			if (!dataConfig.hasGoldStandardConfig())
+				throw new IncompatibleDataConfigDataStatisticException(
+						"IntraInterDistribution requires a goldstandard, which the DataConfig "
+								+ dataConfig + " does not provide.");
 
-		GoldStandardConfig goldStandardConfig = dataConfig
-				.getGoldstandardConfig();
-		GoldStandard goldStandard = goldStandardConfig.getGoldstandard();
-		Clustering gsClustering;
+			GoldStandardConfig goldStandardConfig = dataConfig
+					.getGoldstandardConfig();
+			GoldStandard goldStandard = goldStandardConfig.getGoldstandard();
+			Clustering gsClustering;
 
-		gsClustering = goldStandard.getClustering();
+			gsClustering = goldStandard.getClustering();
 
-		Map<String, Integer> idToClass = new HashMap<String, Integer>();
-		int clId = 0;
-		for (Cluster cl : gsClustering) {
-			for (ClusterItem item : cl) {
-				idToClass.put(item.getId(), clId);
+			Map<String, Integer> idToClass = new HashMap<String, Integer>();
+			int clId = 0;
+			for (Cluster cl : gsClustering) {
+				for (ClusterItem item : cl) {
+					idToClass.put(item.getId(), clId);
+				}
+				clId++;
 			}
-			clId++;
+
+			goldStandard.unloadFromMemory();
+
+			DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
+			RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig
+					.getDataSet().getInStandardFormat());
+
+			if (!dataSet.isInMemory())
+				dataSet.loadIntoMemory();
+			SimilarityMatrix simMatrix = dataSet.getDataSetContent();
+			if (dataSet.isInMemory())
+				dataSet.unloadFromMemory();
+
+			Pair<double[], int[][]> intraVsInterDistribution = simMatrix
+					.toIntraInterDistributionArray(100, idToClass);
+
+			double[] intraDistr = ArraysExt
+					.toDoubleArray(intraVsInterDistribution.getSecond()[0]);
+			double[] interDistr = ArraysExt
+					.toDoubleArray(intraVsInterDistribution.getSecond()[1]);
+
+			double totalSum = ArraysExt.sum(intraDistr)
+					+ ArraysExt.sum(interDistr);
+			intraDistr = ArraysExt.scaleBy(intraDistr, totalSum);
+			interDistr = ArraysExt.scaleBy(interDistr, totalSum);
+
+			lastResult = new IntraInterDistributionDataStatistic(repository,
+					false, changeDate, absPath,
+					intraVsInterDistribution.getFirst(), intraDistr, interDistr);
+			return lastResult;
+		} catch (Exception e) {
+			throw new DataStatisticCalculateException(e);
 		}
-
-		goldStandard.unloadFromMemory();
-
-		DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
-		RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig.getDataSet()
-				.getInStandardFormat());
-
-		if (!dataSet.isInMemory())
-			dataSet.loadIntoMemory();
-		SimilarityMatrix simMatrix = dataSet.getDataSetContent();
-		if (dataSet.isInMemory())
-			dataSet.unloadFromMemory();
-
-		Pair<double[], int[][]> intraVsInterDistribution = simMatrix
-				.toIntraInterDistributionArray(100, idToClass);
-
-		double[] intraDistr = ArraysExt.toDoubleArray(intraVsInterDistribution
-				.getSecond()[0]);
-		double[] interDistr = ArraysExt.toDoubleArray(intraVsInterDistribution
-				.getSecond()[1]);
-
-		double totalSum = ArraysExt.sum(intraDistr) + ArraysExt.sum(interDistr);
-		intraDistr = ArraysExt.scaleBy(intraDistr, totalSum);
-		interDistr = ArraysExt.scaleBy(interDistr, totalSum);
-
-		lastResult = new IntraInterDistributionDataStatistic(repository, false,
-				changeDate, absPath, intraVsInterDistribution.getFirst(),
-				intraDistr, interDistr);
-		return lastResult;
 	}
 
 	@Override

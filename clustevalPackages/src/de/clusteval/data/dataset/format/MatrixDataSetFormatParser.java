@@ -29,6 +29,7 @@ import de.clusteval.data.dataset.DataMatrix;
 import de.clusteval.data.dataset.DataSet;
 import de.clusteval.data.dataset.DataSetAttributeParser;
 import de.clusteval.data.dataset.RelativeDataSet;
+import de.clusteval.data.dataset.DataSet.WEBSITE_VISIBILITY;
 import de.clusteval.data.distance.DistanceMeasure;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.utils.FormatVersion;
@@ -61,7 +62,7 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 				targetFile, dataSet.getAlias(),
 				(RelativeDataSetFormat) DataSetFormat.parseFromString(
 						dataSet.getRepository(), "SimMatrixDataSetFormat"),
-				dataSet.getDataSetType());
+				dataSet.getDataSetType(), WEBSITE_VISIBILITY.HIDE);
 
 		if (!targetFile.exists()) {
 			this.log.info("Parsing input file coordinates into RAM");
