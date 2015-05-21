@@ -180,9 +180,9 @@ public class MCODEDivisiveParameterOptimizationMethod
 			ClusteringQualitySet qualities) {
 		super.giveQualityFeedback(parameterSet, qualities);
 
-		if (!reachedNTCutoff)
-			reachedNTCutoff = !qualities.values().iterator().next()
-					.isTerminated();
+//		if (!reachedNTCutoff)
+//			reachedNTCutoff = !qualities.values().iterator().next()
+//					.isTerminated();
 	}
 
 	/*
