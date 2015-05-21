@@ -20,11 +20,13 @@ import java.util.List;
 import utils.ArraysExt;
 import utils.RangeCreationException;
 import de.clusteval.cluster.quality.ClusteringQualityMeasure;
+import de.clusteval.cluster.quality.ClusteringQualitySet;
 import de.clusteval.data.DataConfig;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
 import de.clusteval.program.DoubleProgramParameter;
 import de.clusteval.program.IntegerProgramParameter;
+import de.clusteval.program.ParameterSet;
 import de.clusteval.program.ProgramConfig;
 import de.clusteval.program.ProgramParameter;
 import de.clusteval.program.StringProgramParameter;
@@ -39,6 +41,8 @@ import de.clusteval.utils.InternalAttributeException;
 public class MCODEDivisiveParameterOptimizationMethod
 		extends
 			DivisiveParameterOptimizationMethod {
+
+	protected boolean reachedNTCutoff;
 
 	/**
 	 * The copy constructor for this method.
@@ -162,5 +166,36 @@ public class MCODEDivisiveParameterOptimizationMethod
 			else
 				currentPos.put(param, 0);
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.clusteval.cluster.paramOptimization.ParameterOptimizationMethod#
+	 * giveQualityFeedback(de.clusteval.program.ParameterSet,
+	 * de.clusteval.cluster.quality.ClusteringQualitySet)
+	 */
+	@Override
+	public synchronized void giveQualityFeedback(ParameterSet parameterSet,
+			ClusteringQualitySet qualities) {
+		super.giveQualityFeedback(parameterSet, qualities);
+
+		if (!reachedNTCutoff)
+			reachedNTCutoff = !qualities.values().iterator().next()
+					.isTerminated();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.clusteval.cluster.paramOptimization.DivisiveParameterOptimizationMethod
+	 * #hasNext()
+	 */
+	@Override
+	public boolean hasNext() {
+		if (reachedNTCutoff)
+			return false;
+		return super.hasNext();
 	}
 }
