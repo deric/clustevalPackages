@@ -37,7 +37,9 @@ import de.clusteval.framework.repository.Repository;
  * @author Christian Wiwie
  * 
  */
-public class RemoveSymmetricZeroFeaturesDataPreprocessor extends DataPreprocessor {
+public class RemoveSymmetricZeroFeaturesDataPreprocessor
+		extends
+			DataPreprocessor {
 
 	/**
 	 * @param repository
@@ -57,7 +59,8 @@ public class RemoveSymmetricZeroFeaturesDataPreprocessor extends DataPreprocesso
 	 * @throws RegisterException
 	 */
 	public RemoveSymmetricZeroFeaturesDataPreprocessor(
-			RemoveSymmetricZeroFeaturesDataPreprocessor other) throws RegisterException {
+			RemoveSymmetricZeroFeaturesDataPreprocessor other)
+			throws RegisterException {
 		super(other);
 	}
 
@@ -86,7 +89,7 @@ public class RemoveSymmetricZeroFeaturesDataPreprocessor extends DataPreprocesso
 					// make similarities symmetric
 					rEngine.eval("matrix <- pmax(matrix,t(matrix))");
 					// get 0-features
-					rEngine.eval("zeroFeatures <- colSums(matrix != 0) > 0");
+					rEngine.eval("zeroFeatures <- colSums(matrix != 0) == 0");
 					rEngine.eval("matrix <- matrix[-c(zeroFeatures),-c(zeroFeatures)]");
 					double[][] result = rEngine.eval("matrix").asDoubleMatrix();
 					String[] ids = rEngine.eval("row.names(matrix)")

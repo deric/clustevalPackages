@@ -42,6 +42,7 @@ public class MCODEDivisiveParameterOptimizationMethod
 		extends
 			DivisiveParameterOptimizationMethod {
 
+	protected boolean reachedT;
 	protected boolean reachedNTCutoff;
 
 	/**
@@ -180,9 +181,13 @@ public class MCODEDivisiveParameterOptimizationMethod
 			ClusteringQualitySet qualities) {
 		super.giveQualityFeedback(parameterSet, qualities);
 
-//		if (!reachedNTCutoff)
-//			reachedNTCutoff = !qualities.values().iterator().next()
-//					.isTerminated();
+		if (!reachedT) {
+			reachedT = qualities.values().iterator().next().isTerminated();
+		}
+		if (reachedT && !reachedNTCutoff) {
+			reachedNTCutoff = !qualities.values().iterator().next()
+					.isTerminated();
+		}
 	}
 
 	/*
@@ -194,7 +199,7 @@ public class MCODEDivisiveParameterOptimizationMethod
 	 */
 	@Override
 	public boolean hasNext() {
-		if (reachedNTCutoff)
+		if (reachedT && reachedNTCutoff)
 			return false;
 		return super.hasNext();
 	}
