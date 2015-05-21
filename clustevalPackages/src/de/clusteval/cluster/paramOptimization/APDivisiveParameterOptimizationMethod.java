@@ -190,7 +190,7 @@ public class APDivisiveParameterOptimizationMethod
 				try {
 					iterationParamSet = this.iterationParamMethod.next(
 							forcedParameterSet,
-							this.iterationParamMethod.getCurrentCount() + 1);
+							this.iterationParamMethod.getStartedCount() + 1);
 					preferenceParamSet = this
 							.getResult()
 							.getParameterSets()
@@ -224,7 +224,7 @@ public class APDivisiveParameterOptimizationMethod
 					.getAbsolutePath()));
 			iterationParamSet = this.iterationParamMethod.next(
 					forcedParameterSet,
-					this.iterationParamMethod.getCurrentCount() + 1);
+					this.iterationParamMethod.getStartedCount() + 1);
 			preferenceParamSet = super.getNextParameterSet(forcedParameterSet);
 		} catch (ParameterOptimizationException e) {
 			e.printStackTrace();

@@ -14,6 +14,13 @@
 				includes="**/SilhouetteValueClusteringQualityMeasure.java" />
 		</jar>
 		<jar
+			destfile="repository/supp/clustering/qualityMeasures/CVNNClusteringQualityMeasure.jar">
+			<fileset dir="bin"
+				includes="**/CVNNClusteringQualityMeasure.class" />
+			<fileset dir="src"
+				includes="**/CVNNClusteringQualityMeasure.java" />
+		</jar>
+		<jar
 			destfile="repository/supp/clustering/qualityMeasures/SilhouetteValueRClusteringQualityMeasure.jar">
 			<fileset dir="bin"
 				includes="**/SilhouetteValueRClusteringQualityMeasure.class" />
@@ -116,6 +123,11 @@
 			destfile="repository/supp/clustering/paramOptimization/DivisiveParameterOptimizationMethod.jar">
 			<fileset dir="bin" includes="**/DivisiveParameterOptimizationMethod.class" />
 			<fileset dir="src" includes="**/DivisiveParameterOptimizationMethod.java" />
+		</jar>
+		<jar
+			destfile="repository/supp/clustering/paramOptimization/MCODEDivisiveParameterOptimizationMethod.jar">
+			<fileset dir="bin" includes="**/MCODEDivisiveParameterOptimizationMethod.class" />
+			<fileset dir="src" includes="**/MCODEDivisiveParameterOptimizationMethod.java" />
 		</jar>
 		<jar
 			destfile="repository/supp/clustering/paramOptimization/LayeredDivisiveParameterOptimizationMethod.jar">

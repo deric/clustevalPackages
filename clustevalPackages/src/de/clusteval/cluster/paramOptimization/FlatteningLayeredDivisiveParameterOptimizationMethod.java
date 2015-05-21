@@ -147,7 +147,7 @@ public class FlatteningLayeredDivisiveParameterOptimizationMethod
 		try {
 			ParameterSet result = this.currentDivisiveMethod.next(
 					forcedParameterSet,
-					this.currentDivisiveMethod.getCurrentCount() + 1);
+					this.currentDivisiveMethod.getStartedCount() + 1);
 
 			if (this.getResult().getParameterSets().contains(result))
 				this.currentDivisiveMethod.giveQualityFeedback(result, this

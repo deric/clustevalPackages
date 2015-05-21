@@ -194,7 +194,7 @@ public class APParameterOptimizationMethod
 			if (method.hasNext()) {
 				try {
 					iterationParamSet = method.next(forcedParameterSet,
-							method.getCurrentCount() + 1);
+							method.getStartedCount() + 1);
 					preferenceParamSet = notTerminatedParameterSet;
 
 					ParameterSet newParamSet = new ParameterSet();
@@ -224,7 +224,7 @@ public class APParameterOptimizationMethod
 							iterationParams.size()), isResume);
 			method.reset(new File(this.getResult().getAbsolutePath()));
 			iterationParamSet = method.next(forcedParameterSet,
-					method.getCurrentCount() + 1);
+					method.getStartedCount() + 1);
 			preferenceParamSet = super.getNextParameterSet(forcedParameterSet);
 		} catch (ParameterOptimizationException e) {
 			e.printStackTrace();
