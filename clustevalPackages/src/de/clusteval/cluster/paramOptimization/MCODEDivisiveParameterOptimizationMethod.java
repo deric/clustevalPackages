@@ -179,8 +179,6 @@ public class MCODEDivisiveParameterOptimizationMethod
 	@Override
 	public synchronized void giveQualityFeedback(ParameterSet parameterSet,
 			ClusteringQualitySet qualities) {
-		super.giveQualityFeedback(parameterSet, qualities);
-
 		if (!reachedT) {
 			reachedT = qualities.values().iterator().next().isTerminated();
 		}
@@ -188,6 +186,8 @@ public class MCODEDivisiveParameterOptimizationMethod
 			reachedNTCutoff = !qualities.values().iterator().next()
 					.isTerminated();
 		}
+		
+		super.giveQualityFeedback(parameterSet, qualities);
 	}
 
 	/*
@@ -199,8 +199,8 @@ public class MCODEDivisiveParameterOptimizationMethod
 	 */
 	@Override
 	public boolean hasNext() {
-		if (reachedT && reachedNTCutoff)
-			return false;
+		// if (reachedT && reachedNTCutoff)
+		// return false;
 		return super.hasNext();
 	}
 }

@@ -150,7 +150,7 @@ public class IntraInterDistributionDataStatisticCalculator
 						+ "names(interDistr) <- xlabels;"
 						+ "svg(filename=paste(path,'.svg',sep=''));"
 						+ "barplot(main=title, rbind(intraDistr, interDistr), beside = TRUE,legend = c('intra similarities', 'inter similarities'));"
-						+ "dev.off()" + "}");
+						+ "dev.off()" + "}; return 0;");
 
 				double[] xlabels = this.getStatistic().xlabels;
 				double[] intraDistr = this.getStatistic().intraDistribution;

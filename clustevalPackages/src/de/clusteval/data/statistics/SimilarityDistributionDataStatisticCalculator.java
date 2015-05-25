@@ -114,7 +114,7 @@ public class SimilarityDistributionDataStatisticCalculator
 						+ "names(distr) <- xlabels;"
 						+ "svg(filename=paste(path,'.svg',sep=''));"
 						+ "barplot(main=title, distr,legend = c('similarities'));"
-						+ "dev.off()" + "}");
+						+ "dev.off()" + "}; return 0;");
 
 				double[] xlabels = this.getStatistic().xlabels;
 				double[] distr = this.getStatistic().distribution;
