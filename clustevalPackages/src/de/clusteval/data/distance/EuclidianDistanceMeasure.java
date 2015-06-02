@@ -20,6 +20,7 @@ import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 
 import de.clusteval.data.dataset.format.ConversionInputToStandardConfiguration;
+import de.clusteval.framework.RLibraryRequirement;
 import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
@@ -28,6 +29,7 @@ import de.clusteval.framework.repository.Repository;
  * @author Christian Wiwie
  * 
  */
+@RLibraryRequirement(requiredRLibraries = {"proxy"})
 public class EuclidianDistanceMeasure extends DistanceMeasureR {
 
 	/**

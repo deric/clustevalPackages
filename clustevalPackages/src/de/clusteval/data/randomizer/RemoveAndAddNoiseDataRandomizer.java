@@ -139,21 +139,44 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 					.getGoldstandardConfig().getGoldstandard();
 
 			try {
-				dataSet.loadIntoMemory();
-				DataMatrix matrix = dataSet.getDataSetContent();
-				String[] ids = matrix.getIds();
-				goldStandard.loadIntoMemory();
-				Clustering gsClustering = goldStandard.getClustering();
-				String[] gs = new String[ids.length];
-				for (int i = 0; i < ids.length; i++)
-					gs[i] = gsClustering
-							.getClusterForItem(
-									gsClustering.getClusterItemWithId(ids[i]))
-							.keySet().iterator().next().getId();
-
+				MyRengine rEngine = repository.getRengineForCurrentThread();
 				try {
-					MyRengine rEngine = repository.getRengineForCurrentThread();
-					try {
+					// the new dataset into file
+					File dataSetFile = new File(dataConfig.getDatasetConfig()
+							.getDataSet().getAbsolutePath()
+							+ "_"
+							+ this.uniqueId
+							+ "_"
+							+ getDataSetFileNamePostFix());
+
+					File goldStandardFile = new File(dataConfig
+							.getGoldstandardConfig().getGoldstandard()
+							.getAbsolutePath()
+							+ "_"
+							+ this.uniqueId
+							+ "_"
+							+ getDataSetFileNamePostFix());
+
+					// writer header
+					String newAlias = this.uniqueId
+							+ "_"
+							+ dataConfig.getDatasetConfig().getDataSet()
+									.getAlias() + getDataSetFileNamePostFix();
+
+					if (!this.onlySimulate) {
+						dataSet.loadIntoMemory();
+						DataMatrix matrix = dataSet.getDataSetContent();
+						String[] ids = matrix.getIds();
+						goldStandard.loadIntoMemory();
+						Clustering gsClustering = goldStandard.getClustering();
+						String[] gs = new String[ids.length];
+						for (int i = 0; i < ids.length; i++)
+							gs[i] = gsClustering
+									.getClusterForItem(
+											gsClustering
+													.getClusterItemWithId(ids[i]))
+									.keySet().iterator().next().getId();
+
 						rEngine.assign("origDs", matrix.getData());
 						rEngine.assign("origGs", gs);
 						rEngine.assign("ids", ids);
@@ -194,112 +217,80 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 						String[] newIds = rEngine.eval("rownames(newDs)")
 								.asStrings();
 
-						// the new dataset into file
-						File dataSetFile = new File(dataConfig
-								.getDatasetConfig().getDataSet()
-								.getAbsolutePath()
-								+ "_"
-								+ this.uniqueId
-								+ "_"
-								+ getDataSetFileNamePostFix());
-
-						File goldStandardFile = new File(dataConfig
-								.getGoldstandardConfig().getGoldstandard()
-								.getAbsolutePath()
-								+ "_"
-								+ this.uniqueId
-								+ "_"
-								+ getDataSetFileNamePostFix());
-
-						try {
-							// write dataset file
-							BufferedWriter writer = new BufferedWriter(
-									new FileWriter(dataSetFile));
-							// writer header
-							String newAlias = this.uniqueId
-									+ "_"
-									+ dataConfig.getDatasetConfig()
-											.getDataSet().getAlias()
-									+ getDataSetFileNamePostFix();
-							writer.append("// alias = " + newAlias);
-							writer.newLine();
-							writer.append("// dataSetFormat = MatrixDataSetFormat");
-							writer.newLine();
-							writer.append("// dataSetType = SyntheticDataSetType");
-							writer.newLine();
-							writer.append("// dataSetFormatVersion = 1");
-							writer.newLine();
-							for (int row = 0; row < coords.length; row++) {
-								writer.append(newIds[row]);
-								for (int col = 0; col < coords[row].length; col++) {
-									writer.append(String.format("\t%s",
-											coords[row][col]));
-								}
-								writer.newLine();
+						// write dataset file
+						BufferedWriter writer = new BufferedWriter(
+								new FileWriter(dataSetFile));
+						writer.append("// alias = " + newAlias);
+						writer.newLine();
+						writer.append("// dataSetFormat = MatrixDataSetFormat");
+						writer.newLine();
+						writer.append("// dataSetType = SyntheticDataSetType");
+						writer.newLine();
+						writer.append("// dataSetFormatVersion = 1");
+						writer.newLine();
+						for (int row = 0; row < coords.length; row++) {
+							writer.append(newIds[row]);
+							for (int col = 0; col < coords[row].length; col++) {
+								writer.append(String.format("\t%s",
+										coords[row][col]));
 							}
-							writer.close();
-
-							AbsoluteDataSet newDs = new AbsoluteDataSet(
-									this.repository, true,
-									dataSetFile.lastModified(), dataSetFile,
-									newAlias,
-									(AbsoluteDataSetFormat) DataSetFormat
-											.parseFromString(repository,
-													"MatrixDataSetFormat"),
-									DataSetType.parseFromString(repository,
-											"SyntheticDataSetType"),
-									WEBSITE_VISIBILITY.HIDE);
-
-							// write goldstandard file
-							writer = new BufferedWriter(new FileWriter(
-									goldStandardFile));
-							for (int row = 0; row < newGs.length; row++) {
-								writer.append(newIds[row] + "\t" + newGs[row]
-										+ ":1.0");
-								writer.newLine();
-							}
-							writer.close();
-
-							GoldStandard newGsObject = new GoldStandard(
-									this.repository,
-									goldStandardFile.lastModified(),
-									goldStandardFile);
-
-							return new Pair<DataSet, GoldStandard>(newDs,
-									newGsObject);
-
-						} catch (IOException e) {
-							e.printStackTrace();
-						} catch (UnknownDataSetFormatException e) {
-							e.printStackTrace();
-						} catch (RegisterException e) {
-							e.printStackTrace();
-						} catch (UnknownDataSetTypeException e) {
-							e.printStackTrace();
+							writer.newLine();
 						}
-					} catch (REngineException e) {
-						e.printStackTrace();
-					} catch (REXPMismatchException e) {
-						e.printStackTrace();
-					} finally {
-						rEngine.clear();
+						writer.close();
+
+						// write goldstandard file
+						writer = new BufferedWriter(new FileWriter(
+								goldStandardFile));
+						for (int row = 0; row < newGs.length; row++) {
+							writer.append(newIds[row] + "\t" + newGs[row]
+									+ ":1.0");
+							writer.newLine();
+						}
+						writer.close();
 					}
-				} catch (RserveException e) {
+
+					AbsoluteDataSet newDs = new AbsoluteDataSet(
+							this.repository, false, dataSetFile.lastModified(),
+							dataSetFile, this.onlySimulate ? newAlias
+									+ System.currentTimeMillis() : newAlias,
+							(AbsoluteDataSetFormat) DataSetFormat
+									.parseFromString(repository,
+											"MatrixDataSetFormat"),
+							DataSetType.parseFromString(repository,
+									"SyntheticDataSetType"),
+							WEBSITE_VISIBILITY.HIDE);
+
+					GoldStandard newGsObject = new GoldStandard(
+							this.repository, goldStandardFile.lastModified(),
+							goldStandardFile);
+
+					return new Pair<DataSet, GoldStandard>(newDs, newGsObject);
+
+				} catch (IOException e) {
 					e.printStackTrace();
+				} catch (UnknownDataSetFormatException e) {
+					e.printStackTrace();
+				} catch (RegisterException e) {
+					e.printStackTrace();
+				} catch (UnknownDataSetTypeException e) {
+					e.printStackTrace();
+				} catch (REngineException e) {
+					e.printStackTrace();
+				} catch (REXPMismatchException e) {
+					e.printStackTrace();
+				} catch (InvalidDataSetFormatVersionException e1) {
+					e1.printStackTrace();
+				} catch (IllegalArgumentException e1) {
+					e1.printStackTrace();
+				} catch (UnknownGoldStandardFormatException e) {
+					e.printStackTrace();
+				} finally {
+					rEngine.clear();
+					dataSet.unloadFromMemory();
+					goldStandard.unloadFromMemory();
 				}
-			} catch (InvalidDataSetFormatVersionException e1) {
-				e1.printStackTrace();
-			} catch (IllegalArgumentException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			} catch (UnknownDataSetFormatException e) {
-				e.printStackTrace();
-			} catch (UnknownGoldStandardFormatException e) {
-				e.printStackTrace();
-			} finally {
-				dataSet.unloadFromMemory();
-				goldStandard.unloadFromMemory();
+			} catch (RserveException e2) {
+				e2.printStackTrace();
 			}
 
 			return null;
@@ -313,21 +304,41 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 				.getGoldstandardConfig().getGoldstandard();
 
 		try {
-			dataSet.loadIntoMemory();
-			SimilarityMatrix matrix = dataSet.getDataSetContent();
-			String[] ids = matrix.getIdsArray();
-			goldStandard.loadIntoMemory();
-			Clustering gsClustering = goldStandard.getClustering();
-			String[] gs = new String[ids.length];
-			for (int i = 0; i < ids.length; i++)
-				gs[i] = gsClustering
-						.getClusterForItem(
-								gsClustering.getClusterItemWithId(ids[i]))
-						.keySet().iterator().next().getId();
-
+			MyRengine rEngine = repository.getRengineForCurrentThread();
 			try {
-				MyRengine rEngine = repository.getRengineForCurrentThread();
-				try {
+				// the new dataset into file
+				File dataSetFile = new File(FileUtils.buildPath(dataConfig
+						.getDatasetConfig().getDataSet().getAbsolutePath()
+						+ "_"
+						+ this.uniqueId
+						+ "_"
+						+ getDataSetFileNamePostFix()));
+				File goldStandardFile = new File(dataConfig
+						.getGoldstandardConfig().getGoldstandard()
+						.getAbsolutePath()
+						+ "_"
+						+ this.uniqueId
+						+ "_"
+						+ getDataSetFileNamePostFix());
+				// writer header
+				String newAlias = this.uniqueId + "_"
+						+ dataConfig.getDatasetConfig().getDataSet().getAlias()
+						+ getDataSetFileNamePostFix();
+
+				if (!this.onlySimulate) {
+					dataSet.loadIntoMemory();
+					SimilarityMatrix matrix = dataSet.getDataSetContent();
+					String[] ids = matrix.getIdsArray();
+					goldStandard.loadIntoMemory();
+					Clustering gsClustering = goldStandard.getClustering();
+					String[] gs = new String[ids.length];
+					for (int i = 0; i < ids.length; i++)
+						gs[i] = gsClustering
+								.getClusterForItem(
+										gsClustering
+												.getClusterItemWithId(ids[i]))
+								.keySet().iterator().next().getId();
+
 					rEngine.assign("origDs", matrix.toArray());
 					rEngine.assign("origGs", gs);
 					rEngine.assign("ids", ids);
@@ -374,113 +385,80 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 					String[] newIds = rEngine.eval("rownames(newDs)")
 							.asStrings();
 
-					// the new dataset into file
-					File dataSetFile = new File(FileUtils.buildPath(dataConfig
-							.getDatasetConfig().getDataSet().getAbsolutePath()
-							+ "_"
-							+ this.uniqueId
-							+ "_"
-							+ getDataSetFileNamePostFix()));
-					File goldStandardFile = new File(dataConfig
-							.getGoldstandardConfig().getGoldstandard()
-							.getAbsolutePath()
-							+ "_"
-							+ this.uniqueId
-							+ "_"
-							+ getDataSetFileNamePostFix());
-
-					try {
-						// write dataset file
-						BufferedWriter writer = new BufferedWriter(
-								new FileWriter(dataSetFile));
-						// writer header
-						String newAlias = this.uniqueId
-								+ "_"
-								+ dataConfig.getDatasetConfig().getDataSet()
-										.getAlias()
-								+ getDataSetFileNamePostFix();
-						writer.append("// alias = " + newAlias);
-						writer.newLine();
-						writer.append("// dataSetFormat = SimMatrixDataSetFormat");
-						writer.newLine();
-						writer.append("// dataSetType = SyntheticDataSetType");
-						writer.newLine();
-						writer.append("// dataSetFormatVersion = 1");
-						writer.newLine();
-						for (String id : newIds)
-							writer.append(String.format("\t%s", id));
-						writer.newLine();
-						for (int row = 0; row < coords.length; row++) {
-							writer.append(newIds[row]);
-							for (int col = 0; col < coords.length; col++) {
-								writer.append(String.format("\t%s",
-										coords[row][col]));
-							}
-							writer.newLine();
+					// write dataset file
+					BufferedWriter writer = new BufferedWriter(new FileWriter(
+							dataSetFile));
+					writer.append("// alias = " + newAlias);
+					writer.newLine();
+					writer.append("// dataSetFormat = SimMatrixDataSetFormat");
+					writer.newLine();
+					writer.append("// dataSetType = SyntheticDataSetType");
+					writer.newLine();
+					writer.append("// dataSetFormatVersion = 1");
+					writer.newLine();
+					for (String id : newIds)
+						writer.append(String.format("\t%s", id));
+					writer.newLine();
+					for (int row = 0; row < coords.length; row++) {
+						writer.append(newIds[row]);
+						for (int col = 0; col < coords.length; col++) {
+							writer.append(String.format("\t%s",
+									coords[row][col]));
 						}
-						writer.close();
-
-						RelativeDataSet newDs = new RelativeDataSet(
-								this.repository, true,
-								dataSetFile.lastModified(), dataSetFile,
-								newAlias,
-								(RelativeDataSetFormat) DataSetFormat
-										.parseFromString(repository,
-												"SimMatrixDataSetFormat"),
-								DataSetType.parseFromString(repository,
-										"SyntheticDataSetType"),
-								WEBSITE_VISIBILITY.HIDE);
-
-						// write goldstandard file
-						writer = new BufferedWriter(new FileWriter(
-								goldStandardFile));
-						for (int row = 0; row < newGs.length; row++) {
-							writer.append(newIds[row] + "\t" + newGs[row]
-									+ ":1.0");
-							writer.newLine();
-						}
-						writer.close();
-
-						GoldStandard newGsObject = new GoldStandard(
-								this.repository,
-								goldStandardFile.lastModified(),
-								goldStandardFile);
-
-						return new Pair<DataSet, GoldStandard>(newDs,
-								newGsObject);
-
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (UnknownDataSetFormatException e) {
-						e.printStackTrace();
-					} catch (RegisterException e) {
-						e.printStackTrace();
-					} catch (UnknownDataSetTypeException e) {
-						e.printStackTrace();
+						writer.newLine();
 					}
-				} catch (REngineException e) {
-					e.printStackTrace();
-				} catch (REXPMismatchException e) {
-					e.printStackTrace();
-				} finally {
-					rEngine.clear();
+					writer.close();
+
+					// write goldstandard file
+					writer = new BufferedWriter(
+							new FileWriter(goldStandardFile));
+					for (int row = 0; row < newGs.length; row++) {
+						writer.append(newIds[row] + "\t" + newGs[row] + ":1.0");
+						writer.newLine();
+					}
+					writer.close();
 				}
-			} catch (RserveException e) {
+
+				RelativeDataSet newDs = new RelativeDataSet(this.repository,
+						false, dataSetFile.lastModified(), dataSetFile,
+						this.onlySimulate ? newAlias
+								+ System.currentTimeMillis() : newAlias,
+						(RelativeDataSetFormat) DataSetFormat.parseFromString(
+								repository, "SimMatrixDataSetFormat"),
+						DataSetType.parseFromString(repository,
+								"SyntheticDataSetType"),
+						WEBSITE_VISIBILITY.HIDE);
+
+				GoldStandard newGsObject = new GoldStandard(this.repository,
+						goldStandardFile.lastModified(), goldStandardFile);
+
+				return new Pair<DataSet, GoldStandard>(newDs, newGsObject);
+
+			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (UnknownDataSetFormatException e) {
+				e.printStackTrace();
+			} catch (RegisterException e) {
+				e.printStackTrace();
+			} catch (UnknownDataSetTypeException e) {
+				e.printStackTrace();
+			} catch (REngineException e) {
+				e.printStackTrace();
+			} catch (REXPMismatchException e) {
+				e.printStackTrace();
+			} catch (InvalidDataSetFormatVersionException e1) {
+				e1.printStackTrace();
+			} catch (IllegalArgumentException e1) {
+				e1.printStackTrace();
+			} catch (UnknownGoldStandardFormatException e) {
+				e.printStackTrace();
+			} finally {
+				rEngine.clear();
+				dataSet.unloadFromMemory();
+				goldStandard.unloadFromMemory();
 			}
-		} catch (InvalidDataSetFormatVersionException e1) {
-			e1.printStackTrace();
-		} catch (IllegalArgumentException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (UnknownDataSetFormatException e) {
+		} catch (RserveException e) {
 			e.printStackTrace();
-		} catch (UnknownGoldStandardFormatException e) {
-			e.printStackTrace();
-		} finally {
-			dataSet.unloadFromMemory();
-			goldStandard.unloadFromMemory();
 		}
 
 		return null;
