@@ -97,7 +97,7 @@ public class SOMClusteringRProgram extends AbsoluteDataRProgram {
 	 */
 	@Override
 	protected float[][] getFuzzyCoeffMatrixFromExecResult()
-			throws RserveException, REXPMismatchException {
+			throws RserveException, REXPMismatchException, InterruptedException {
 		REXP result = rEngine.eval("result$unit.classif");
 		int[] clusterIds = result.asIntegers();
 		return Clustering.clusterIdsToFuzzyCoeff(clusterIds);

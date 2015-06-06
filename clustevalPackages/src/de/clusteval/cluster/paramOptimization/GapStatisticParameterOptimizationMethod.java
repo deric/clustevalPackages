@@ -113,7 +113,8 @@ public class GapStatisticParameterOptimizationMethod
 	 */
 	@SuppressWarnings("unused")
 	@Override
-	protected ParameterSet getNextParameterSet(ParameterSet forcedParameterSet) {
+	protected ParameterSet getNextParameterSet(ParameterSet forcedParameterSet)
+			throws InterruptedException {
 
 		AbsoluteDataSet dataSet = (AbsoluteDataSet) (dataConfig
 				.getDatasetConfig().getDataSet().getOriginalDataSet());

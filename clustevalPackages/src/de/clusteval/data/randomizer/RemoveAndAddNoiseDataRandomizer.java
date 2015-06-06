@@ -131,7 +131,8 @@ public class RemoveAndAddNoiseDataRandomizer extends DataRandomizer {
 	 * de.clusteval.data.dataset.randomizer.DataRandomizer#randomizeDataConfig()
 	 */
 	@Override
-	protected Pair<DataSet, GoldStandard> randomizeDataConfig() {
+	protected Pair<DataSet, GoldStandard> randomizeDataConfig()
+			throws InterruptedException {
 		if (this.dataConfig.getDatasetConfig().getDataSet() instanceof AbsoluteDataSet) {
 			final AbsoluteDataSet dataSet = (AbsoluteDataSet) this.dataConfig
 					.getDatasetConfig().getDataSet();

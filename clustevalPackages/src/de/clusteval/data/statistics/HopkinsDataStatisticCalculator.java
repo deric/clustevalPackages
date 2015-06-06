@@ -77,7 +77,7 @@ public class HopkinsDataStatisticCalculator
 			UnknownGoldStandardFormatException, UnknownDataSetFormatException,
 			IllegalArgumentException, IOException,
 			InvalidDataSetFormatVersionException, RegisterException,
-			REngineException, REXPMismatchException {
+			REngineException, REXPMismatchException, InterruptedException {
 		// check whether throw exception here or in constructor
 		if (!(dataConfig.getDatasetConfig().getDataSet().getOriginalDataSet() instanceof AbsoluteDataSet))
 			throw new IllegalArgumentException(

@@ -90,7 +90,8 @@ public class JaccardIndexRClusteringQualityMeasure
 	public ClusteringQualityMeasureValue getQualityOfClusteringHelper(
 			Clustering clustering, Clustering gsClustering,
 			DataConfig dataConfig, final MyRengine rEngine)
-			throws REXPMismatchException, REngineException {
+			throws REXPMismatchException, REngineException,
+			InterruptedException {
 
 		/*
 		 * Create an array with all the cluster ids for every cluster
@@ -195,8 +196,11 @@ public class JaccardIndexRClusteringQualityMeasure
 		return quality1.getValue() > quality2.getValue();
 	}
 
-	/* (non-Javadoc)
-	 * @see de.clusteval.cluster.quality.ClusteringQualityMeasure#supportsFuzzyClusterings()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.clusteval.cluster.quality.ClusteringQualityMeasure#
+	 * supportsFuzzyClusterings()
 	 */
 	@Override
 	public boolean supportsFuzzyClusterings() {

@@ -110,7 +110,8 @@ public class NodeDegreeDistributionDataStatisticCalculator
 
 	@Override
 	protected void writeOutputToHelper(final File absFolderPath,
-			final MyRengine rEngine) throws REngineException {
+			final MyRengine rEngine) throws REngineException,
+			InterruptedException {
 
 		rEngine.eval("plotNodeDegreeDistribution <- function(title, path, xlabels, distr) {"
 				+ "names(distr) <- xlabels;"

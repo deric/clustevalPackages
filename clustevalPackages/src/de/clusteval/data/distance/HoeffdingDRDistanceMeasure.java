@@ -64,7 +64,7 @@ public class HoeffdingDRDistanceMeasure extends DistanceMeasureR {
 	@Override
 	public double getDistanceHelper(double[] point1, double[] point2,
 			final MyRengine rEngine) throws REngineException,
-			REXPMismatchException {
+			REXPMismatchException, InterruptedException {
 		rEngine.eval("library(Hmisc)");
 		rEngine.assign("p1", point1);
 		rEngine.assign("p2", point2);

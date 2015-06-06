@@ -73,7 +73,7 @@ public class SampleRangeNormalizationDataPreprocessor extends DataPreprocessor {
 	 * .data.DataConfig)
 	 */
 	@Override
-	public DataSet preprocess(DataSet data) {
+	public DataSet preprocess(DataSet data) throws InterruptedException {
 		if (data instanceof RelativeDataSet)
 			throw new IllegalArgumentException(
 					"The range normalization is only applicable to absolute coordinates");

@@ -140,7 +140,8 @@ public class IntraInterDistributionDataStatisticCalculator
 	}
 
 	@Override
-	public void writeOutputTo(final File absFolderPath) {
+	public void writeOutputTo(final File absFolderPath)
+			throws InterruptedException {
 		try {
 			MyRengine rEngine = repository.getRengineForCurrentThread();
 			try {

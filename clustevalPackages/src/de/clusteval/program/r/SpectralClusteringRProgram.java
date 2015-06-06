@@ -93,7 +93,8 @@ public class SpectralClusteringRProgram extends AbsoluteAndRelativeDataRProgram 
 	 */
 	@Override
 	public String getInvocationFormat() {
-		return "{ for (i in 1:10) {tryCatch({" + "resultNew <- specc(x,centers=%k%);"
+		return "{ for (i in 1:10) {tryCatch({"
+				+ "resultNew <- specc(x,centers=%k%);"
 				+ "if (sum(resultNew@withinss) < minWithinss) {"
 				+ "resultTmp <<- resultNew;"
 				+ "minWithinss <<- sum(resultNew@withinss);" + "};});" + "};"
@@ -107,7 +108,7 @@ public class SpectralClusteringRProgram extends AbsoluteAndRelativeDataRProgram 
 	 */
 	@Override
 	protected float[][] getFuzzyCoeffMatrixFromExecResult()
-			throws RserveException, REXPMismatchException {
+			throws RserveException, REXPMismatchException, InterruptedException {
 		REXP result = rEngine.eval("result@.Data");
 		int[] clusterIds = result.asIntegers();
 		return Clustering.clusterIdsToFuzzyCoeff(clusterIds);
@@ -151,7 +152,7 @@ public class SpectralClusteringRProgram extends AbsoluteAndRelativeDataRProgram 
 	 */
 	@Override
 	protected void convertDistancesToAppropriateDatastructure()
-			throws RserveException {
+			throws RserveException, InterruptedException {
 		rEngine.eval("x <- as.kernelMatrix(x)");
 	}
 
@@ -169,7 +170,7 @@ public class SpectralClusteringRProgram extends AbsoluteAndRelativeDataRProgram 
 			Map<String, String> effectiveParams,
 			Map<String, String> internalParams)
 			throws RLibraryNotLoadedException, REngineException,
-			RNotAvailableException {
+			RNotAvailableException, InterruptedException {
 		super.beforeExec(dataConfig, programConfig, invocationLine,
 				effectiveParams, internalParams);
 		rEngine.eval("minWithinss <- .Machine$double.xmax");

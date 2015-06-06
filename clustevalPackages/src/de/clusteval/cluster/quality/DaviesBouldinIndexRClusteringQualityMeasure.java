@@ -92,7 +92,7 @@ public class DaviesBouldinIndexRClusteringQualityMeasure
 			final Clustering clustering, Clustering gsClustering,
 			final DataConfig dataConfig, final MyRengine rEngine)
 			throws IllegalArgumentException, REngineException,
-			REXPMismatchException {
+			REXPMismatchException, InterruptedException {
 
 		RelativeDataSet dataSet = (RelativeDataSet) (dataConfig
 				.getDatasetConfig().getDataSet().getInStandardFormat());

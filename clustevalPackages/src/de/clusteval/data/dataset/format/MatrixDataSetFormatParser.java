@@ -53,7 +53,8 @@ public class MatrixDataSetFormatParser extends DataSetFormatParser {
 	protected DataSet convertToStandardFormat(DataSet dataSet,
 			ConversionInputToStandardConfiguration config) throws IOException,
 			RegisterException, UnknownDataSetFormatException,
-			InvalidParameterException, RNotAvailableException {
+			InvalidParameterException, RNotAvailableException,
+			InterruptedException {
 
 		File targetFile = new File(dataSet.getAbsolutePath() + ".SimMatrix");
 

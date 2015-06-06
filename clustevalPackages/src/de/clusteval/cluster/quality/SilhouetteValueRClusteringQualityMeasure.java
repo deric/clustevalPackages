@@ -92,7 +92,7 @@ public class SilhouetteValueRClusteringQualityMeasure
 			final Clustering clustering, Clustering gsClustering,
 			final DataConfig dataConfig, final MyRengine rEngine)
 			throws IllegalArgumentException, REngineException,
-			REXPMismatchException {
+			REXPMismatchException, InterruptedException {
 
 		if (clustering.getClusters().size() < 2)
 			return ClusteringQualityMeasureValue.getForDouble(-1.0);

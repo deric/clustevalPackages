@@ -188,7 +188,7 @@ public class CooccurrenceBestRunStatisticCalculator
 	 * @see utils.StatisticCalculator#writeOutputTo(java.io.File)
 	 */
 	@Override
-	public void writeOutputTo(File absFolderPath) {
+	public void writeOutputTo(File absFolderPath) throws InterruptedException {
 		LongMatrix2D matrix = lastResult.cooccurrenceMatrix;
 		try {
 			MyRengine rEngine = repository.getRengineForCurrentThread();

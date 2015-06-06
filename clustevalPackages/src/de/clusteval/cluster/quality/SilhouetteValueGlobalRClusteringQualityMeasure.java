@@ -90,7 +90,7 @@ public class SilhouetteValueGlobalRClusteringQualityMeasure
 			final Clustering clustering, Clustering gsClustering,
 			final DataConfig dataConfig, final MyRengine rEngine)
 			throws IllegalArgumentException, REngineException,
-			REXPMismatchException {
+			REXPMismatchException, InterruptedException {
 
 		if (clustering.getClusters().size() < 2)
 			return ClusteringQualityMeasureValue.getForDouble(-1.0);
@@ -140,34 +140,29 @@ public class SilhouetteValueGlobalRClusteringQualityMeasure
 		rEngine.eval("colnames(sim) <- as.character(1:" + similarities.length
 				+ ");");
 
-		String fct = "si <- function(dissims, rowSums, clusterIds, clustering, clusterToItems, item) {" +
-				"  clId = clustering[item];" +
-				"  clusterElems = clusterToItems[[clId]];" +
-				"  if (length(clusterElems)==1)" +
-				"    return (0);" +
-				"  disSumOwnCluster <- sum(dissims[item,clusterElems])-dissims[item,item];" +
-				"  ai = disSumOwnCluster/length(clusterElems);" +
-				"  bi <- (rowSums[item]-disSumOwnCluster)/(length(clustering)-length(clusterElems));" +
-				"  m = max(bi,ai,na.rm=T);" +
-				"  if (m == 0)" +
-				"    return (0);" +
-				"  return ((bi-ai)/m);" +
-				"};" +
-				"0;";
+		String fct = "si <- function(dissims, rowSums, clusterIds, clustering, clusterToItems, item) {"
+				+ "  clId = clustering[item];"
+				+ "  clusterElems = clusterToItems[[clId]];"
+				+ "  if (length(clusterElems)==1)"
+				+ "    return (0);"
+				+ "  disSumOwnCluster <- sum(dissims[item,clusterElems])-dissims[item,item];"
+				+ "  ai = disSumOwnCluster/length(clusterElems);"
+				+ "  bi <- (rowSums[item]-disSumOwnCluster)/(length(clustering)-length(clusterElems));"
+				+ "  m = max(bi,ai,na.rm=T);"
+				+ "  if (m == 0)"
+				+ "    return (0);" + "  return ((bi-ai)/m);" + "};" + "0;";
 		rEngine.eval(fct);
-		fct = "silhouetteGlobal <- function(dissims,clustering) {" +
-				"  clusterIds <- unique(clustering);" +
-				"  if (length(clusterIds) == 1)" +
-				"    return (-1.0);" +
-				"  clusterToItems = list();" +
-				"  for (clusterId in clusterIds) {" +
-				"    clusterToItems[clusterId] <- list(which(clustering==clusterId));" +
-				"  };" +
-				"  rs <- rowSums(dissims);" +
-				"  sis <- sapply(1:length(clustering),FUN=function(x){si(dissims,rs,clusterIds,clustering, clusterToItems,x)});" +
-				"  return (mean(sis));" +
-				"};" +
-				"0;";
+		fct = "silhouetteGlobal <- function(dissims,clustering) {"
+				+ "  clusterIds <- unique(clustering);"
+				+ "  if (length(clusterIds) == 1)"
+				+ "    return (-1.0);"
+				+ "  clusterToItems = list();"
+				+ "  for (clusterId in clusterIds) {"
+				+ "    clusterToItems[clusterId] <- list(which(clustering==clusterId));"
+				+ "  };"
+				+ "  rs <- rowSums(dissims);"
+				+ "  sis <- sapply(1:length(clustering),FUN=function(x){si(dissims,rs,clusterIds,clustering, clusterToItems,x)});"
+				+ "  return (mean(sis));" + "};" + "0;";
 		rEngine.eval(fct);
 		REXP exp = rEngine.eval("silhouetteGlobal(sim, clusterIds)");
 		if (exp != null)

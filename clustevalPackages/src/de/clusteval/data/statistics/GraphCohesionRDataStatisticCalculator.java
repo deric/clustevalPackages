@@ -74,7 +74,7 @@ public class GraphCohesionRDataStatisticCalculator
 			final MyRengine rEngine) throws IllegalArgumentException,
 			IOException, InvalidDataSetFormatVersionException,
 			RegisterException, REngineException, REXPMismatchException,
-			UnknownDataSetFormatException {
+			UnknownDataSetFormatException, InterruptedException {
 
 		DataSetConfig dataSetConfig = dataConfig.getDatasetConfig();
 		RelativeDataSet dataSet = (RelativeDataSet) (dataSetConfig.getDataSet()

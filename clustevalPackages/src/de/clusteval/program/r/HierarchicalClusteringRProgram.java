@@ -99,7 +99,7 @@ public class HierarchicalClusteringRProgram extends RelativeDataRProgram {
 	 */
 	@Override
 	protected float[][] getFuzzyCoeffMatrixFromExecResult()
-			throws RserveException, REXPMismatchException {
+			throws RserveException, REXPMismatchException, InterruptedException {
 		REXP result = rEngine.eval("result@.Data");
 		int[] clusterIds = result.asIntegers();
 		return Clustering.clusterIdsToFuzzyCoeff(clusterIds);

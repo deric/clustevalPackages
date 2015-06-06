@@ -131,7 +131,8 @@ public class CassiniDataSetGenerator extends DataSetGenerator {
 	 * @see data.dataset.generator.DataSetGenerator#generateDataSet()
 	 */
 	@Override
-	protected DataSet generateDataSet() throws DataSetGenerationException {
+	protected DataSet generateDataSet() throws DataSetGenerationException,
+			InterruptedException {
 		try {
 			MyRengine rEngine = repository.getRengineForCurrentThread();
 			rEngine.eval("library(mlbench)");
@@ -171,7 +172,7 @@ public class CassiniDataSetGenerator extends DataSetGenerator {
 								repository, "MatrixDataSetFormat"),
 						DataSetType.parseFromString(repository,
 								"SyntheticDataSetType"),
-								WEBSITE_VISIBILITY.HIDE);
+						WEBSITE_VISIBILITY.HIDE);
 
 			} catch (IOException e) {
 				e.printStackTrace();

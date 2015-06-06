@@ -69,7 +69,7 @@ public class RemoveZeroSamplesDataPreprocessor extends DataPreprocessor {
 	 * .data.DataConfig)
 	 */
 	@Override
-	public DataSet preprocess(DataSet data) {
+	public DataSet preprocess(DataSet data) throws InterruptedException {
 		if (data instanceof AbsoluteDataSet)
 			throw new IllegalArgumentException(
 					"The RemoveZeroSamplesPreprocessor is only applicable to relative similarities");

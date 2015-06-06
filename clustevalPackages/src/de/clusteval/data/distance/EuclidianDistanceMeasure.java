@@ -109,7 +109,8 @@ public class EuclidianDistanceMeasure extends DistanceMeasureR {
 	protected double[][] getDistancesHelper(
 			ConversionInputToStandardConfiguration config, double[][] matrix,
 			MyRengine rEngine, int firstRow, int lastRow)
-			throws REngineException, REXPMismatchException {
+			throws REngineException, REXPMismatchException,
+			InterruptedException {
 		return rEngine
 				.eval(String
 						.format("proxy::dist(rbind(matrix[%d:%d,]), rbind(matrix), method='Euclidean')",

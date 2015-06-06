@@ -81,7 +81,7 @@ public class ClusterDPClusteringRProgram extends RelativeDataRProgram {
 			Map<String, String> effectiveParams,
 			Map<String, String> internalParams)
 			throws RLibraryNotLoadedException, REngineException,
-			RNotAvailableException {
+			RNotAvailableException, InterruptedException {
 		super.beforeExec(dataConfig, programConfig, invocationLine,
 				effectiveParams, internalParams);
 
@@ -164,7 +164,7 @@ public class ClusterDPClusteringRProgram extends RelativeDataRProgram {
 	 */
 	@Override
 	protected float[][] getFuzzyCoeffMatrixFromExecResult()
-			throws RserveException, REXPMismatchException {
+			throws RserveException, REXPMismatchException, InterruptedException {
 		REXP result = rEngine.eval("result");
 		int[] clusterIds = result.asIntegers();
 		return Clustering.clusterIdsToFuzzyCoeff(clusterIds);

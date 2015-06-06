@@ -27,7 +27,9 @@ import de.clusteval.framework.repository.Repository;
  * @author Christian Wiwie
  * 
  */
-public class AbsolutePearsonCorrelationRDistanceMeasure extends DistanceMeasureR {
+public class AbsolutePearsonCorrelationRDistanceMeasure
+		extends
+			DistanceMeasureR {
 
 	/**
 	 * @param repository
@@ -63,7 +65,7 @@ public class AbsolutePearsonCorrelationRDistanceMeasure extends DistanceMeasureR
 	@Override
 	public double getDistanceHelper(double[] point1, double[] point2,
 			final MyRengine rEngine) throws REXPMismatchException,
-			REngineException {
+			REngineException, InterruptedException {
 		rEngine.assign("p1", point1);
 		rEngine.assign("p2", point2);
 		double result = rEngine.eval("cor(p1,p2)").asDouble();
@@ -100,7 +102,8 @@ public class AbsolutePearsonCorrelationRDistanceMeasure extends DistanceMeasureR
 	public double[][] getDistancesHelper(
 			ConversionInputToStandardConfiguration config, double[][] matrix,
 			final MyRengine rEngine, int firstRow, int lastRow)
-			throws REngineException, REXPMismatchException {
+			throws REngineException, REXPMismatchException,
+			InterruptedException {
 		return rEngine
 				.eval(String
 						.format("1-abs(cor(cbind(matrix.t[,%d:%d]), cbind(matrix.t), method='pearson'))",

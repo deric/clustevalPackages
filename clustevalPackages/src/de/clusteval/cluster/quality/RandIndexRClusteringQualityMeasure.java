@@ -91,7 +91,8 @@ public class RandIndexRClusteringQualityMeasure
 	public ClusteringQualityMeasureValue getQualityOfClusteringHelper(
 			Clustering clustering, Clustering gsClustering,
 			DataConfig dataConfig, final MyRengine rEngine)
-			throws REngineException, REXPMismatchException {
+			throws REngineException, REXPMismatchException,
+			InterruptedException {
 
 		RelativeDataSet dataSet = (RelativeDataSet) (dataConfig
 				.getDatasetConfig().getDataSet().getInStandardFormat());

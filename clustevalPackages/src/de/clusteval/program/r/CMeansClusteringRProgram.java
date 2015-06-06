@@ -98,7 +98,7 @@ public class CMeansClusteringRProgram extends AbsoluteAndRelativeDataRProgram {
 	 */
 	@Override
 	protected float[][] getFuzzyCoeffMatrixFromExecResult()
-			throws RserveException, REXPMismatchException {
+			throws RserveException, REXPMismatchException, InterruptedException {
 		REXP result = rEngine.eval("result$membership");
 		double[][] fuzzyCoeffs = result.asDoubleMatrix();
 		return ArraysExt.toFloatArray(fuzzyCoeffs);
