@@ -19,8 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import utils.ArraysExt;
-import utils.Pair;
+import de.wiwie.wiutils.utils.ArraysExt;
+import de.wiwie.wiutils.utils.Pair;
 import de.clusteval.cluster.quality.ClusteringQualityMeasure;
 import de.clusteval.cluster.quality.ClusteringQualityMeasureValue;
 import de.clusteval.cluster.quality.ClusteringQualitySet;
@@ -30,7 +30,7 @@ import de.clusteval.framework.repository.Repository;
 import de.clusteval.program.ParameterSet;
 import de.clusteval.run.result.ParameterOptimizationResult;
 import de.clusteval.run.result.RunResult;
-import file.FileUtils;
+import de.wiwie.wiutils.file.FileUtils;
 
 /**
  * @author Christian Wiwie

@@ -15,7 +15,7 @@ package de.clusteval.data.statistics;
 
 import java.io.File;
 
-import utils.SimilarityMatrix;
+import de.wiwie.wiutils.utils.SimilarityMatrix;
 import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.DataSetConfig;
 import de.clusteval.data.dataset.RelativeDataSet;

@@ -20,8 +20,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import utils.text.TextFileMapParser;
-import file.FileUtils;
+import de.wiwie.wiutils.utils.text.TextFileMapParser;
+import de.wiwie.wiutils.file.FileUtils;
 
 /**
  * @author Christian Wiwie

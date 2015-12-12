@@ -27,7 +27,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import utils.SimilarityMatrix.NUMBER_PRECISION;
+import de.wiwie.wiutils.utils.SimilarityMatrix.NUMBER_PRECISION;
 import ch.qos.logback.classic.Level;
 import de.clusteval.cluster.quality.ClusteringQualitySet;
 import de.clusteval.context.Context;

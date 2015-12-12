@@ -21,7 +21,7 @@ import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RserveException;
 
-import utils.ArraysExt;
+import de.wiwie.wiutils.utils.ArraysExt;
 import de.clusteval.context.Context;
 import de.clusteval.context.UnknownContextException;
 import de.clusteval.data.dataset.format.DataSetFormat;
@@ -32,7 +32,7 @@ import de.clusteval.framework.repository.Repository;
 import de.clusteval.program.Program;
 import de.clusteval.run.result.format.RunResultFormat;
 import de.clusteval.run.result.format.UnknownRunResultFormatException;
-import file.FileUtils;
+import de.wiwie.wiutils.file.FileUtils;
 
 /**
  * This class is an implementation of C-Means Clustering based on the

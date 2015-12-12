@@ -16,7 +16,7 @@ package de.clusteval.run.result.format;
 import java.io.IOException;
 import java.util.Map;
 
-import utils.StringExt;
+import de.wiwie.wiutils.utils.StringExt;
 
 /**
  * @author Christian Wiwie

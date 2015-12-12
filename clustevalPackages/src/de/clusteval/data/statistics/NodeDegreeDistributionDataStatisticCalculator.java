@@ -18,9 +18,9 @@ import java.io.IOException;
 
 import org.rosuda.REngine.REngineException;
 
-import utils.ArraysExt;
-import utils.Pair;
-import utils.SimilarityMatrix;
+import de.wiwie.wiutils.utils.ArraysExt;
+import de.wiwie.wiutils.utils.Pair;
+import de.wiwie.wiutils.utils.SimilarityMatrix;
 import de.clusteval.data.DataConfig;
 import de.clusteval.data.dataset.DataSetConfig;
 import de.clusteval.data.dataset.RelativeDataSet;
@@ -30,7 +30,7 @@ import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
 import de.clusteval.framework.repository.MyRengine;
 import de.clusteval.framework.repository.RegisterException;
 import de.clusteval.framework.repository.Repository;
-import file.FileUtils;
+import de.wiwie.wiutils.file.FileUtils;
 
 /**
  * @author Christian Wiwie

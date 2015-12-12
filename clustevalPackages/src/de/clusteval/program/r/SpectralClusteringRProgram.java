@@ -38,7 +38,7 @@ import de.clusteval.program.ProgramConfig;
 import de.clusteval.run.result.format.RunResultFormat;
 import de.clusteval.run.result.format.UnknownRunResultFormatException;
 import de.clusteval.utils.RNotAvailableException;
-import file.FileUtils;
+import de.wiwie.wiutils.file.FileUtils;
 
 /**
  * This class is an implementation of Spectral Clustering using the R-framework

@@ -18,11 +18,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import utils.SimilarityMatrix;
-import utils.SimilarityMatrix.NUMBER_PRECISION;
-import utils.parse.SimFileMatrixParser;
-import utils.parse.SimFileParser.SIM_FILE_FORMAT;
-import utils.parse.TextFileParser.OUTPUT_MODE;
+import de.wiwie.wiutils.utils.SimilarityMatrix;
+import de.wiwie.wiutils.utils.SimilarityMatrix.NUMBER_PRECISION;
+import de.wiwie.wiutils.utils.parse.SimFileMatrixParser;
+import de.wiwie.wiutils.utils.parse.SimFileParser.SIM_FILE_FORMAT;
+import de.wiwie.wiutils.utils.parse.TextFileParser.OUTPUT_MODE;
 import de.clusteval.data.dataset.DataSet;
 import de.clusteval.data.dataset.RelativeDataSet;
 import de.clusteval.framework.ClustevalBackendServer;

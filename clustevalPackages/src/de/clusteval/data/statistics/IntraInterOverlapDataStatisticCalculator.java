@@ -17,9 +17,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import utils.ArraysExt;
-import utils.Pair;
-import utils.SimilarityMatrix;
+import de.wiwie.wiutils.utils.ArraysExt;
+import de.wiwie.wiutils.utils.Pair;
+import de.wiwie.wiutils.utils.SimilarityMatrix;
 import de.clusteval.cluster.Cluster;
 import de.clusteval.cluster.ClusterItem;
 import de.clusteval.cluster.Clustering;

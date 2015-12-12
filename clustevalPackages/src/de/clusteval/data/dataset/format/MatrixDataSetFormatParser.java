@@ -20,10 +20,10 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.Pair;
-import utils.SimilarityMatrix;
-import utils.SimilarityMatrix.NUMBER_PRECISION;
-import utils.parse.TextFileParser;
+import de.wiwie.wiutils.utils.Pair;
+import de.wiwie.wiutils.utils.SimilarityMatrix;
+import de.wiwie.wiutils.utils.SimilarityMatrix.NUMBER_PRECISION;
+import de.wiwie.wiutils.utils.parse.TextFileParser;
 import de.clusteval.data.dataset.AbsoluteDataSet;
 import de.clusteval.data.dataset.DataMatrix;
 import de.clusteval.data.dataset.DataSet;

@@ -24,7 +24,7 @@ import java.util.Set;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RserveException;
 
-import utils.ArraysExt;
+import de.wiwie.wiutils.utils.ArraysExt;
 import cern.colt.matrix.tlong.LongMatrix2D;
 import cern.colt.matrix.tlong.impl.SparseLongMatrix2D;
 import de.clusteval.cluster.Cluster;
@@ -37,7 +37,7 @@ import de.clusteval.framework.repository.Repository;
 import de.clusteval.program.ParameterSet;
 import de.clusteval.run.result.ParameterOptimizationResult;
 import de.clusteval.run.result.RunResult;
-import file.FileUtils;
+import de.wiwie.wiutils.file.FileUtils;
 
 /**
  * @author Christian Wiwie
