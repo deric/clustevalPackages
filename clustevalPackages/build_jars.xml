@@ -263,6 +263,10 @@
 			<fileset dir="bin" includes="**/SpiralsDataSetGenerator*.class" />
 			<fileset dir="src" includes="**/SpiralsDataSetGenerator*.java" />
 		</jar>
+		<jar destfile="repository/supp/generators/dataset/QiuJoeCovarianceClusterDataSetGenerator.jar">
+			<fileset dir="bin" includes="**/QiuJoeCovarianceClusterDataSetGenerator*.class" />
+			<fileset dir="src" includes="**/QiuJoeCovarianceClusterDataSetGenerator*.java" />
+		</jar>
 	</target>
 
 	<target name="create_dataRandomizer_jars">
