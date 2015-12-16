@@ -27,14 +27,6 @@ import org.apache.commons.cli.ParseException;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RserveException;
 
-import de.clusteval.data.dataset.AbsoluteDataSet;
-import de.clusteval.data.dataset.DataSet;
-import de.clusteval.data.dataset.DataSet.WEBSITE_VISIBILITY;
-import de.clusteval.data.dataset.format.AbsoluteDataSetFormat;
-import de.clusteval.data.dataset.format.DataSetFormat;
-import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
-import de.clusteval.data.dataset.type.DataSetType;
-import de.clusteval.data.dataset.type.UnknownDataSetTypeException;
 import de.clusteval.data.goldstandard.GoldStandard;
 import de.clusteval.framework.RLibraryRequirement;
 import de.clusteval.framework.repository.MyRengine;
@@ -158,7 +150,7 @@ public class SpiralsDataSetGenerator extends DataSetGenerator {
 	 * @see data.dataset.generator.DataSetGenerator#generateDataSet()
 	 */
 	@Override
-	protected DataSet generateDataSet() throws DataSetGenerationException,
+	protected void generateDataSet() throws DataSetGenerationException,
 			InterruptedException {
 		try {
 			MyRengine rEngine = repository.getRengineForCurrentThread();
@@ -166,59 +158,12 @@ public class SpiralsDataSetGenerator extends DataSetGenerator {
 			rEngine.eval("result <- mlbench.spirals(n=" + this.numberOfPoints
 					+ ",cycles=" + this.numberCycles + ",sd="
 					+ this.standardDeviation + ");");
-			double[][] coords = rEngine.eval("result$x").asDoubleMatrix();
+			coords = rEngine.eval("result$x").asDoubleMatrix();
 			classes = rEngine.eval("result$classes").asIntegers();
 
-			// create the target file
-			File dataSetFile = new File(FileUtils.buildPath(
-					this.repository.getBasePath(DataSet.class),
-					this.getFolderName(), this.getFileName()));
-
-			try {
-				// dataset file
-				BufferedWriter writer = new BufferedWriter(new FileWriter(
-						dataSetFile));
-				// writer header
-				writer.append("// alias = " + getAlias());
-				writer.newLine();
-				writer.append("// dataSetFormat = MatrixDataSetFormat");
-				writer.newLine();
-				writer.append("// dataSetType = SyntheticDataSetType");
-				writer.newLine();
-				writer.append("// dataSetFormatVersion = 1");
-				writer.newLine();
-				for (int row = 0; row < coords.length; row++) {
-					writer.append((row + 1) + "\t" + coords[row][0] + "\t"
-							+ coords[row][1]);
-					writer.newLine();
-				}
-				writer.close();
-
-				return new AbsoluteDataSet(this.repository, true,
-						dataSetFile.lastModified(), dataSetFile, getAlias(),
-						(AbsoluteDataSetFormat) DataSetFormat.parseFromString(
-								repository, "MatrixDataSetFormat"),
-						DataSetType.parseFromString(repository,
-								"SyntheticDataSetType"),
-						WEBSITE_VISIBILITY.HIDE);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (UnknownDataSetFormatException e) {
-				e.printStackTrace();
-			} catch (RegisterException e) {
-				e.printStackTrace();
-			} catch (UnknownDataSetTypeException e) {
-				e.printStackTrace();
-			}
-
-		} catch (RserveException e) {
-			e.printStackTrace();
-		} catch (REXPMismatchException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new DataSetGenerationException("The dataset could not be generated!");
 		}
-		throw new DataSetGenerationException(
-				"The dataset could not be generated!");
 	}
 
 	/*

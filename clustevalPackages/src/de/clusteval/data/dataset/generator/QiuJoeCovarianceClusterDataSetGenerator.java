@@ -17,7 +17,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -28,14 +27,6 @@ import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RserveException;
 
-import de.clusteval.data.dataset.AbsoluteDataSet;
-import de.clusteval.data.dataset.DataSet;
-import de.clusteval.data.dataset.DataSet.WEBSITE_VISIBILITY;
-import de.clusteval.data.dataset.format.AbsoluteDataSetFormat;
-import de.clusteval.data.dataset.format.DataSetFormat;
-import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
-import de.clusteval.data.dataset.type.DataSetType;
-import de.clusteval.data.dataset.type.UnknownDataSetTypeException;
 import de.clusteval.data.goldstandard.GoldStandard;
 import de.clusteval.framework.RLibraryRequirement;
 import de.clusteval.framework.repository.MyRengine;
@@ -158,8 +149,10 @@ public class QiuJoeCovarianceClusterDataSetGenerator extends DataSetGenerator {
 	 */
 	@Override
 	protected void handleOptions(CommandLine cmd) throws ParseException {
-		if (cmd.getArgList().size() > 0)
-			throw new ParseException("Unknown parameters: " + Arrays.toString(cmd.getArgs()));
+		// TODO: throws an error with non-existing parameter 0????WTF?
+		// if (cmd.getArgList().size() > 0)
+		// throw new ParseException("Unknown parameters: " +
+		// Arrays.toString(cmd.getArgs()));
 
 		if (cmd.hasOption("n"))
 			this.numberOfPoints = Integer.parseInt(cmd.getOptionValue("n"));
@@ -198,7 +191,7 @@ public class QiuJoeCovarianceClusterDataSetGenerator extends DataSetGenerator {
 	 * @see data.dataset.generator.DataSetGenerator#generateDataSet()
 	 */
 	@Override
-	protected DataSet generateDataSet() throws DataSetGenerationException, InterruptedException {
+	protected void generateDataSet() throws DataSetGenerationException, InterruptedException {
 		try {
 
 			String fileName = "test";
@@ -228,53 +221,12 @@ public class QiuJoeCovarianceClusterDataSetGenerator extends DataSetGenerator {
 					this.numberClusters, this.clusterSeparation, this.numberNonNoisyFeatures, this.numberNoisyFeatures,
 					fileName, covMethod));
 
-			double[][] coords = rEngine.eval(String.format("result$datList$%s_1", fileName)).asDoubleMatrix();
+			coords = rEngine.eval(String.format("result$datList$%s_1", fileName)).asDoubleMatrix();
 			classes = rEngine.eval(String.format("result$memList$%s_1", fileName)).asIntegers();
 
-			// create the target file
-			File dataSetFile = new File(FileUtils.buildPath(this.repository.getBasePath(DataSet.class),
-					this.getFolderName(), this.getFileName()));
-
-			try {
-				// dataset file
-				BufferedWriter writer = new BufferedWriter(new FileWriter(dataSetFile));
-				// writer header
-				writer.append("// alias = " + getAlias());
-				writer.newLine();
-				writer.append("// dataSetFormat = MatrixDataSetFormat");
-				writer.newLine();
-				writer.append("// dataSetType = SyntheticDataSetType");
-				writer.newLine();
-				writer.append("// dataSetFormatVersion = 1");
-				writer.newLine();
-				for (int row = 0; row < coords.length; row++) {
-					writer.append((row + 1) + "\t" + coords[row][0] + "\t" + coords[row][1]);
-					writer.newLine();
-				}
-				writer.close();
-
-				return new AbsoluteDataSet(this.repository, true, dataSetFile.lastModified(), dataSetFile, getAlias(),
-						(AbsoluteDataSetFormat) DataSetFormat.parseFromString(repository, "MatrixDataSetFormat"),
-						DataSetType.parseFromString(repository, "OtherDataSetType"), WEBSITE_VISIBILITY.HIDE);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (UnknownDataSetFormatException e) {
-				e.printStackTrace();
-			} catch (RegisterException e) {
-				e.printStackTrace();
-			} catch (UnknownDataSetTypeException e) {
-				e.printStackTrace();
-			}
-
-		} catch (RserveException e) {
-			e.printStackTrace();
-		} catch (REXPMismatchException e) {
-			e.printStackTrace();
-		} catch (REngineException e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			throw new DataSetGenerationException("The dataset could not be generated!");
 		}
-		throw new DataSetGenerationException("The dataset could not be generated!");
 	}
 
 	/*

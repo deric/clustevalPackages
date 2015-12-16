@@ -27,14 +27,6 @@ import org.apache.commons.cli.ParseException;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RserveException;
 
-import de.clusteval.data.dataset.AbsoluteDataSet;
-import de.clusteval.data.dataset.DataSet;
-import de.clusteval.data.dataset.DataSet.WEBSITE_VISIBILITY;
-import de.clusteval.data.dataset.format.AbsoluteDataSetFormat;
-import de.clusteval.data.dataset.format.DataSetFormat;
-import de.clusteval.data.dataset.format.UnknownDataSetFormatException;
-import de.clusteval.data.dataset.type.DataSetType;
-import de.clusteval.data.dataset.type.UnknownDataSetTypeException;
 import de.clusteval.data.goldstandard.GoldStandard;
 import de.clusteval.framework.RLibraryRequirement;
 import de.clusteval.framework.repository.MyRengine;
@@ -63,8 +55,8 @@ public class CassiniDataSetGenerator extends DataSetGenerator {
 	 * @param absPath
 	 * @throws RegisterException
 	 */
-	public CassiniDataSetGenerator(Repository repository, boolean register,
-			long changeDate, File absPath) throws RegisterException {
+	public CassiniDataSetGenerator(Repository repository, boolean register, long changeDate, File absPath)
+			throws RegisterException {
 		super(repository, register, changeDate, absPath);
 	}
 
@@ -72,8 +64,7 @@ public class CassiniDataSetGenerator extends DataSetGenerator {
 	 * @param other
 	 * @throws RegisterException
 	 */
-	public CassiniDataSetGenerator(DataSetGenerator other)
-			throws RegisterException {
+	public CassiniDataSetGenerator(DataSetGenerator other) throws RegisterException {
 		super(other);
 	}
 
@@ -116,8 +107,7 @@ public class CassiniDataSetGenerator extends DataSetGenerator {
 	@Override
 	protected void handleOptions(CommandLine cmd) throws ParseException {
 		if (cmd.getArgList().size() > 0)
-			throw new ParseException("Unknown parameters: "
-					+ Arrays.toString(cmd.getArgs()));
+			throw new ParseException("Unknown parameters: " + Arrays.toString(cmd.getArgs()));
 
 		if (cmd.hasOption("n"))
 			this.numberOfPoints = Integer.parseInt(cmd.getOptionValue("n"));
@@ -131,66 +121,18 @@ public class CassiniDataSetGenerator extends DataSetGenerator {
 	 * @see data.dataset.generator.DataSetGenerator#generateDataSet()
 	 */
 	@Override
-	protected DataSet generateDataSet() throws DataSetGenerationException,
-			InterruptedException {
+	protected void generateDataSet() throws DataSetGenerationException, InterruptedException {
 		try {
 			MyRengine rEngine = repository.getRengineForCurrentThread();
 			rEngine.eval("library(mlbench)");
-			rEngine.eval("result <- mlbench.cassini(n=" + this.numberOfPoints
-					+ ");");
-			double[][] coords = rEngine.eval("result$x").asDoubleMatrix();
+			rEngine.eval("result <- mlbench.cassini(n=" + this.numberOfPoints + ");");
+			coords = rEngine.eval("result$x").asDoubleMatrix();
 			classes = rEngine.eval("result$classes").asIntegers();
 
-			// create the target file
-			File dataSetFile = new File(FileUtils.buildPath(
-					this.repository.getBasePath(DataSet.class),
-					this.getFolderName(), this.getFileName()));
-
-			try {
-				// dataset file
-				BufferedWriter writer = new BufferedWriter(new FileWriter(
-						dataSetFile));
-				// writer header
-				writer.append("// alias = " + getAlias());
-				writer.newLine();
-				writer.append("// dataSetFormat = MatrixDataSetFormat");
-				writer.newLine();
-				writer.append("// dataSetType = SyntheticDataSetType");
-				writer.newLine();
-				writer.append("// dataSetFormatVersion = 1");
-				writer.newLine();
-				for (int row = 0; row < coords.length; row++) {
-					writer.append((row + 1) + "\t" + coords[row][0] + "\t"
-							+ coords[row][1]);
-					writer.newLine();
-				}
-				writer.close();
-
-				return new AbsoluteDataSet(this.repository, true,
-						dataSetFile.lastModified(), dataSetFile, getAlias(),
-						(AbsoluteDataSetFormat) DataSetFormat.parseFromString(
-								repository, "MatrixDataSetFormat"),
-						DataSetType.parseFromString(repository,
-								"SyntheticDataSetType"),
-						WEBSITE_VISIBILITY.HIDE);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (UnknownDataSetFormatException e) {
-				e.printStackTrace();
-			} catch (RegisterException e) {
-				e.printStackTrace();
-			} catch (UnknownDataSetTypeException e) {
-				e.printStackTrace();
-			}
-
-		} catch (RserveException e) {
-			e.printStackTrace();
-		} catch (REXPMismatchException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new DataSetGenerationException("The dataset could not be generated!");
 		}
-		throw new DataSetGenerationException(
-				"The dataset could not be generated!");
+
 	}
 
 	/*
@@ -199,32 +141,27 @@ public class CassiniDataSetGenerator extends DataSetGenerator {
 	 * @see data.dataset.generator.DataSetGenerator#generateGoldStandard()
 	 */
 	@Override
-	protected GoldStandard generateGoldStandard()
-			throws GoldStandardGenerationException {
+	protected GoldStandard generateGoldStandard() throws GoldStandardGenerationException {
 
 		try {
 			// goldstandard file
-			File goldStandardFile = new File(FileUtils.buildPath(
-					this.repository.getBasePath(GoldStandard.class),
+			File goldStandardFile = new File(FileUtils.buildPath(this.repository.getBasePath(GoldStandard.class),
 					this.getFolderName(), this.getFileName()));
-			BufferedWriter writer = new BufferedWriter(new FileWriter(
-					goldStandardFile));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(goldStandardFile));
 			for (int row = 0; row < classes.length; row++) {
 				writer.append((row + 1) + "\t" + classes[row] + ":1.0");
 				writer.newLine();
 			}
 			writer.close();
 
-			return new GoldStandard(repository,
-					goldStandardFile.lastModified(), goldStandardFile);
+			return new GoldStandard(repository, goldStandardFile.lastModified(), goldStandardFile);
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (RegisterException e) {
 			e.printStackTrace();
 		}
-		throw new GoldStandardGenerationException(
-				"The goldstandard could not be generated!");
+		throw new GoldStandardGenerationException("The goldstandard could not be generated!");
 	}
 
 }
