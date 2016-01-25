@@ -501,6 +501,26 @@
 			<fileset dir="bin" includes="**/ClassSizeDistributionDataStatistic*.class" />
 			<fileset dir="src" includes="**/ClassSizeDistributionDataStatistic*.java" />
 		</jar>
+		<jar
+			destfile="repository/supp/statistics/data/RichClub10DataStatistic.jar">
+			<fileset dir="bin" includes="**/RichClub10DataStatistic*.class" />
+			<fileset dir="src" includes="**/RichClub10DataStatistic*.java" />
+		</jar>
+		<jar
+			destfile="repository/supp/statistics/data/RichClubMaxDataStatistic.jar">
+			<fileset dir="bin" includes="**/RichClubMaxDataStatistic*.class" />
+			<fileset dir="src" includes="**/RichClubMaxDataStatistic*.java" />
+		</jar>
+		<jar
+			destfile="repository/supp/statistics/data/AssortativityDataStatistic.jar">
+			<fileset dir="bin" includes="**/AssortativityDataStatistic*.class" />
+			<fileset dir="src" includes="**/AssortativityDataStatistic*.java" />
+		</jar>
+		<jar
+			destfile="repository/supp/statistics/data/AssortativityWeightedDataStatistic.jar">
+			<fileset dir="bin" includes="**/AssortativityWeightedDataStatistic*.class" />
+			<fileset dir="src" includes="**/AssortativityWeightedDataStatistic*.java" />
+		</jar>
 	</target>
 
 	<target name="create_runStatistic_jars">
